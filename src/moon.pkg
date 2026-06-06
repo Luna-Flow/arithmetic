@@ -1,0 +1,9 @@
+import {
+  "Kaida-Amethyst/math" @km,
+  "moonbitlang/core/math" @math,
+}
+
+import {
+  "Luna-Flow/luna-generic" @lg,
+  "moonbitlang/core/test",
+} for "test"

@@ -1,0 +1,6 @@
+.mooncakes/
+_build/
+target/
+coverage/
+*.mi
+*.core

@@ -1,3 +1,4 @@
+///|
 fn uint_pow_impl(base : UInt, exponent : UInt) -> UInt {
   let mut exp = exponent
   let mut acc : UInt = 1U
@@ -12,6 +13,7 @@ fn uint_pow_impl(base : UInt, exponent : UInt) -> UInt {
   acc
 }
 
+///|
 fn uint16_pow_impl(base : UInt16, exponent : UInt16) -> UInt16 {
   let mut exp = exponent.to_uint()
   let mut acc : UInt16 = 1
@@ -26,6 +28,7 @@ fn uint16_pow_impl(base : UInt16, exponent : UInt16) -> UInt16 {
   acc
 }
 
+///|
 fn uint64_pow_impl(base : UInt64, exponent : UInt64) -> UInt64 {
   let mut exp = exponent
   let mut acc : UInt64 = 1UL

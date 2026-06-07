@@ -2,7 +2,9 @@
 ///
 /// Implementations should return a value of the same type as the input.
 /// Domain restrictions, branch choices, and exceptional-value behavior are
-/// defined by each concrete instance.
+/// defined by each concrete instance. This unchecked surface is primarily for
+/// native scalars or APIs where context-free IEEE-style behavior is acceptable.
+
 ///|
 pub(open) trait Sqrt {
   fn sqrt(Self) -> Self
@@ -11,7 +13,9 @@ pub(open) trait Sqrt {
 /// Cubic-root capability on `Self`.
 ///
 /// Implementations should stay within `Self`. Instance-specific semantics
-/// decide how special values and edge cases are handled.
+/// decide how special values and edge cases are handled. This unchecked surface
+/// is primarily for native scalars or other context-free backends.
+
 ///|
 pub(open) trait Cbrt {
   fn cbrt(Self) -> Self
@@ -19,12 +23,16 @@ pub(open) trait Cbrt {
 
 /// Combined radical capability for types that support both square root and
 /// cubic root.
+
 ///|
-pub(open) trait Radical : Sqrt + Cbrt {}
+pub(open) trait Radical: Sqrt + Cbrt {}
 
 /// Exponential-function capability on `Self`.
 ///
-/// `exp` denotes the natural exponential and `exp2` denotes base-2 exponentiation.
+/// `exp` denotes the natural exponential and `exp2` denotes base-2
+/// exponentiation. This unchecked surface is mainly intended for native scalar
+/// backends or APIs that accept unchecked elementary behavior.
+
 ///|
 pub(open) trait Exponential {
   fn exp(Self) -> Self
@@ -35,6 +43,9 @@ pub(open) trait Exponential {
 ///
 /// `ln` is the natural logarithm. Domain validity is the caller's
 /// responsibility unless a concrete instance documents stronger guarantees.
+/// This unchecked surface is mainly intended for native scalar backends or
+/// APIs that accept unchecked elementary behavior.
+
 ///|
 pub(open) trait Logarithmic {
   fn ln(Self) -> Self
@@ -51,7 +62,10 @@ pub(open) trait Logarithmic {
 /// For the integer-family instances shipped by this package, the exponent must
 /// be non-negative. Passing a negative exponent to signed integer or `BigInt`
 /// instances aborts at runtime because the result would not stay closed in the
-/// same type.
+/// same type. This unchecked surface remains available for native scalars and
+/// other context-free backends; validated or contextual types should prefer the
+/// checked power traits.
+
 ///|
 pub(open) trait Power {
   fn pow(Self, Self) -> Self
@@ -60,7 +74,9 @@ pub(open) trait Power {
 /// Circular trigonometric capability on `Self`.
 ///
 /// Angle unit, special-value handling, and branch conventions are defined by
-/// each instance backend.
+/// each instance backend. This unchecked surface is mainly intended for native
+/// scalar backends or APIs that accept unchecked elementary behavior.
+
 ///|
 pub(open) trait Trigonometric {
   fn sin(Self) -> Self
@@ -70,7 +86,10 @@ pub(open) trait Trigonometric {
 
 /// Inverse circular trigonometric capability on `Self`.
 ///
-/// Principal values and branch choices are instance-defined.
+/// Principal values and branch choices are instance-defined. This unchecked
+/// surface is mainly intended for native scalar backends or APIs that accept
+/// unchecked elementary behavior.
+
 ///|
 pub(open) trait InverseTrigonometric {
   fn asin(Self) -> Self
@@ -80,6 +99,10 @@ pub(open) trait InverseTrigonometric {
 }
 
 /// Hyperbolic-function capability on `Self`.
+///
+/// This unchecked surface is mainly intended for native scalar backends or
+/// APIs that accept unchecked elementary behavior.
+
 ///|
 pub(open) trait Hyperbolic {
   fn sinh(Self) -> Self
@@ -89,7 +112,10 @@ pub(open) trait Hyperbolic {
 
 /// Inverse hyperbolic-function capability on `Self`.
 ///
-/// Domain restrictions remain instance-defined.
+/// Domain restrictions remain instance-defined. This unchecked surface is
+/// mainly intended for native scalar backends or APIs that accept unchecked
+/// elementary behavior.
+
 ///|
 pub(open) trait InverseHyperbolic {
   fn asinh(Self) -> Self
@@ -100,7 +126,10 @@ pub(open) trait InverseHyperbolic {
 /// Standard scalar constants exposed in `Self`.
 ///
 /// This trait only states availability of constants in the target type; it
-/// does not impose any broader “real number” semantic bundle.
+/// does not impose any broader “real number” semantic bundle. This unchecked
+/// surface is mainly intended for native scalar backends and similar
+/// context-free APIs.
+
 ///|
 pub(open) trait Constants {
   fn pi() -> Self

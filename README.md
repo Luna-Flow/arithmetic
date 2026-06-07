@@ -2,9 +2,9 @@
 
 Arithmetic capability traits for Luna projects.
 
-## v0.1.0 - Capability Trait Baseline
+## v0.2.0 - Checked Capability Boundary Expansion
 
-This documentation tracks the initial `v0.1.0` package baseline.
+This documentation tracks the current `v0.2.0` package baseline.
 
 ### Package Positioning
 
@@ -28,6 +28,25 @@ This documentation tracks the initial `v0.1.0` package baseline.
   - `Hyperbolic`
   - `InverseHyperbolic`
   - `Constants`
+- Checked/contextual shared types:
+  - `FpClass`
+  - `RoundingMode`
+  - `ArithmeticContext`
+  - `ArithmeticErrorKind`
+  - `ArithmeticError`
+- Checked/contextual traits:
+  - `SqrtChecked`
+  - `DivChecked`
+  - `CompareChecked`
+  - `PowNatChecked`
+  - `PowIntChecked`
+  - `ParseChecked`
+- Enclosure traits:
+  - `Contains`
+  - `Overlaps`
+  - `DefinitelyLt`
+  - `DefinitelyLe`
+  - `MaybeEq`
 - Default instances in the root package:
   - `Float`
   - `Double`
@@ -46,6 +65,9 @@ This documentation tracks the initial `v0.1.0` package baseline.
 - Domain validity remains part of the caller contract unless a specific instance documents stronger guarantees.
 - Floating-point instances inherit special-value behavior, branch choices, and principal-value conventions from `Kaida-Amethyst/math`.
 - Integer-family instances are intentionally narrower: this package only implements capabilities that stay meaningfully closed on those concrete types.
+- Unchecked/context-free elementary traits remain available for native scalars and other backends where direct IEEE-style behavior is acceptable.
+- Checked/contextual traits use `Result[Self, ArithmeticError]` plus `ArithmeticContext` to express validated, precision-aware, or error-aware arithmetic boundaries.
+- Enclosure traits describe containment/overlap style relations without pretending enclosure values are totally ordered scalars.
 
 ### Official Base-Type Wrapping
 
@@ -62,6 +84,9 @@ This documentation tracks the initial `v0.1.0` package baseline.
 - Supplying a negative exponent to those signed integer-family instances aborts at runtime, because the result would not remain closed in the same integer type.
 - `UInt`, `UInt16`, and `UInt64` are already non-negative by construction, so their `pow` surface has no extra signed-exponent check.
 - This package exposes the capability surface and its preconditions; selecting arguments that satisfy the mathematical domain is still partly the caller's responsibility.
+- `PowNatChecked` and `PowIntChecked` split integer-exponent power from general unchecked `pow(Self, Self)`.
+- In this first checked-power layer, `x^0` returns one, including `0^0`.
+- `PowIntChecked` requires reciprocal/division semantics for negative exponents and must not silently accept zero base with a negative exponent.
 
 ### API Guidance
 
@@ -70,6 +95,9 @@ This documentation tracks the initial `v0.1.0` package baseline.
 - `Power` remains intentionally undivided in this release, even though integer and floating use cases may be split more carefully later.
 - This package does not define “realness”; it defines callable capability surfaces.
 - When an algorithm may produce out-of-domain arguments, validate them at the application layer before calling the trait method.
+- For high-precision, validated, or context-sensitive numeric types, prefer the checked/contextual traits over the unchecked elementary traits.
+- `arithmetic` is a capability-boundary package; it does not add calculus, matrices, complex numbers, symbolic algebra, or special-function layers.
+- Packages such as `floating` implement these capability boundaries for concrete numeric representations.
 
 ### Quick Start
 

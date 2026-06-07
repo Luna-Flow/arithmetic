@@ -1,4 +1,26 @@
 ///|
+fn double_is_nan(x : Double) -> Bool {
+  x != x
+}
+
+///|
+fn double_pow_nat(base : Double, exponent : UInt) -> Double {
+  let mut exp = exponent
+  let mut acc : Double = 1.0
+  let mut factor = base
+  while exp > 0U {
+    if (exp & 1U) == 1U {
+      acc = acc * factor
+    }
+    exp = exp >> 1
+    if exp > 0U {
+      factor = factor * factor
+    }
+  }
+  acc
+}
+
+///|
 pub impl Sqrt for Double with fn sqrt(x) -> Double {
   @km.sqrt(x)
 }
@@ -120,3 +142,63 @@ pub impl Constants for Double with fn e() -> Double {
 
 ///|
 pub impl Radical for Double
+
+///|
+pub impl SqrtChecked for Double with fn sqrt_checked(x, _ctx) -> Result[
+  Double,
+  ArithmeticError,
+] {
+  Ok(Sqrt::sqrt(x))
+}
+
+///|
+pub impl DivChecked for Double with fn div_checked(lhs, rhs, _ctx) -> Result[
+  Double,
+  ArithmeticError,
+] {
+  guard rhs != 0.0 else {
+    return Err(ArithmeticError::division_by_zero("division by zero"))
+  }
+  Ok(lhs / rhs)
+}
+
+///|
+pub impl CompareChecked for Double with fn compare_checked(lhs, rhs) -> Result[
+  Int,
+  ArithmeticError,
+] {
+  guard !double_is_nan(lhs) && !double_is_nan(rhs) else {
+    return Err(ArithmeticError::unordered_comparison("NaN is unordered"))
+  }
+  Ok(if lhs < rhs { -1 } else if lhs > rhs { 1 } else { 0 })
+}
+
+///|
+pub impl PowNatChecked for Double with fn pow_nat_checked(base, exponent, _ctx) -> Result[
+  Double,
+  ArithmeticError,
+] {
+  Ok(double_pow_nat(base, exponent))
+}
+
+///|
+pub impl PowIntChecked for Double with fn pow_int_checked(base, exponent, ctx) -> Result[
+  Double,
+  ArithmeticError,
+] {
+  if exponent == 0 {
+    return Ok(1.0)
+  }
+  if exponent < 0 {
+    guard base != 0.0 else {
+      return Err(
+        ArithmeticError::division_by_zero(
+          "negative exponent requires a non-zero base",
+        ),
+      )
+    }
+    let positive = double_pow_nat(base, (-exponent).reinterpret_as_uint())
+    return DivChecked::div_checked(1.0, positive, ctx)
+  }
+  PowNatChecked::pow_nat_checked(base, exponent.reinterpret_as_uint(), ctx)
+}

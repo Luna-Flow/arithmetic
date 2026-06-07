@@ -1,3 +1,4 @@
+///|
 fn int_pow_impl(base : Int, exponent : Int) -> Int {
   guard exponent >= 0 else {
     abort("Power::pow for Int requires a non-negative exponent")
@@ -15,6 +16,7 @@ fn int_pow_impl(base : Int, exponent : Int) -> Int {
   acc
 }
 
+///|
 fn int16_pow_impl(base : Int16, exponent : Int16) -> Int16 {
   guard exponent >= 0 else {
     abort("Power::pow for Int16 requires a non-negative exponent")
@@ -32,6 +34,7 @@ fn int16_pow_impl(base : Int16, exponent : Int16) -> Int16 {
   acc
 }
 
+///|
 fn int64_pow_impl(base : Int64, exponent : Int64) -> Int64 {
   guard exponent >= 0L else {
     abort("Power::pow for Int64 requires a non-negative exponent")

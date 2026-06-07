@@ -1,6 +1,6 @@
 # Arithmetic 文档
 
-这里是 `arithmetic` `0.1.0` 的简体中文文档入口。
+这里是 `arithmetic` `0.2.0` 的简体中文文档入口。
 
 ## 概览
 
@@ -11,12 +11,19 @@
 - 浮点默认实例以后端方式直接使用 `Kaida-Amethyst/math`。
 - 这个包当前不建模序、拓扑、支路或主值等更高层分析语义。
 
+## 能力分层
+
+- 非 checked 的 elementary traits 继续保留，用于原生标量或其他上下文无关后端。
+- checked/contextual traits 统一返回 `Result[Self, ArithmeticError]`，并接收 `ArithmeticContext`。
+- enclosure traits 用来表达包含、重叠和确定性比较关系，不伪造总序。
+
 ## 语义说明
 
 - 公共 trait 会保持具体的 `Self` 返回类型，不会自动提升到额外的包装结果类型。
 - 除非具体实例另行声明更强保证，定义域合法性默认仍属于调用方契约的一部分。
 - `Float` 与 `Double` 的边界值、特殊值和支路语义继承自 `Kaida-Amethyst/math`。
 - 整数族支持会刻意更窄，只实现那些在该类型上仍能保持闭合的能力。
+- `arithmetic` 是能力边界包，不在这一层引入微积分、矩阵、复数、符号代数或特殊函数。
 
 ## `Power` 前置条件
 
@@ -25,3 +32,5 @@
 - 对这些有符号整数实例传入负指数会在运行时 `abort`。
 - `UInt`、`UInt16`、`UInt64` 的指数类型天然非负，因此不存在这一额外检查。
 - 这个包会把前置条件写清楚，但选择满足数学定义域的参数，仍然部分属于调用方责任。
+- `PowNatChecked` 与 `PowIntChecked` 会把整数指数能力拆成 checked 边界。
+- 在这层 checked 语义里，`x^0` 一律返回一，包括 `0^0`。

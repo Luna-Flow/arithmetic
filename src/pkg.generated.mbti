@@ -1,0 +1,201 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Luna-Flow/arithmetic"
+
+import {
+  "moonbitlang/core/bigint",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub struct ArithmeticContext {
+  precision : Int
+  rounding : RoundingMode
+} derive(Eq)
+pub fn ArithmeticContext::new(Int, rounding? : RoundingMode) -> Self
+
+pub struct ArithmeticError {
+  kind : ArithmeticErrorKind
+  message : String
+} derive(Eq)
+pub fn ArithmeticError::division_by_zero(String) -> Self
+pub fn ArithmeticError::domain_error(String) -> Self
+pub fn ArithmeticError::format_error(String) -> Self
+pub fn ArithmeticError::is_division_by_zero(Self) -> Bool
+pub fn ArithmeticError::is_domain_error(Self) -> Bool
+pub fn ArithmeticError::is_format_error(Self) -> Bool
+pub fn ArithmeticError::is_parse_error(Self) -> Bool
+pub fn ArithmeticError::is_unordered_comparison(Self) -> Bool
+pub fn ArithmeticError::is_unsupported(Self) -> Bool
+pub fn ArithmeticError::parse_error(String) -> Self
+pub fn ArithmeticError::unordered_comparison(String) -> Self
+pub fn ArithmeticError::unsupported(String) -> Self
+
+pub enum ArithmeticErrorKind {
+  DivisionByZero
+  ParseError
+  DomainError
+  FormatError
+  UnsupportedOperation
+  UnorderedComparison
+} derive(Eq)
+
+pub(all) enum FpClass {
+  Finite
+  Infinity
+  NaN
+} derive(Eq)
+
+pub(all) enum RoundingMode {
+  ToNearestEven
+  TowardZero
+  TowardPositive
+  TowardNegative
+  AwayFromZero
+} derive(Eq)
+
+// Type aliases
+
+// Traits
+pub(open) trait Cbrt {
+  fn cbrt(Self) -> Self
+}
+pub impl Cbrt for Float
+pub impl Cbrt for Double
+
+pub(open) trait CompareChecked {
+  fn compare_checked(Self, Self) -> Result[Int, ArithmeticError]
+}
+pub impl CompareChecked for Float
+pub impl CompareChecked for Double
+
+pub(open) trait Constants {
+  fn pi() -> Self
+  fn tau() -> Self
+  fn e() -> Self
+}
+pub impl Constants for Float
+pub impl Constants for Double
+
+pub(open) trait Contains {
+  fn contains(Self, Self) -> Bool
+}
+
+pub(open) trait DefinitelyLe {
+  fn definitely_le(Self, Self) -> Bool
+}
+
+pub(open) trait DefinitelyLt {
+  fn definitely_lt(Self, Self) -> Bool
+}
+
+pub(open) trait DivChecked {
+  fn div_checked(Self, Self, ArithmeticContext) -> Result[Self, ArithmeticError]
+}
+pub impl DivChecked for Float
+pub impl DivChecked for Double
+
+pub(open) trait Exponential {
+  fn exp(Self) -> Self
+  fn exp2(Self) -> Self
+}
+pub impl Exponential for Float
+pub impl Exponential for Double
+
+pub(open) trait Hyperbolic {
+  fn sinh(Self) -> Self
+  fn cosh(Self) -> Self
+  fn tanh(Self) -> Self
+}
+pub impl Hyperbolic for Float
+pub impl Hyperbolic for Double
+
+pub(open) trait InverseHyperbolic {
+  fn asinh(Self) -> Self
+  fn acosh(Self) -> Self
+  fn atanh(Self) -> Self
+}
+pub impl InverseHyperbolic for Float
+pub impl InverseHyperbolic for Double
+
+pub(open) trait InverseTrigonometric {
+  fn asin(Self) -> Self
+  fn acos(Self) -> Self
+  fn atan(Self) -> Self
+  fn atan2(Self, Self) -> Self
+}
+pub impl InverseTrigonometric for Float
+pub impl InverseTrigonometric for Double
+
+pub(open) trait Logarithmic {
+  fn ln(Self) -> Self
+  fn log2(Self) -> Self
+  fn log10(Self) -> Self
+}
+pub impl Logarithmic for Float
+pub impl Logarithmic for Double
+
+pub(open) trait MaybeEq {
+  fn maybe_eq(Self, Self) -> Bool
+}
+
+pub(open) trait Overlaps {
+  fn overlaps(Self, Self) -> Bool
+}
+
+pub(open) trait ParseChecked {
+  fn parse_checked(String, ArithmeticContext) -> Result[Self, ArithmeticError]
+}
+
+pub(open) trait PowIntChecked {
+  fn pow_int_checked(Self, Int, ArithmeticContext) -> Result[Self, ArithmeticError]
+}
+pub impl PowIntChecked for Float
+pub impl PowIntChecked for Double
+
+pub(open) trait PowNatChecked {
+  fn pow_nat_checked(Self, UInt, ArithmeticContext) -> Result[Self, ArithmeticError]
+}
+pub impl PowNatChecked for Float
+pub impl PowNatChecked for Double
+
+pub(open) trait Power {
+  fn pow(Self, Self) -> Self
+}
+pub impl Power for Int
+pub impl Power for Int16
+pub impl Power for Int64
+pub impl Power for UInt
+pub impl Power for UInt16
+pub impl Power for UInt64
+pub impl Power for Float
+pub impl Power for Double
+pub impl Power for @bigint.BigInt
+
+pub(open) trait Radical : Sqrt + Cbrt {
+}
+pub impl Radical for Float
+pub impl Radical for Double
+
+pub(open) trait Sqrt {
+  fn sqrt(Self) -> Self
+}
+pub impl Sqrt for Float
+pub impl Sqrt for Double
+
+pub(open) trait SqrtChecked {
+  fn sqrt_checked(Self, ArithmeticContext) -> Result[Self, ArithmeticError]
+}
+pub impl SqrtChecked for Float
+pub impl SqrtChecked for Double
+
+pub(open) trait Trigonometric {
+  fn sin(Self) -> Self
+  fn cos(Self) -> Self
+  fn tan(Self) -> Self
+}
+pub impl Trigonometric for Float
+pub impl Trigonometric for Double
+

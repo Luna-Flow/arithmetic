@@ -1,4 +1,26 @@
 ///|
+fn float_is_nan(x : Float) -> Bool {
+  x != x
+}
+
+///|
+fn float_pow_nat(base : Float, exponent : UInt) -> Float {
+  let mut exp = exponent
+  let mut acc : Float = 1.0
+  let mut factor = base
+  while exp > 0U {
+    if (exp & 1U) == 1U {
+      acc = acc * factor
+    }
+    exp = exp >> 1
+    if exp > 0U {
+      factor = factor * factor
+    }
+  }
+  acc
+}
+
+///|
 pub impl Sqrt for Float with fn sqrt(x) -> Float {
   @km.sqrtf(x)
 }
@@ -120,3 +142,63 @@ pub impl Constants for Float with fn e() -> Float {
 
 ///|
 pub impl Radical for Float
+
+///|
+pub impl SqrtChecked for Float with fn sqrt_checked(x, _ctx) -> Result[
+  Float,
+  ArithmeticError,
+] {
+  Ok(Sqrt::sqrt(x))
+}
+
+///|
+pub impl DivChecked for Float with fn div_checked(lhs, rhs, _ctx) -> Result[
+  Float,
+  ArithmeticError,
+] {
+  guard rhs != 0.0 else {
+    return Err(ArithmeticError::division_by_zero("division by zero"))
+  }
+  Ok(lhs / rhs)
+}
+
+///|
+pub impl CompareChecked for Float with fn compare_checked(lhs, rhs) -> Result[
+  Int,
+  ArithmeticError,
+] {
+  guard !float_is_nan(lhs) && !float_is_nan(rhs) else {
+    return Err(ArithmeticError::unordered_comparison("NaN is unordered"))
+  }
+  Ok(if lhs < rhs { -1 } else if lhs > rhs { 1 } else { 0 })
+}
+
+///|
+pub impl PowNatChecked for Float with fn pow_nat_checked(base, exponent, _ctx) -> Result[
+  Float,
+  ArithmeticError,
+] {
+  Ok(float_pow_nat(base, exponent))
+}
+
+///|
+pub impl PowIntChecked for Float with fn pow_int_checked(base, exponent, ctx) -> Result[
+  Float,
+  ArithmeticError,
+] {
+  if exponent == 0 {
+    return Ok(1.0)
+  }
+  if exponent < 0 {
+    guard base != 0.0 else {
+      return Err(
+        ArithmeticError::division_by_zero(
+          "negative exponent requires a non-zero base",
+        ),
+      )
+    }
+    let positive = float_pow_nat(base, (-exponent).reinterpret_as_uint())
+    return DivChecked::div_checked(1.0, positive, ctx)
+  }
+  PowNatChecked::pow_nat_checked(base, exponent.reinterpret_as_uint(), ctx)
+}

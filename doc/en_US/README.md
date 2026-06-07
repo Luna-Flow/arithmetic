@@ -1,6 +1,6 @@
 # Arithmetic Documentation
 
-This directory contains the English documentation baseline for `arithmetic` `0.2.0`.
+This directory contains the English documentation baseline for `arithmetic` `0.2.1`.
 
 ## Core Documents
 

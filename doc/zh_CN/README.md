@@ -1,6 +1,6 @@
 # Arithmetic 文档
 
-这里是 `arithmetic` `0.2.0` 的简体中文文档入口。
+这里是 `arithmetic` `0.2.1` 的简体中文文档入口。
 
 ## 概览
 

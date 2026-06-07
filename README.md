@@ -2,9 +2,9 @@
 
 Arithmetic capability traits for Luna projects.
 
-## v0.2.0 - Checked Capability Boundary Expansion
+## v0.2.1 - Checked Capability Boundary Refinement
 
-This documentation tracks the current `v0.2.0` package baseline.
+This documentation tracks the current `v0.2.1` package baseline.
 
 ### Package Positioning
 
@@ -98,6 +98,7 @@ This documentation tracks the current `v0.2.0` package baseline.
 - For high-precision, validated, or context-sensitive numeric types, prefer the checked/contextual traits over the unchecked elementary traits.
 - `arithmetic` is a capability-boundary package; it does not add calculus, matrices, complex numbers, symbolic algebra, or special-function layers.
 - Packages such as `floating` implement these capability boundaries for concrete numeric representations.
+- `floating` now targets the published checked capability boundary from this package rather than carrying its own ecosystem-level arithmetic error/context types.
 
 ### Quick Start
 

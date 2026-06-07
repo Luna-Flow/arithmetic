@@ -11,7 +11,7 @@ readme = "README.md"
 
 repository = "https://github.com/Luna-Flow/arithmetic"
 
-license = "MIT"
+license = "Apache-2.0"
 
 keywords = [ "math", "arithmetic", "elementary-functions" ]
 

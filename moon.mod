@@ -15,7 +15,7 @@ license = "Apache-2.0"
 
 keywords = [ "math", "arithmetic", "elementary-functions" ]
 
-description = "Arithmetic capability traits and default real-valued instances for Luna projects."
+description = "Arithmetic capability traits and checked analytic operations for LunaFlow numeric types, with default real-valued instances."
 
 options(
   source: "src",

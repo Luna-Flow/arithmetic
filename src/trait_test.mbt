@@ -229,6 +229,26 @@ test "checked float and double sqrt lift returns ok" {
 }
 
 ///|
+test "checked float and double sqrt reject negative real inputs" {
+  match SqrtChecked::sqrt_checked((-1.0 : Float), default_ctx) {
+    Ok(_) => fail("expected negative float checked sqrt to fail")
+    Err(err) => assert_eq(err.is_domain_error(), true)
+  }
+  match SqrtChecked::sqrt_checked((-1.0 : Double), default_ctx) {
+    Ok(_) => fail("expected negative double checked sqrt to fail")
+    Err(err) => assert_eq(err.is_domain_error(), true)
+  }
+  match SqrtChecked::sqrt_checked((-0.0 : Float), default_ctx) {
+    Ok(value) => assert_eq(approx_eq_float(value, (0.0 : Float)), true)
+    Err(_) => fail("expected negative zero float checked sqrt to succeed")
+  }
+  match SqrtChecked::sqrt_checked((-0.0 : Double), default_ctx) {
+    Ok(value) => assert_eq(approx_eq_double(value, (0.0 : Double)), true)
+    Err(_) => fail("expected negative zero double checked sqrt to succeed")
+  }
+}
+
+///|
 test "checked float and double division lift enforces explicit zero-division errors" {
   match DivChecked::div_checked((8.0 : Float), (2.0 : Float), default_ctx) {
     Ok(value) => assert_eq(approx_eq_float(value, (4.0 : Float)), true)
@@ -286,5 +306,18 @@ test "checked power int handles negative exponents and zero-base failures" {
   match PowIntChecked::pow_int_checked((0.0 : Double), -1, default_ctx) {
     Ok(_) => fail("expected zero base with negative exponent to fail")
     Err(err) => assert_eq(err.is_division_by_zero(), true)
+  }
+}
+
+///|
+test "checked power int handles minimum int exponent without direct negation" {
+  let min_int = 1 << 31
+  match PowIntChecked::pow_int_checked((1.0 : Float), min_int, default_ctx) {
+    Ok(value) => assert_eq(approx_eq_float(value, (1.0 : Float)), true)
+    Err(_) => fail("expected minimum int exponent with base one to succeed")
+  }
+  match PowIntChecked::pow_int_checked((1.0 : Double), min_int, default_ctx) {
+    Ok(value) => assert_eq(approx_eq_double(value, (1.0 : Double)), true)
+    Err(_) => fail("expected minimum int exponent with base one to succeed")
   }
 }

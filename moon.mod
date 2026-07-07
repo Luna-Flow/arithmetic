@@ -1,6 +1,6 @@
 name = "Luna-Flow/arithmetic"
 
-version = "0.2.1"
+version = "0.2.2"
 
 import {
   "Kaida-Amethyst/math@0.1.20",
@@ -17,6 +17,4 @@ keywords = [ "math", "arithmetic", "elementary-functions" ]
 
 description = "Arithmetic capability traits and checked analytic operations for LunaFlow numeric types, with default real-valued instances."
 
-options(
-  source: "src",
-)
+source = "src"

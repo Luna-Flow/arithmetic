@@ -60,6 +60,11 @@ These are defined in `src/checked.mbt`.
 
 - Unchecked traits leave domain restrictions and branch semantics to the
   concrete instance.
+- Checked traits also use instance-defined domains; `SqrtChecked` does not
+  require every implementation to support real-number ordering or comparison
+  with zero.
+- The shipped `Float` and `Double` checked square roots are default real-valued
+  instances, so negative real inputs return `DomainError`.
 - On signed integers and `BigInt`, `Power` requires a non-negative exponent;
   negative exponents abort at runtime.
 - `ArithmeticContext::new` clamps precision to at least `1`.

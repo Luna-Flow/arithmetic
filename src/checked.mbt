@@ -135,6 +135,11 @@ pub fn ArithmeticError::is_unordered_comparison(self : ArithmeticError) -> Bool 
 }
 
 /// Checked square-root capability with explicit arithmetic context.
+///
+/// Domain validity is defined by each concrete `Self`. This trait does not
+/// require a real-number ordering, zero comparison, or a universal notion of a
+/// negative input. Implementations should report structured domain errors for
+/// values that are invalid in their own mathematical domain.
 
 ///|
 pub(open) trait SqrtChecked {

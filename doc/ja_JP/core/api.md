@@ -58,6 +58,10 @@
 ## 意味論メモ
 
 - unchecked traits の定義域や branch は具体インスタンス依存です。
+- checked traits もインスタンスごとの数学的な定義域に従います。
+  `SqrtChecked` は、すべての実装に実数順序やゼロとの比較を要求しません。
+- 同梱の `Float` と `Double` の checked 平方根は既定の実数値インスタンスなので、
+  負の実数入力では `DomainError` を返します。
 - 符号付き整数と `BigInt` に対する `Power` は非負指数を要求し、負指数は
   実行時 abort になります。
 - `ArithmeticContext::new` は precision を最低 `1` に補正します。

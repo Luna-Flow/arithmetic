@@ -21,6 +21,15 @@ fn float_pow_nat(base : Float, exponent : UInt) -> Float {
 }
 
 ///|
+fn float_int_abs_magnitude_as_uint(exponent : Int) -> UInt {
+  if exponent >= 0 {
+    exponent.reinterpret_as_uint()
+  } else {
+    (-(exponent + 1)).reinterpret_as_uint() + 1U
+  }
+}
+
+///|
 pub impl Sqrt for Float with fn sqrt(x) -> Float {
   @km.sqrtf(x)
 }
@@ -148,6 +157,13 @@ pub impl SqrtChecked for Float with fn sqrt_checked(x, _ctx) -> Result[
   Float,
   ArithmeticError,
 ] {
+  guard x >= 0.0 || float_is_nan(x) else {
+    return Err(
+      ArithmeticError::domain_error(
+        "square root is undefined for negative real inputs",
+      ),
+    )
+  }
   Ok(Sqrt::sqrt(x))
 }
 
@@ -197,8 +213,15 @@ pub impl PowIntChecked for Float with fn pow_int_checked(base, exponent, ctx) ->
         ),
       )
     }
-    let positive = float_pow_nat(base, (-exponent).reinterpret_as_uint())
+    let positive = float_pow_nat(
+      base,
+      float_int_abs_magnitude_as_uint(exponent),
+    )
     return DivChecked::div_checked(1.0, positive, ctx)
   }
-  PowNatChecked::pow_nat_checked(base, exponent.reinterpret_as_uint(), ctx)
+  PowNatChecked::pow_nat_checked(
+    base,
+    float_int_abs_magnitude_as_uint(exponent),
+    ctx,
+  )
 }

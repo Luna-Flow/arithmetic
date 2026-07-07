@@ -56,6 +56,10 @@
 ## 语义说明
 
 - unchecked traits 把定义域和 branch 语义交给具体实例决定。
+- checked traits 也使用实例定义的数学域；`SqrtChecked` 不要求所有实现都支持
+  实数序或与零比较。
+- 内置的 `Float` 与 `Double` checked 平方根是默认实值实例，因此负实数输入会返回
+  `DomainError`。
 - 在有符号整数和 `BigInt` 上，`Power` 要求指数非负；负指数会在运行时 abort。
 - `ArithmeticContext::new` 会把 precision 下限钳到 `1`。
 - `PowNatChecked` 把 `x^0` 视为乘法单位元，包括 `0^0`。

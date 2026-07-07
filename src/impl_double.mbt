@@ -1,6 +1,11 @@
 ///|
 fn double_is_nan(x : Double) -> Bool {
-  x != x
+  Double::is_nan(x)
+}
+
+///|
+fn double_is_inf(x : Double) -> Bool {
+  Double::is_inf(x)
 }
 
 ///|
@@ -172,6 +177,16 @@ pub impl DivChecked for Double with fn div_checked(lhs, rhs, _ctx) -> Result[
   Double,
   ArithmeticError,
 ] {
+  guard !(lhs == 0.0 && rhs == 0.0) else {
+    return Err(
+      ArithmeticError::domain_error("zero divided by zero is undefined"),
+    )
+  }
+  guard !(double_is_inf(lhs) && double_is_inf(rhs)) else {
+    return Err(
+      ArithmeticError::domain_error("infinity divided by infinity is undefined"),
+    )
+  }
   guard rhs != 0.0 else {
     return Err(ArithmeticError::division_by_zero("division by zero"))
   }

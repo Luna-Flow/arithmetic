@@ -64,7 +64,7 @@ This documentation tracks the current `v0.2.2` package baseline.
 - Each trait preserves the concrete `Self` type instead of introducing widening or wrapper return types.
 - Domain validity remains part of the caller contract unless a specific instance documents stronger guarantees.
 - Unchecked floating-point instances inherit special-value behavior, branch choices, and principal-value conventions from `Kaida-Amethyst/math`.
-- Checked `Float` and `Double` instances use the same backend for ordinary values but may report structured errors for documented real-valued domain failures, such as negative real inputs to checked square root.
+- Checked `Float` and `Double` instances use the same backend for ordinary values but may report structured errors for documented real-valued domain failures, such as negative real inputs to checked square root or indeterminate checked division forms.
 - The current built-in `Float` and `Double` checked operations do not implement arbitrary precision or rounding control from `ArithmeticContext`; the context is shared boundary data for contextual implementations.
 - Integer-family instances are intentionally narrower: this package only implements capabilities that stay meaningfully closed on those concrete types.
 - Unchecked/context-free elementary traits remain available for native scalars and other backends where direct IEEE-style behavior is acceptable.

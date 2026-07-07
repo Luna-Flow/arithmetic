@@ -63,8 +63,13 @@ These are defined in `src/checked.mbt`.
 - Checked traits also use instance-defined domains; `SqrtChecked` does not
   require every implementation to support real-number ordering or comparison
   with zero.
+- `DivChecked` likewise does not require floating-point concepts such as NaN or
+  infinity; invalid division is defined by each concrete instance.
 - The shipped `Float` and `Double` checked square roots are default real-valued
   instances, so negative real inputs return `DomainError`.
+- The shipped `Float` and `Double` checked divisions classify `0 / 0` and
+  `infinity / infinity` as `DomainError`, while non-zero division by zero
+  remains `DivisionByZero`.
 - On signed integers and `BigInt`, `Power` requires a non-negative exponent;
   negative exponents abort at runtime.
 - `ArithmeticContext::new` clamps precision to at least `1`.

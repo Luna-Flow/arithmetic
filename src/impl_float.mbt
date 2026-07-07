@@ -1,6 +1,11 @@
 ///|
 fn float_is_nan(x : Float) -> Bool {
-  x != x
+  Float::is_nan(x)
+}
+
+///|
+fn float_is_inf(x : Float) -> Bool {
+  Float::is_inf(x)
 }
 
 ///|
@@ -172,6 +177,16 @@ pub impl DivChecked for Float with fn div_checked(lhs, rhs, _ctx) -> Result[
   Float,
   ArithmeticError,
 ] {
+  guard !(lhs == 0.0 && rhs == 0.0) else {
+    return Err(
+      ArithmeticError::domain_error("zero divided by zero is undefined"),
+    )
+  }
+  guard !(float_is_inf(lhs) && float_is_inf(rhs)) else {
+    return Err(
+      ArithmeticError::domain_error("infinity divided by infinity is undefined"),
+    )
+  }
   guard rhs != 0.0 else {
     return Err(ArithmeticError::division_by_zero("division by zero"))
   }

@@ -147,6 +147,11 @@ pub(open) trait SqrtChecked {
 }
 
 /// Checked division capability with explicit arithmetic context.
+///
+/// Invalid division is defined by each concrete `Self`. This trait does not
+/// require IEEE floating-point values, infinities, NaN, or a scalar total
+/// order. Implementations should use structured errors for division cases that
+/// are invalid in their own mathematical domain.
 
 ///|
 pub(open) trait DivChecked {

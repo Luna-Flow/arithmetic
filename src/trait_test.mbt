@@ -261,6 +261,28 @@ test "checked float and double division lift enforces explicit zero-division err
 }
 
 ///|
+test "checked float and double division classifies indeterminate forms" {
+  let float_inf : Float = 1.0 / 0.0
+  let double_inf : Double = 1.0 / 0.0
+  match DivChecked::div_checked((0.0 : Float), (0.0 : Float), default_ctx) {
+    Ok(_) => fail("expected zero divided by zero to fail")
+    Err(err) => assert_eq(err.is_domain_error(), true)
+  }
+  match DivChecked::div_checked(double_inf, double_inf, default_ctx) {
+    Ok(_) => fail("expected infinity divided by infinity to fail")
+    Err(err) => assert_eq(err.is_domain_error(), true)
+  }
+  match DivChecked::div_checked((-1.0 : Float), (0.0 : Float), default_ctx) {
+    Ok(_) => fail("expected non-zero division by zero to fail")
+    Err(err) => assert_eq(err.is_division_by_zero(), true)
+  }
+  match DivChecked::div_checked((1.0 : Float), float_inf, default_ctx) {
+    Ok(value) => assert_eq(approx_eq_float(value, (0.0 : Float)), true)
+    Err(_) => fail("expected finite division by infinity to succeed")
+  }
+}
+
+///|
 test "checked scalar comparison rejects nan" {
   let nan_d = 0.0 / 0.0
   match CompareChecked::compare_checked((1.0 : Double), (2.0 : Double)) {

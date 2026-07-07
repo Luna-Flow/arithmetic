@@ -60,8 +60,13 @@
 - unchecked traits の定義域や branch は具体インスタンス依存です。
 - checked traits もインスタンスごとの数学的な定義域に従います。
   `SqrtChecked` は、すべての実装に実数順序やゼロとの比較を要求しません。
+- `DivChecked` も NaN や infinity のような浮動小数点概念を要求しません。
+  不正な除算は具体インスタンスの数学的な定義域で決まります。
 - 同梱の `Float` と `Double` の checked 平方根は既定の実数値インスタンスなので、
   負の実数入力では `DomainError` を返します。
+- 同梱の `Float` と `Double` の checked 除算は `0 / 0` と
+  `infinity / infinity` を `DomainError` に分類し、非ゼロ値のゼロ除算は
+  `DivisionByZero` のまま扱います。
 - 符号付き整数と `BigInt` に対する `Power` は非負指数を要求し、負指数は
   実行時 abort になります。
 - `ArithmeticContext::new` は precision を最低 `1` に補正します。

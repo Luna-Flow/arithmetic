@@ -1,19 +1,43 @@
-# core 設計
+# Core 設計
 
 ## 設計目標
 
-`arithmetic` は LunaFlow を「代数構造」から「解析 capability」へ広げつつ、
-後端差異と意味論境界を明示したまま扱うことを目指します。
+`arithmetic` は Luna Flow を代数構造から解析 capability と context 依存の数値能力へ
+拡張しつつ、後端ごとの意味論を明示したまま扱います。
 
-## 主な設計判断
+## Capability 境界
 
-- 解析 capability を小さな traits 群へ分割する。
-- unchecked と checked を共存させ、直接後端意味論と明示的検証を選べるようにする。
-- checked 層は `ArithmeticContext` と `ArithmeticError` を共有する。
-- enclosure 関係を scalar 比較から分離し、意味論上の嘘を避ける。
-- 整数族は閉じた操作だけを公開し、surface を意図的に狭く保つ。
+- unchecked traits は context を持たない直接的な後端演算を表します。
+- checked traits は、成功値を診断レコードへ変えずに定義域や算術エラーを明示します。
+- contextual traits は `ArithmeticContext` を受け取り `ArithmeticOutcome[T]` を返し、
+  丸めや例外条件のフラグを報告できるようにします。
+- enclosure 関係は scalar 比較から分離します。
+
+アルゴリズムは、要件を表す最小の既存 trait 構成に依存すべきです。広すぎるローカルな
+“number” や “real” trait は、数値領域ごとの重要な違いを隠してしまいます。
+
+## データと効果
+
+`ArithmeticContext`、`ArithmeticDiagnostics`、`ArithmeticOutcome` は通常の値です。
+context は明示的に渡し、diagnostics は純粋な `combine` で集約します。パッケージ全体の
+算術状態は必要ありません。
+
+エラーは `Result[..., ArithmeticError]` で明示します。診断フラグは成功した計算に伴う
+注目すべき条件を表し、実装が拒否した操作のエラーを置き換えるものではありません。
+
+## 組み込み Adapter 戦略
+
+`Float` と `Double` は新しい contextual 境界を既存のネイティブ演算と checked 演算へ
+接続します。除算と平方根は checked 検証を再利用し、その他はネイティブ scalar の
+挙動を維持します。
+
+これらはインターフェースを利用可能にする adapter であり、software decimal engine
+ではありません。任意精度、方向付き丸め、指数 clamp、完全な IEEE フラグ生成を
+実装したようには扱いません。
 
 ## 境界
 
-- このパッケージはベクトル、行列、複素数、記号オブジェクトを定義しない。
-- branch cut や特殊値意味論を 1 つの曖昧な抽象へ押し込まない。
+- このパッケージはベクトル、行列、複素数、記号オブジェクト、任意精度 decimal
+  ストレージを定義しません。
+- branch cut や特殊値を 1 つの広い抽象へ押し込みません。
+- contextual rounding、指数処理、diagnostics 生成は具体的な数値後端が担当します。

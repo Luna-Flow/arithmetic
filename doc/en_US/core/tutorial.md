@@ -1,41 +1,80 @@
-# core Tutorial
+# Core Tutorial
 
-## Generic analytic helper
+## Generic Analytic Helper
 
 ```moonbit
 fn hypot2[T : Add + Mul + Sqrt](x : T, y : T) -> T {
-  (x * x + y * y).sqrt()
+  Sqrt::sqrt(x * x + y * y)
 }
 ```
 
-This expresses exactly which capability the algorithm needs, without tying it
-to one concrete numeric type.
+This signature requests only the capabilities the algorithm uses.
 
-## Checked division
+## Construct an Arithmetic Context
 
 ```moonbit
-fn safe_ratio[T : DivChecked](x : T, y : T) -> Result[T, ArithmeticError] {
-  x.div_checked(y, ArithmeticContext::new(32))
-}
+let custom = ArithmeticContext::new(
+  24,
+  rounding=RoundingMode::TowardNegative,
+  e_min=-100,
+  e_max=100,
+  clamp=true,
+)
+let standard = ArithmeticContext::decimal64()
 ```
 
-Use the checked layer when zero-division, domain validity, or precision
-sensitivity should be surfaced explicitly.
+Use a preset when its decimal format matches the backend contract. Use `new`
+when a concrete backend supports a different working context.
 
-## Checked comparison
+## Contextual Division
 
 ```moonbit
-fn ordering_or_error[T : CompareChecked](lhs : T, rhs : T) -> Result[Int, ArithmeticError] {
-  lhs.compare_checked(rhs)
+let outcome = DivContextual::div_contextual(
+  10.0,
+  4.0,
+  ArithmeticContext::decimal64(),
+).unwrap()
+
+inspect(outcome.value, content="2.5")
+inspect(outcome.diagnostics.inexact, content="false")
+```
+
+The built-in `Double` instance validates division through `DivChecked` and
+wraps a successful result with exact diagnostics. A decimal backend may use the
+same trait while producing rounding or clamping flags.
+
+## Combine Diagnostics
+
+```moonbit
+let diagnostics = first.diagnostics.combine(second.diagnostics)
+let result = ArithmeticOutcome::with_diagnostics(second.value, diagnostics)
+```
+
+Combining diagnostics is an explicit value transformation. It does not mutate
+either input or package-global state.
+
+## Checked Comparison
+
+```moonbit
+fn ordering_or_error[T : CompareChecked](
+  lhs : T,
+  rhs : T,
+) -> Result[Int, ArithmeticError] {
+  CompareChecked::compare_checked(lhs, rhs)
 }
 ```
 
-This is the right path when unordered values such as NaN must not be silently
+Use the checked path when unordered values such as NaN must not be silently
 coerced into a total order.
 
-## Practical guidance
+## Practical Guidance
 
-- Use unchecked traits only when direct backend semantics are acceptable.
-- Use checked traits at API boundaries.
-- Keep algebraic structure in `luna-generic`; use `arithmetic` for analytic
-  capabilities.
+- Use unchecked traits when direct backend semantics are acceptable.
+- Use checked traits when failure must be explicit but diagnostics are not
+  needed.
+- Use contextual traits when an algorithm must pass working context and retain
+  diagnostic flags.
+- Do not assume the built-in `Float` or `Double` contextual instances emulate
+  decimal precision or directed rounding.
+- Keep algebraic structure in `luna-generic`; use `arithmetic` for analytic and
+  contextual capabilities.

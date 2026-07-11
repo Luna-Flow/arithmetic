@@ -24,6 +24,9 @@ pub(all) enum RoundingMode {
 pub struct ArithmeticContext {
   precision : Int
   rounding : RoundingMode
+  e_min : Int?
+  e_max : Int?
+  clamp : Bool
 } derive(Eq)
 
 /// Structured arithmetic error categories shared across Luna-Flow.
@@ -50,8 +53,29 @@ pub struct ArithmeticError {
 pub fn ArithmeticContext::new(
   precision : Int,
   rounding? : RoundingMode = RoundingMode::ToNearestEven,
+  e_min? : Int,
+  e_max? : Int,
+  clamp? : Bool = false,
 ) -> ArithmeticContext {
-  { precision: Int::max(1, precision), rounding }
+  guard e_min is None || e_max is None || e_min.unwrap() <= e_max.unwrap() else {
+    abort("ArithmeticContext::new: e_min must not exceed e_max")
+  }
+  { precision: Int::max(1, precision), rounding, e_min, e_max, clamp }
+}
+
+///|
+pub fn ArithmeticContext::decimal32() -> ArithmeticContext {
+  ArithmeticContext::new(7, e_min=-95, e_max=96, clamp=true)
+}
+
+///|
+pub fn ArithmeticContext::decimal64() -> ArithmeticContext {
+  ArithmeticContext::new(16, e_min=-383, e_max=384, clamp=true)
+}
+
+///|
+pub fn ArithmeticContext::decimal128() -> ArithmeticContext {
+  ArithmeticContext::new(34, e_min=-6143, e_max=6144, clamp=true)
 }
 
 ///|

@@ -1,6 +1,6 @@
 name = "Luna-Flow/arithmetic"
 
-version = "0.2.2"
+version = "0.3.0"
 
 import {
   "Kaida-Amethyst/math@0.1.20",

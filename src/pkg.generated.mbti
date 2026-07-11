@@ -3,6 +3,7 @@ package "Luna-Flow/arithmetic"
 
 import {
   "moonbitlang/core/bigint",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -13,8 +14,26 @@ import {
 pub struct ArithmeticContext {
   precision : Int
   rounding : RoundingMode
+  e_min : Int?
+  e_max : Int?
+  clamp : Bool
 } derive(Eq)
-pub fn ArithmeticContext::new(Int, rounding? : RoundingMode) -> Self
+pub fn ArithmeticContext::decimal128() -> Self
+pub fn ArithmeticContext::decimal32() -> Self
+pub fn ArithmeticContext::decimal64() -> Self
+pub fn ArithmeticContext::new(Int, rounding? : RoundingMode, e_min? : Int, e_max? : Int, clamp? : Bool) -> Self
+
+pub struct ArithmeticDiagnostics {
+  inexact : Bool
+  rounded : Bool
+  overflow : Bool
+  underflow : Bool
+  subnormal : Bool
+  clamped : Bool
+} derive(Eq, @debug.Debug)
+pub fn ArithmeticDiagnostics::combine(Self, Self) -> Self
+pub fn ArithmeticDiagnostics::empty() -> Self
+pub fn ArithmeticDiagnostics::new(inexact? : Bool, rounded? : Bool, overflow? : Bool, underflow? : Bool, subnormal? : Bool, clamped? : Bool) -> Self
 
 pub struct ArithmeticError {
   kind : ArithmeticErrorKind
@@ -42,6 +61,13 @@ pub enum ArithmeticErrorKind {
   UnorderedComparison
 } derive(Eq)
 
+pub struct ArithmeticOutcome[T] {
+  value : T
+  diagnostics : ArithmeticDiagnostics
+} derive(Eq, @debug.Debug)
+pub fn[T] ArithmeticOutcome::exact(T) -> Self[T]
+pub fn[T] ArithmeticOutcome::with_diagnostics(T, ArithmeticDiagnostics) -> Self[T]
+
 pub(all) enum FpClass {
   Finite
   Infinity
@@ -59,6 +85,18 @@ pub(all) enum RoundingMode {
 // Type aliases
 
 // Traits
+pub(open) trait AbsContextual {
+  fn abs_contextual(Self, ArithmeticContext) -> Result[ArithmeticOutcome[Self], ArithmeticError]
+}
+pub impl AbsContextual for Float
+pub impl AbsContextual for Double
+
+pub(open) trait AddContextual {
+  fn add_contextual(Self, Self, ArithmeticContext) -> Result[ArithmeticOutcome[Self], ArithmeticError]
+}
+pub impl AddContextual for Float
+pub impl AddContextual for Double
+
 pub(open) trait Cbrt {
   fn cbrt(Self) -> Self
 }
@@ -96,6 +134,18 @@ pub(open) trait DivChecked {
 }
 pub impl DivChecked for Float
 pub impl DivChecked for Double
+
+pub(open) trait DivContextual {
+  fn div_contextual(Self, Self, ArithmeticContext) -> Result[ArithmeticOutcome[Self], ArithmeticError]
+}
+pub impl DivContextual for Float
+pub impl DivContextual for Double
+
+pub(open) trait ExpContextual {
+  fn exp_contextual(Self, ArithmeticContext) -> Result[ArithmeticOutcome[Self], ArithmeticError]
+}
+pub impl ExpContextual for Float
+pub impl ExpContextual for Double
 
 pub(open) trait Exponential {
   fn exp(Self) -> Self
@@ -140,6 +190,23 @@ pub impl Logarithmic for Double
 pub(open) trait MaybeEq {
   fn maybe_eq(Self, Self) -> Bool
 }
+
+pub(open) trait MulContextual {
+  fn mul_contextual(Self, Self, ArithmeticContext) -> Result[ArithmeticOutcome[Self], ArithmeticError]
+}
+pub impl MulContextual for Float
+pub impl MulContextual for Double
+
+pub(open) trait NumericFormatContextual {
+  fn zero_contextual(ArithmeticContext) -> Self
+  fn one_contextual(ArithmeticContext) -> Self
+  fn epsilon_contextual(ArithmeticContext) -> Self
+  fn min_normal_contextual(ArithmeticContext) -> Self
+  fn max_finite_contextual(ArithmeticContext) -> Self
+  fn classify_contextual(Self) -> FpClass
+}
+pub impl NumericFormatContextual for Float
+pub impl NumericFormatContextual for Double
 
 pub(open) trait Overlaps {
   fn overlaps(Self, Self) -> Bool
@@ -190,6 +257,18 @@ pub(open) trait SqrtChecked {
 }
 pub impl SqrtChecked for Float
 pub impl SqrtChecked for Double
+
+pub(open) trait SqrtContextual {
+  fn sqrt_contextual(Self, ArithmeticContext) -> Result[ArithmeticOutcome[Self], ArithmeticError]
+}
+pub impl SqrtContextual for Float
+pub impl SqrtContextual for Double
+
+pub(open) trait SubContextual {
+  fn sub_contextual(Self, Self, ArithmeticContext) -> Result[ArithmeticOutcome[Self], ArithmeticError]
+}
+pub impl SubContextual for Float
+pub impl SubContextual for Double
 
 pub(open) trait Trigonometric {
   fn sin(Self) -> Self

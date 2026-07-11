@@ -1,140 +1,155 @@
 # Arithmetic
 
-Arithmetic capability traits for Luna projects.
+Arithmetic capability traits and checked or contextual numeric boundaries for
+Luna Flow projects.
 
-## v0.2.2 - Instance-Specific Checked Domain Semantics
+## v0.3.0 - Contextual Arithmetic Outcomes
 
-This documentation tracks the current `v0.2.2` package baseline.
+This README matches the **v0.3.0** repository state. The release adds explicit
+contextual operation results, composable arithmetic diagnostics, decimal
+context presets, and `Float` / `Double` implementations for the new capability
+surface.
 
-### Package Positioning
+For earlier release notes and repository history, see
+[CHANGELOG.md](./CHANGELOG.md).
 
-- `luna-generic` expresses algebraic structure such as `Ring`, `Field`, and `Num`.
-- `arithmetic` expresses analytic and elementary-function capabilities such as `sqrt`, `exp`, `log`, and trigonometric functions.
-- The package intentionally describes capabilities rather than declaring “real number” abstractions.
-- Packages such as `floating` and future packages such as `computable-real` should implement these traits where the semantics make sense, rather than inheriting a premature bundled `Real` notion from this package.
-- The floating-point instances directly call `Kaida-Amethyst/math`.
+### Release Notes
 
-### Public Surface
+- `ArithmeticContext` now carries optional exponent limits and a clamp flag in
+  addition to precision and rounding mode.
+- `ArithmeticContext::decimal32`, `decimal64`, and `decimal128` provide standard
+  decimal working-context presets.
+- `ArithmeticOutcome[T]` pairs a value with `ArithmeticDiagnostics`, whose flags
+  can be combined without hidden mutable state.
+- Contextual traits cover addition, subtraction, multiplication, division,
+  absolute value, square root, exponential, and numeric-format facts.
+- The built-in `Float` and `Double` instances expose the new surface while
+  preserving their existing native and `Kaida-Amethyst/math` behavior.
 
-- Atomic traits:
-  - `Sqrt`
-  - `Cbrt`
-  - `Radical`
-  - `Exponential`
-  - `Logarithmic`
-  - `Power`
-  - `Trigonometric`
-  - `InverseTrigonometric`
-  - `Hyperbolic`
-  - `InverseHyperbolic`
-  - `Constants`
-- Checked/contextual shared types:
-  - `FpClass`
-  - `RoundingMode`
-  - `ArithmeticContext`
-  - `ArithmeticErrorKind`
-  - `ArithmeticError`
-- Checked/contextual traits:
-  - `SqrtChecked`
-  - `DivChecked`
-  - `CompareChecked`
-  - `PowNatChecked`
-  - `PowIntChecked`
-  - `ParseChecked`
-- Enclosure traits:
-  - `Contains`
-  - `Overlaps`
-  - `DefinitelyLt`
-  - `DefinitelyLe`
-  - `MaybeEq`
-- Default instances in the root package:
-  - `Float`
-  - `Double`
-  - `BigInt`
-  - `Int`
-  - `Int16`
-  - `Int64`
-  - `UInt`
-  - `UInt16`
-  - `UInt64`
+## Package Positioning
 
-### Semantic Contract
+- `luna-generic` expresses algebraic structure such as `Ring`, `Field`, and
+  `Num`.
+- `arithmetic` expresses analytic functions, checked operations, contextual
+  outcomes, and enclosure-style relations.
+- The package describes small capabilities rather than declaring a bundled
+  “real number” abstraction.
+- Concrete numeric packages should implement only the traits whose semantics
+  they can support faithfully.
 
-- The package documents callable capabilities, not a unified semantic model for all numeric domains.
-- Each trait preserves the concrete `Self` type instead of introducing widening or wrapper return types.
-- Domain validity remains part of the caller contract unless a specific instance documents stronger guarantees.
-- Unchecked floating-point instances inherit special-value behavior, branch choices, and principal-value conventions from `Kaida-Amethyst/math`.
-- Checked `Float` and `Double` instances use the same backend for ordinary values but may report structured errors for documented real-valued domain failures, such as negative real inputs to checked square root or indeterminate checked division forms.
-- The current built-in `Float` and `Double` checked operations do not implement arbitrary precision or rounding control from `ArithmeticContext`; the context is shared boundary data for contextual implementations.
-- Integer-family instances are intentionally narrower: this package only implements capabilities that stay meaningfully closed on those concrete types.
-- Unchecked/context-free elementary traits remain available for native scalars and other backends where direct IEEE-style behavior is acceptable.
-- Checked/contextual traits use `Result[Self, ArithmeticError]` plus `ArithmeticContext` to express validated, precision-aware, or error-aware arithmetic boundaries.
-- Enclosure traits describe containment/overlap style relations without pretending enclosure values are totally ordered scalars.
+## Capability Layers
 
-### Official Base-Type Wrapping
+### Unchecked Elementary Traits
 
-- `src/impl_float.mbt` and `src/impl_double.mbt` directly bind the trait surface to `Kaida-Amethyst/math`.
-- `src/impl_bigint.mbt`, `src/impl_signed_ints.mbt`, and `src/impl_unsigned_ints.mbt` provide exact integer-family impls only for the capabilities that stay closed on those types.
-- Algebraic structure still lives in `luna-generic`; this package only binds function capabilities to concrete numeric backends.
-- `Constants` only states that the given `Self` exposes the standard scalar constants used by the package.
+- `Sqrt`, `Cbrt`, `Radical`
+- `Exponential`, `Logarithmic`, `Power`
+- `Trigonometric`, `InverseTrigonometric`
+- `Hyperbolic`, `InverseHyperbolic`
+- `Constants`
 
-### Instance-Specific Preconditions
+These traits preserve direct backend behavior and return `Self`.
 
-- `Power::pow` uses one shared signature across floating and integer families.
-- For `Float` and `Double`, `pow` follows the backend floating-point semantics from `Kaida-Amethyst/math`.
-- For `BigInt`, `Int`, `Int16`, and `Int64`, the exponent must be non-negative.
-- Supplying a negative exponent to those signed integer-family instances aborts at runtime, because the result would not remain closed in the same integer type.
-- `UInt`, `UInt16`, and `UInt64` are already non-negative by construction, so their `pow` surface has no extra signed-exponent check.
-- This package exposes the capability surface and its preconditions; selecting arguments that satisfy the mathematical domain is still partly the caller's responsibility.
-- `PowNatChecked` and `PowIntChecked` split integer-exponent power from general unchecked `pow(Self, Self)`.
-- In this first checked-power layer, `x^0` returns one, including `0^0`.
-- `PowIntChecked` requires reciprocal/division semantics for negative exponents and must not silently accept zero base with a negative exponent.
+### Checked Traits
 
-### API Guidance
+- `SqrtChecked`, `DivChecked`, `CompareChecked`
+- `PowNatChecked`, `PowIntChecked`, `ParseChecked`
 
-- Use the narrowest trait that matches an algorithm.
-- Prefer direct capability constraints such as `Sqrt`, `Trigonometric`, or `Logarithmic` instead of semantic bundle traits.
-- `Power` remains intentionally undivided in this release, even though integer and floating use cases may be split more carefully later.
-- This package does not define “realness”; it defines callable capability surfaces.
-- When an algorithm may produce out-of-domain arguments, validate them at the application layer before calling the trait method.
-- For high-precision, validated, or context-sensitive numeric types, prefer the checked/contextual traits over the unchecked elementary traits.
-- `arithmetic` is a capability-boundary package; it does not add calculus, matrices, complex numbers, symbolic algebra, or special-function layers.
-- Packages such as `floating` implement these capability boundaries for concrete numeric representations.
-- `floating` now targets the published checked capability boundary from this package rather than carrying its own ecosystem-level arithmetic error/context types.
+Checked traits return `Result[..., ArithmeticError]` and use
+`ArithmeticContext` where the operation needs an explicit context.
 
-### Quick Start
+### Contextual Outcome Traits
+
+- `AddContextual`, `SubContextual`, `MulContextual`, `DivContextual`
+- `AbsContextual`, `SqrtContextual`, `ExpContextual`
+- `NumericFormatContextual`
+
+Contextual operations return `ArithmeticOutcome[Self]` inside `Result`, keeping
+the computed value and diagnostic flags together as immutable data.
+
+### Enclosure Relations
+
+- `Contains`, `Overlaps`
+- `DefinitelyLt`, `DefinitelyLe`, `MaybeEq`
+
+These traits model containment and definite or possible relations without
+pretending enclosure values form a scalar total order.
+
+## Context Contract
+
+- `ArithmeticContext::new` clamps precision to at least `1`.
+- If both exponent limits are present, `e_min` must not exceed `e_max`.
+- The decimal presets use precisions `7`, `16`, and `34` with their matching
+  exponent ranges and clamping enabled.
+- `ArithmeticDiagnostics::combine` merges flags with logical OR, so callers can
+  aggregate a sequence of outcomes explicitly.
+
+The built-in `Float` and `Double` contextual implementations do **not** emulate
+arbitrary decimal precision, directed rounding, exponent clamping, or IEEE
+status-flag detection. They currently return exact diagnostics for successful
+native operations; contextual division and square root delegate validation to
+their checked counterparts. The richer context and diagnostics are public
+capability boundaries for numeric backends that can implement those semantics.
+
+## Installation
+
+```bash
+moon add Luna-Flow/arithmetic@0.3.0
+moon add Luna-Flow/luna-generic@0.3.1
+```
+
+Use explicit Luna Flow aliases in `moon.pkg`:
+
+```moonbit nocheck
+import {
+  "Luna-Flow/luna-generic" @lf_alg,
+  "Luna-Flow/arithmetic" @lf_arith,
+}
+```
+
+## Quick Start
 
 ```moonbit
-using @lg { trait Add, trait Mul }
+using @lf_alg { trait Add, trait Mul }
+using @lf_arith { trait Sqrt }
 
 fn hypot2[T : Add + Mul + Sqrt](x : T, y : T) -> T {
   Sqrt::sqrt(x * x + y * y)
 }
 
-fn polar_x[T : Mul + Trigonometric](r : T, theta : T) -> T {
-  r * Trigonometric::cos(theta)
-}
-
-inspect(hypot2(3.0, 4.0), content="5")
-inspect(
-  polar_x(2.0, Constants::pi() / 3.0),
-  content="1.0000000000000002",
-)
+let context = @lf_arith.ArithmeticContext::decimal64()
+let outcome = @lf_arith.DivContextual::div_contextual(10.0, 4.0, context).unwrap()
+inspect(outcome.value, content="2.5")
+inspect(outcome.diagnostics.inexact, content="false")
 ```
 
-### Documentation
-
-We provide README-level documentation in multiple languages:
+## Documentation
 
 - English: [doc/en_US/README.md](./doc/en_US/README.md)
 - Simplified Chinese: [doc/zh_CN/README.md](./doc/zh_CN/README.md)
 - Japanese: [doc/ja_JP/README.md](./doc/ja_JP/README.md)
+- Documentation standard: [doc/en_US/doc_standard.md](./doc/en_US/doc_standard.md)
+
+## Changelog
+
+Historical release notes live in [CHANGELOG.md](./CHANGELOG.md). This README
+stays focused on the current package baseline and entry points.
 
 ## Development
 
 Useful local commands:
 
 ```bash
-moon check
+moon fmt
+moon info
+moon check --target all
 moon test
 ```
+
+## Release Checklist
+
+1. Bump `moon.mod` to the intended release version.
+2. Update `README.md`, localized documentation, and `CHANGELOG.md`.
+3. Run `moon fmt`, `moon info`, `moon check --target all`, and `moon test`.
+4. Push the verified release state and trigger the `publish-package` workflow.
+
+The workflow publishes the version declared in `moon.mod` to mooncakes.

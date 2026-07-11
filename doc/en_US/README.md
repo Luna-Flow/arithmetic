@@ -1,42 +1,46 @@
 # Arithmetic Documentation
 
-This directory contains the English documentation baseline for `arithmetic` `0.2.2`.
+This directory contains the English documentation baseline for `arithmetic`
+**0.3.0**. Earlier release history lives in
+[CHANGELOG.md](../../CHANGELOG.md).
 
-## Core Documents
+## Release Focus
 
-- Package README: [../../README.md](../../README.md)
-
-## Surface Summary
-
-- Algebra remains in `luna-generic`.
-- `arithmetic` provides function capabilities, not a bundled “real number” abstraction.
-- `Float` and `Double` instances live in the root package and call `Kaida-Amethyst/math` directly.
-- `BigInt` and the integer family provide only exact capability impls such as integer `Power`.
-- These floating-point instances use `Kaida-Amethyst/math` as their backend.
-- The package does not model ordering, topology, branch cuts, or principal-value semantics.
+- `ArithmeticContext` now includes exponent limits, clamping, and decimal32,
+  decimal64, and decimal128 presets.
+- `ArithmeticOutcome[T]` carries a result value and immutable
+  `ArithmeticDiagnostics` flags.
+- Contextual traits cover core arithmetic, selected analytic operations, and
+  numeric-format facts.
+- `Float` and `Double` implement the new surface without claiming arbitrary
+  precision or context-controlled rounding.
 
 ## Capability Layers
 
-- Unchecked elementary traits remain available for native scalars and similar context-free backends.
-- Checked/contextual traits return `Result[Self, ArithmeticError]` and take `ArithmeticContext`.
-- Enclosure traits model containment and overlap relations without forcing a fake scalar total order.
+- Unchecked elementary traits expose direct backend behavior.
+- Checked traits expose structured domain and division failures.
+- Contextual traits return a value plus diagnostics under an explicit
+  `ArithmeticContext`.
+- Enclosure traits model containment and definite or possible relations.
 
-## Semantic Notes
+## Context Contract
 
-- Public traits preserve the concrete `Self` type instead of widening to helper result types.
-- Domain validity remains part of the caller contract unless an instance explicitly documents stronger behavior.
-- Unchecked floating-point instances inherit edge-value and branch semantics from `Kaida-Amethyst/math`.
-- Checked `Float` and `Double` instances may add structured errors for documented real-valued domain failures, such as negative real inputs to checked square root.
-- The built-in `Float` and `Double` checked operations currently do not apply arbitrary precision or rounding control from `ArithmeticContext`.
-- Integer-family support is intentionally narrower and only covers capabilities that remain closed on those types.
-- `arithmetic` is a capability-boundary package and does not define calculus, matrices, complex numbers, symbolic algebra, or special-function layers.
+- Precision is clamped to at least `1`.
+- `e_min` must not exceed `e_max` when both are supplied.
+- Decimal presets define precision, exponent range, and clamping together.
+- Diagnostics combine with logical OR and remain ordinary immutable values.
 
-## `Power` Preconditions
+## Built-in Instance Limits
 
-- `Power::pow` is shared across floating and integer families, but not every instance accepts the same argument space.
-- `BigInt`, `Int`, `Int16`, and `Int64` require a non-negative exponent.
-- Passing a negative exponent to those signed integer-family instances aborts at runtime.
-- `UInt`, `UInt16`, and `UInt64` avoid that specific precondition because their exponent type is already non-negative.
-- This package documents the preconditions, but selecting mathematically valid arguments remains partly the caller's responsibility.
-- `PowNatChecked` and `PowIntChecked` split integer-exponent power into checked capability boundaries.
-- In this checked layer, `x^0` returns one, including `0^0`.
+The built-in `Float` and `Double` contextual operations currently preserve
+native scalar behavior. They do not apply arbitrary decimal precision,
+directed rounding, exponent clamping, or status-flag detection. Successful
+operations therefore return exact diagnostics, while contextual division and
+square root reuse the checked validation paths.
+
+## Core Documents
+
+- [API reference](./core/api.md)
+- [Tutorial](./core/tutorial.md)
+- [Design](./core/design.md)
+- [Documentation standard](./doc_standard.md)

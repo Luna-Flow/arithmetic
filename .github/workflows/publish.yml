@@ -1,54 +1,58 @@
-name: publish-package
-run-name: publish to mooncakes
+name: Publish Package
+run-name: Publish arithmetic ${{ inputs.release_version }}
 
 on:
   workflow_dispatch:
+    inputs:
+      release_version:
+        description: Version declared in moon.mod, without a v prefix
+        required: true
+        type: string
+
+permissions:
+  contents: write
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: install
+      - uses: ./.github/actions/setup-moonbit
+      - name: Verify release version
+        env:
+          RELEASE_VERSION: ${{ inputs.release_version }}
         run: |
-          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
-          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
-
-      - name: moon version
+          PACKAGE_VERSION=$(sed -n 's/^version = "\([^"]*\)"/\1/p' moon.mod)
+          test -n "$PACKAGE_VERSION"
+          test "$RELEASE_VERSION" = "$PACKAGE_VERSION"
+      - name: Update registry
+        run: moon update
+      - name: Build all targets
+        run: moon build --target all
+      - name: Check all targets
+        run: moon check --target all --frozen
+      - name: Test default target
+        run: moon test --frozen
+      - name: Test JavaScript target
+        run: moon test --target js --frozen
+      - name: Test native target
+        run: moon test --target native --frozen
+      - name: Validate public interface snapshot
         run: |
-          moon version --all
-          moonrun --version
-
-      - name: read release version
-        id: release
-        run: |
-          test -f moon.mod
-          test ! -f moon.mod.json
-          test -f README.md
-          PKG_VERSION=$(sed -n 's/^version = "\(.*\)"$/\1/p' moon.mod)
-          echo "moon.mod version: $PKG_VERSION"
-          test -n "$PKG_VERSION"
-          echo "version=$PKG_VERSION" >> "$GITHUB_OUTPUT"
-
-      - name: moon update
-        run: |
-          moon update
-
-      - name: moon check
-        run: |
-          moon install
-          moon check --target all
-
-      - name: repository tests
-        run: |
-          moon test
-
-      - name: publish
-        run: |
-          trap 'rm -f ~/.moon/credentials.json' EXIT
-          echo "publishing version ${{ steps.release.outputs.version }}"
-          printf '%s' "$SECRET" > ~/.moon/credentials.json
-          moon publish
+          moon info
+          git diff --exit-code -- src/pkg.generated.mbti
+      - name: Check formatting
+        run: moon fmt --check
+      - name: Publish to mooncakes
         env:
           SECRET: ${{ secrets.LUNA_MOONCAKE }}
+        run: |
+          trap 'rm -f ~/.moon/credentials.json' EXIT
+          mkdir -p ~/.moon
+          printf '%s' "$SECRET" > ~/.moon/credentials.json
+          moon publish
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_VERSION: ${{ inputs.release_version }}
+        run: gh release create "v$RELEASE_VERSION" --title "v$RELEASE_VERSION" --generate-notes

@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify MoonBit package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-moonbit
+      - name: Update registry
+        run: moon update
+      - name: Build all targets
+        run: moon build --target all
+      - name: Check all targets
+        run: moon check --target all --frozen
+      - name: Test default target
+        run: moon test --frozen
+      - name: Test JavaScript target
+        run: moon test --target js --frozen
+      - name: Test native target
+        run: moon test --target native --frozen
+      - name: Validate public interface snapshot
+        run: |
+          moon info
+          git diff --exit-code -- src/pkg.generated.mbti
+      - name: Check formatting
+        run: moon fmt --check

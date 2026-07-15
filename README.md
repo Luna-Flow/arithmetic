@@ -3,28 +3,29 @@
 Arithmetic capability traits and checked or contextual numeric boundaries for
 Luna Flow projects.
 
-## v0.3.0 - Contextual Arithmetic Outcomes
+## v0.4.0 - Certified Evaluation Failures
 
-This README matches the **v0.3.0** repository state. The release adds explicit
-contextual operation results, composable arithmetic diagnostics, decimal
-context presets, and `Float` / `Double` implementations for the new capability
-surface.
+This README matches the **v0.4.0** repository state. The release adds a
+structured failure boundary for proof-backed numerical evaluation while
+retaining the contextual outcomes, diagnostics, and checked capability surface
+introduced in `0.3.0`.
 
 For earlier release notes and repository history, see
 [CHANGELOG.md](./CHANGELOG.md).
 
 ### Release Notes
 
-- `ArithmeticContext` now carries optional exponent limits and a clamp flag in
-  addition to precision and rounding mode.
-- `ArithmeticContext::decimal32`, `decimal64`, and `decimal128` provide standard
-  decimal working-context presets.
-- `ArithmeticOutcome[T]` pairs a value with `ArithmeticDiagnostics`, whose flags
-  can be combined without hidden mutable state.
-- Contextual traits cover addition, subtraction, multiplication, division,
-  absolute value, square root, exponential, and numeric-format facts.
-- The built-in `Float` and `Double` instances expose the new surface while
-  preserving their existing native and `Kaida-Amethyst/math` behavior.
+- `CertificationStage` records the proof step that could not establish a
+  result: range reduction, series evaluation, enclosure propagation, or target
+  rounding.
+- `CertificationFailureReason` distinguishes an uncertified range, missing
+  convergence, invalid enclosure, resource limit, and exhausted refinement
+  budget.
+- `CertificationFailureDetail` retains the operation, requested and working
+  precision, and the number of refinement attempts.
+- `ArithmeticErrorKind::CertificationFailure` and
+  `ArithmeticError::certification_failure` preserve that detail without
+  flattening it into an unstructured message.
 
 ## Package Positioning
 
@@ -56,6 +57,8 @@ These traits preserve direct backend behavior and return `Self`.
 
 Checked traits return `Result[..., ArithmeticError]` and use
 `ArithmeticContext` where the operation needs an explicit context.
+`ArithmeticError` can also carry a `CertificationFailureDetail` when a
+proof-backed backend cannot certify a result at the requested target.
 
 ### Contextual Outcome Traits
 
@@ -93,7 +96,7 @@ capability boundaries for numeric backends that can implement those semantics.
 ## Installation
 
 ```bash
-moon add Luna-Flow/arithmetic@0.3.0
+moon add Luna-Flow/arithmetic@0.4.0
 moon add Luna-Flow/luna-generic@0.3.1
 ```
 
@@ -127,6 +130,9 @@ inspect(outcome.diagnostics.inexact, content="false")
 - English: [doc/en_US/README.md](./doc/en_US/README.md)
 - Simplified Chinese: [doc/zh_CN/README.md](./doc/zh_CN/README.md)
 - Japanese: [doc/ja_JP/README.md](./doc/ja_JP/README.md)
+- Getting started: [doc/en_US/getting_started.md](./doc/en_US/getting_started.md)
+- Architecture: [doc/en_US/architecture.md](./doc/en_US/architecture.md)
+- Verification: [doc/en_US/verification.md](./doc/en_US/verification.md)
 - Documentation standard: [doc/en_US/doc_standard.md](./doc/en_US/doc_standard.md)
 
 ## Changelog
@@ -148,8 +154,14 @@ moon test
 ## Release Checklist
 
 1. Bump `moon.mod` to the intended release version.
-2. Update `README.md`, localized documentation, and `CHANGELOG.md`.
-3. Run `moon fmt`, `moon info`, `moon check --target all`, and `moon test`.
-4. Push the verified release state and trigger the `publish-package` workflow.
+2. Update `README.md`, all three localized documentation trees, and
+   `CHANGELOG.md`.
+3. Run `moon fmt --check`, `moon info`, `moon build --target all`,
+   `moon check --target all --frozen`, and the default, JavaScript, and native
+   test suites.
+4. Trigger `publish-package` with the exact `moon.mod` version. The workflow
+   repeats the checks, publishes to mooncakes, and creates the matching GitHub
+   release.
 
-The workflow publishes the version declared in `moon.mod` to mooncakes.
+The workflow publishes the version declared in `moon.mod` to mooncakes; it does
+not accept a mismatched release version.

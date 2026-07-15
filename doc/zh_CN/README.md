@@ -1,15 +1,15 @@
 # Arithmetic 文档
 
-这里是 `arithmetic` **0.3.0** 的简体中文文档入口。更早的版本说明和仓库历史请参见
+这里是 `arithmetic` **0.4.0** 的简体中文文档入口。更早的版本说明和仓库历史请参见
 [CHANGELOG.md](../../CHANGELOG.md)。
 
 ## 本版重点
 
-- `ArithmeticContext` 新增指数上下限、钳制选项，以及 decimal32、decimal64、
-  decimal128 三组预设。
-- `ArithmeticOutcome[T]` 把结果值与不可变的 `ArithmeticDiagnostics` 标志放在一起。
-- contextual traits 覆盖基础算术、部分解析操作和数值格式信息。
-- `Float` 与 `Double` 已实现新接口，但不会因此声称支持任意精度或由 context 控制的舍入。
+- `CertificationStage` 标识无法建立证明结果的步骤。
+- `CertificationFailureReason` 标识认证停止的原因。
+- `CertificationFailureDetail` 保留操作、精度计划与细化次数。
+- `ArithmeticError` 在不改变已有 checked/contextual 错误行为的前提下，提供了结构化
+  certification-failure 变体。
 
 ## 能力分层
 
@@ -33,6 +33,9 @@ contextual 除法和平方根会复用 checked 路径完成验证。
 
 ## 核心文档
 
+- [快速上手](./getting_started.md)
+- [架构](./architecture.md)
+- [验证](./verification.md)
 - [API 参考](./core/api.md)
 - [教程](./core/tutorial.md)
 - [设计](./core/design.md)

@@ -23,6 +23,9 @@
 - `FpClass`
 - `RoundingMode`
 - `ArithmeticContext`
+- `CertificationStage`
+- `CertificationFailureReason`
+- `CertificationFailureDetail`
 - `ArithmeticErrorKind`
 - `ArithmeticError`
 

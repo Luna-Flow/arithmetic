@@ -2,7 +2,7 @@
 using @test {assert_eq}
 
 ///|
-using @lg {trait AddMonoid, trait Num}
+using @lg {trait AddMonoid, trait Num, trait Zero}
 
 ///|
 let float_eps : Float = 0.0000001
@@ -15,7 +15,7 @@ let default_ctx : ArithmeticContext = ArithmeticContext::new(32)
 
 ///|
 fn[T : AddMonoid] add_identity(x : T) -> T {
-  x + T::zero()
+  x + Zero::zero()
 }
 
 ///|

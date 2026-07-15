@@ -4,9 +4,42 @@ All notable repository-release changes are tracked here. The main
 [`README.md`](./README.md) stays focused on the current baseline and entry
 points; older release history lives in this file.
 
-## 0.3.0 - 2026-07-12
+## 0.4.0 - 2026-07-15
 
 Current repository release.
+
+### Added
+
+- Added `CertificationStage` and `CertificationFailureReason` to distinguish
+  where and why proof-backed numerical evaluation could not certify a result.
+- Added `CertificationFailureDetail`, retaining the operation, target and
+  working precision, and refinement count for callers that need to decide
+  whether to retry with more resources or report the failure.
+- Added `ArithmeticErrorKind::CertificationFailure` and corresponding
+  `ArithmeticError` construction, inspection, and predicate APIs.
+- Added the localized getting-started, architecture, and verification guides,
+  with synchronized English, Simplified Chinese, and Japanese counterparts.
+- Added CI coverage for all-target builds/checks, JavaScript and native tests,
+  public-interface snapshots, and formatting.
+
+### Changed
+
+- Standardized the manual publish workflow on the release contract used by
+  `mare_mark`: an explicit version input must match `moon.mod`, verification
+  precedes publication, and a GitHub release is created after publication.
+- Added the standard `Debug` derivation to `FpClass`.
+
+### Compatibility
+
+- `CertificationFailure` is an additive `ArithmeticErrorKind` variant. Existing
+  callers should include a fallback branch when matching error kinds so future
+  categories remain representable.
+- The new detail types are a capability boundary; built-in `Float` and `Double`
+  operations do not currently produce certification failures.
+
+## 0.3.0 - 2026-07-12
+
+Previous repository release.
 
 ### Added
 

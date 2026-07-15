@@ -1,19 +1,18 @@
 # Arithmetic Documentation
 
 This directory contains the English documentation baseline for `arithmetic`
-**0.3.0**. Earlier release history lives in
+**0.4.0**. Earlier release history lives in
 [CHANGELOG.md](../../CHANGELOG.md).
 
 ## Release Focus
 
-- `ArithmeticContext` now includes exponent limits, clamping, and decimal32,
-  decimal64, and decimal128 presets.
-- `ArithmeticOutcome[T]` carries a result value and immutable
-  `ArithmeticDiagnostics` flags.
-- Contextual traits cover core arithmetic, selected analytic operations, and
-  numeric-format facts.
-- `Float` and `Double` implement the new surface without claiming arbitrary
-  precision or context-controlled rounding.
+- `CertificationStage` identifies the proof step that could not establish a
+  result.
+- `CertificationFailureReason` identifies why certification stopped.
+- `CertificationFailureDetail` retains the operation, precision plan, and
+  refinement count.
+- `ArithmeticError` exposes a structured certification-failure variant while
+  preserving existing checked and contextual error behavior.
 
 ## Capability Layers
 
@@ -40,6 +39,9 @@ square root reuse the checked validation paths.
 
 ## Core Documents
 
+- [Getting started](./getting_started.md)
+- [Architecture](./architecture.md)
+- [Verification](./verification.md)
 - [API reference](./core/api.md)
 - [Tutorial](./core/tutorial.md)
 - [Design](./core/design.md)

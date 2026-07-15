@@ -1,16 +1,15 @@
 # Arithmetic ドキュメント
 
-ここは `arithmetic` **0.3.0** の日本語ドキュメント入口です。過去のリリースノートと
+ここは `arithmetic` **0.4.0** の日本語ドキュメント入口です。過去のリリースノートと
 履歴は [CHANGELOG.md](../../CHANGELOG.md) を参照してください。
 
 ## このリリースの要点
 
-- `ArithmeticContext` に指数の上下限、clamp 設定、decimal32・decimal64・
-  decimal128 のプリセットを追加しました。
-- `ArithmeticOutcome[T]` は計算値と不変な `ArithmeticDiagnostics` フラグを保持します。
-- contextual traits は基本算術、一部の解析演算、数値形式の情報を扱います。
-- `Float` と `Double` は新しい surface を実装しますが、任意精度や context による
-  丸めまで実装したものではありません。
+- `CertificationStage` は結果を証明できなかった段階を示します。
+- `CertificationFailureReason` は certification が停止した理由を示します。
+- `CertificationFailureDetail` は演算、精度計画、refinement 回数を保持します。
+- `ArithmeticError` は既存の checked/contextual error の挙動を維持したまま、構造化
+  された certification-failure variant を提供します。
 
 ## Capability レイヤー
 
@@ -35,6 +34,9 @@ checked 経路で検証します。
 
 ## Core ドキュメント
 
+- [はじめに](./getting_started.md)
+- [アーキテクチャ](./architecture.md)
+- [検証](./verification.md)
 - [API リファレンス](./core/api.md)
 - [チュートリアル](./core/tutorial.md)
 - [設計](./core/design.md)

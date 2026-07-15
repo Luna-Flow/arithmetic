@@ -1,0 +1,29 @@
+name: Setup MoonBit
+description: Install the MoonBit toolchain used by this repository.
+
+inputs:
+  version:
+    description: MoonBit version to install.
+    required: false
+    default: "0.1.20260713"
+
+runs:
+  using: composite
+  steps:
+    - name: Cache MoonBit registry
+      uses: actions/cache@v4
+      with:
+        path: ~/.moon/registry
+        key: ${{ runner.os }}-moonbit-${{ inputs.version }}-${{ hashFiles('moon.mod') }}
+        restore-keys: |
+          ${{ runner.os }}-moonbit-${{ inputs.version }}-
+    - name: Install MoonBit
+      shell: bash
+      run: |
+        curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash -s -- "${{ inputs.version }}"
+        echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+    - name: Show MoonBit versions
+      shell: bash
+      run: |
+        moon version --all
+        moonrun --version

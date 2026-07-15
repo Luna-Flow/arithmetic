@@ -39,9 +39,12 @@ pub struct ArithmeticError {
   kind : ArithmeticErrorKind
   message : String
 } derive(Eq)
+pub fn ArithmeticError::certification_failure(CertificationFailureDetail) -> Self
+pub fn ArithmeticError::certification_failure_detail(Self) -> CertificationFailureDetail?
 pub fn ArithmeticError::division_by_zero(String) -> Self
 pub fn ArithmeticError::domain_error(String) -> Self
 pub fn ArithmeticError::format_error(String) -> Self
+pub fn ArithmeticError::is_certification_failure(Self) -> Bool
 pub fn ArithmeticError::is_division_by_zero(Self) -> Bool
 pub fn ArithmeticError::is_domain_error(Self) -> Bool
 pub fn ArithmeticError::is_format_error(Self) -> Bool
@@ -59,6 +62,7 @@ pub enum ArithmeticErrorKind {
   FormatError
   UnsupportedOperation
   UnorderedComparison
+  CertificationFailure(CertificationFailureDetail)
 } derive(Eq)
 
 pub struct ArithmeticOutcome[T] {
@@ -68,11 +72,42 @@ pub struct ArithmeticOutcome[T] {
 pub fn[T] ArithmeticOutcome::exact(T) -> Self[T]
 pub fn[T] ArithmeticOutcome::with_diagnostics(T, ArithmeticDiagnostics) -> Self[T]
 
+pub struct CertificationFailureDetail {
+  operation : String
+  stage : CertificationStage
+  reason : CertificationFailureReason
+  target_precision : Int
+  work_precision : Int
+  refinements : Int
+} derive(Eq)
+pub fn CertificationFailureDetail::new(String, CertificationStage, CertificationFailureReason, Int, Int, Int) -> Self
+pub fn CertificationFailureDetail::operation(Self) -> String
+pub fn CertificationFailureDetail::reason(Self) -> CertificationFailureReason
+pub fn CertificationFailureDetail::refinements(Self) -> Int
+pub fn CertificationFailureDetail::stage(Self) -> CertificationStage
+pub fn CertificationFailureDetail::target_precision(Self) -> Int
+pub fn CertificationFailureDetail::work_precision(Self) -> Int
+
+pub(all) enum CertificationFailureReason {
+  RangeNotCertified
+  SeriesDidNotConverge
+  InvalidEnclosure
+  ResourceLimit
+  RefinementBudgetExhausted
+} derive(Eq)
+
+pub(all) enum CertificationStage {
+  RangeReduction
+  SeriesEvaluation
+  EnclosurePropagation
+  TargetRounding
+} derive(Eq)
+
 pub(all) enum FpClass {
   Finite
   Infinity
   NaN
-} derive(Eq)
+} derive(Eq, @debug.Debug)
 
 pub(all) enum RoundingMode {
   ToNearestEven

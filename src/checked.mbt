@@ -5,7 +5,7 @@ pub(all) enum FpClass {
   Finite
   Infinity
   NaN
-} derive(Eq)
+} derive(Eq, Debug)
 
 /// Rounding modes shared by checked/contextual arithmetic capabilities.
 
@@ -29,6 +29,42 @@ pub struct ArithmeticContext {
   clamp : Bool
 } derive(Eq)
 
+/// Stage at which a proof-backed numerical evaluation failed.
+///
+
+///|
+pub(all) enum CertificationStage {
+  RangeReduction
+  SeriesEvaluation
+  EnclosurePropagation
+  TargetRounding
+} derive(Eq)
+
+/// Structured reason for a proof-backed numerical evaluation failure.
+///
+
+///|
+pub(all) enum CertificationFailureReason {
+  RangeNotCertified
+  SeriesDidNotConverge
+  InvalidEnclosure
+  ResourceLimit
+  RefinementBudgetExhausted
+} derive(Eq)
+
+/// Details retained when certified evaluation cannot prove a target result.
+///
+
+///|
+pub struct CertificationFailureDetail {
+  operation : String
+  stage : CertificationStage
+  reason : CertificationFailureReason
+  target_precision : Int
+  work_precision : Int
+  refinements : Int
+} derive(Eq)
+
 /// Structured arithmetic error categories shared across Luna-Flow.
 
 ///|
@@ -39,6 +75,7 @@ pub enum ArithmeticErrorKind {
   FormatError
   UnsupportedOperation
   UnorderedComparison
+  CertificationFailure(CertificationFailureDetail)
 } derive(Eq)
 
 /// Structured error returned by checked/contextual arithmetic capabilities.
@@ -79,6 +116,67 @@ pub fn ArithmeticContext::decimal128() -> ArithmeticContext {
 }
 
 ///|
+pub fn CertificationFailureDetail::new(
+  operation : String,
+  stage : CertificationStage,
+  reason : CertificationFailureReason,
+  target_precision : Int,
+  work_precision : Int,
+  refinements : Int,
+) -> CertificationFailureDetail {
+  {
+    operation,
+    stage,
+    reason,
+    target_precision: Int::max(1, target_precision),
+    work_precision: Int::max(1, work_precision),
+    refinements: Int::max(0, refinements),
+  }
+}
+
+///|
+pub fn CertificationFailureDetail::operation(
+  self : CertificationFailureDetail,
+) -> String {
+  self.operation
+}
+
+///|
+pub fn CertificationFailureDetail::stage(
+  self : CertificationFailureDetail,
+) -> CertificationStage {
+  self.stage
+}
+
+///|
+pub fn CertificationFailureDetail::reason(
+  self : CertificationFailureDetail,
+) -> CertificationFailureReason {
+  self.reason
+}
+
+///|
+pub fn CertificationFailureDetail::target_precision(
+  self : CertificationFailureDetail,
+) -> Int {
+  self.target_precision
+}
+
+///|
+pub fn CertificationFailureDetail::work_precision(
+  self : CertificationFailureDetail,
+) -> Int {
+  self.work_precision
+}
+
+///|
+pub fn CertificationFailureDetail::refinements(
+  self : CertificationFailureDetail,
+) -> Int {
+  self.refinements
+}
+
+///|
 pub fn ArithmeticError::division_by_zero(message : String) -> ArithmeticError {
   { kind: ArithmeticErrorKind::DivisionByZero, message }
 }
@@ -108,6 +206,26 @@ pub fn ArithmeticError::unordered_comparison(
   message : String,
 ) -> ArithmeticError {
   { kind: ArithmeticErrorKind::UnorderedComparison, message }
+}
+
+///|
+pub fn ArithmeticError::certification_failure(
+  detail : CertificationFailureDetail,
+) -> ArithmeticError {
+  {
+    kind: ArithmeticErrorKind::CertificationFailure(detail),
+    message: "certified evaluation failed for " + detail.operation(),
+  }
+}
+
+///|
+pub fn ArithmeticError::certification_failure_detail(
+  self : ArithmeticError,
+) -> CertificationFailureDetail? {
+  match self.kind {
+    ArithmeticErrorKind::CertificationFailure(detail) => Some(detail)
+    _ => None
+  }
 }
 
 ///|
@@ -154,6 +272,16 @@ pub fn ArithmeticError::is_unsupported(self : ArithmeticError) -> Bool {
 pub fn ArithmeticError::is_unordered_comparison(self : ArithmeticError) -> Bool {
   match self.kind {
     ArithmeticErrorKind::UnorderedComparison => true
+    _ => false
+  }
+}
+
+///|
+pub fn ArithmeticError::is_certification_failure(
+  self : ArithmeticError,
+) -> Bool {
+  match self.kind {
+    ArithmeticErrorKind::CertificationFailure(_) => true
     _ => false
   }
 }

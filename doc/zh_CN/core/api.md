@@ -69,7 +69,19 @@
 
 - `AddContextual`、`SubContextual`、`MulContextual`、`DivContextual`
 - `AbsContextual`、`SqrtContextual`、`ExpContextual`
+- `IntegralContextual`、`AdjacentContextual`
+- `ConstantsContextual`、`HyperbolicContextual`
 - `NumericFormatContextual`
+
+`IntegralContextual::from_int_contextual` 在目标 context 下嵌入 MoonBit `Int` 并返回
+转换 diagnostics；更宽的整数来源使用独立 capability。`AdjacentContextual` 提供
+`next_plus_contextual`、
+`next_minus_contextual` 和 `next_toward_contextual`。`ConstantsContextual`
+按 context 生成 `pi`、`tau` 与 `e`；采用证明式计算的实现无法认证目标舍入时，可以返回
+kind 为 `ArithmeticErrorKind::CertificationFailure` 的 `ArithmeticError`。
+
+`HyperbolicContextual` 提供 contextual `sinh`、`cosh` 与 `tanh`，每项都在
+`Result` 中返回 `ArithmeticOutcome`。
 
 `NumericFormatContextual` 提供 contextual zero、one、epsilon、最小正规值、最大有限值，
 并把数值分类为 `Finite`、`Infinity` 或 `NaN`。
@@ -88,7 +100,10 @@
 
 - `Float` 与 `Double` 通过 `Kaida-Amethyst/math` 实现较完整的 elementary 表面。
 - `Float` 与 `Double` 实现 checked 平方根、除法、比较和整数幂能力。
-- `Float` 与 `Double` 实现 `0.3.0` 新增的全部 contextual traits。
+- `Float` 与 `Double` 实现原有 contextual 表面以及 `IntegralContextual`、
+  `AdjacentContextual`。
+- `Float` 与 `Double` 有意不实现 `ConstantsContextual` 或
+  `HyperbolicContextual`；忠实于 context 的数值后端负责提供这些能力。
 - `BigInt` 与整数族只实现能够在具体类型上保持闭合的精确子集。
 
 ## 语义说明
@@ -98,7 +113,10 @@
 - 内置 checked 除法把 `0 / 0` 和 infinity 除以 infinity 归为 `DomainError`；
   非零数除以零仍归为 `DivisionByZero`。
 - 内置 contextual 除法与平方根委托给 checked 操作，并把成功值包装为 exact diagnostics。
-- 其他内置 `Float` 与 `Double` contextual 操作保留原生行为，也返回 exact diagnostics。
+- 内置 `Float` 整数嵌入在源整数无法精确表示时设置 `inexact` 与 `rounded`；`Double`
+  可以精确嵌入所有 MoonBit `Int`。
+- 内置相邻值操作遵循固定 IEEE 二进制表示，包括带符号零和 infinity 边界；邻接选择在
+  固定表示集合中是精确操作，因此返回空 diagnostics。
 - 内置实现不会执行 context 控制的 precision、rounding、指数钳制或状态标志探测。
 - 有符号整数与 `BigInt` 的 `Power` 要求指数非负；负指数会 abort。
 - `PowNatChecked` 把 `x^0` 视为乘法单位元，包括 `0^0`。

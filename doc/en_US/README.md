@@ -1,18 +1,16 @@
 # Arithmetic Documentation
 
 This directory contains the English documentation baseline for `arithmetic`
-**0.4.0**. Earlier release history lives in
+**0.5.0**. Earlier release history lives in
 [CHANGELOG.md](../../CHANGELOG.md).
 
 ## Release Focus
 
-- `CertificationStage` identifies the proof step that could not establish a
-  result.
-- `CertificationFailureReason` identifies why certification stopped.
-- `CertificationFailureDetail` retains the operation, precision plan, and
-  refinement count.
-- `ArithmeticError` exposes a structured certification-failure variant while
-  preserving existing checked and contextual error behavior.
+- `IntegralContextual` embeds MoonBit `Int` values and returns diagnostics.
+- `AdjacentContextual` exposes next-plus, next-minus, and next-toward.
+- `ConstantsContextual` and `HyperbolicContextual` define context-faithful
+  capability boundaries for richer numeric backends.
+- Certification failures remain explicit through `ArithmeticError`.
 
 ## Capability Layers
 
@@ -31,11 +29,14 @@ This directory contains the English documentation baseline for `arithmetic`
 
 ## Built-in Instance Limits
 
-The built-in `Float` and `Double` contextual operations currently preserve
-native scalar behavior. They do not apply arbitrary decimal precision,
-directed rounding, exponent clamping, or status-flag detection. Successful
-operations therefore return exact diagnostics, while contextual division and
-square root reuse the checked validation paths.
+The built-in `Float` and `Double` contextual operations preserve native scalar
+behavior. They do not apply arbitrary decimal precision, directed rounding,
+exponent clamping, or general status-flag detection. `Float` integer embedding
+reports detectable conversion loss; adjacent operations use the fixed IEEE
+binary format and return empty diagnostics because neighbor selection is exact.
+Contextual division and square root reuse the checked validation paths. Native
+`Float` and `Double` do not implement contextual constants or hyperbolic
+functions.
 
 ## Core Documents
 

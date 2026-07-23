@@ -26,8 +26,14 @@ checked tests は certification failure の分類、public construction、inspec
 precision/refinement input が正規化されること、既存 error predicates が
 `is_certification_failure` と別であることを確立します。
 
+contextual tests は、正確な `Int` 埋め込みと丸めを伴う埋め込み、符号付きゼロの方向、
+NaN 伝播、停止する infinity、有限値から infinity への step、固定 IEEE `Float`/`Double`
+形式での最小 subnormal からゼロへの step を対象にします。test package 内の実装は
+contextual hyperbolic outcome と定数の certification-failure 伝播も検証します。
+
 tests は `Float` または `Double` が certified arithmetic を実行するとは主張しません。共有の
-capability vocabulary と通常の error-model behavior だけを検証します。
+capability vocabulary、固定形式の adjacent semantics、通常の error-model behavior を
+検証します。
 
 ## Release Gate
 

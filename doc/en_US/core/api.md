@@ -74,7 +74,21 @@ flags.
 
 - `AddContextual`, `SubContextual`, `MulContextual`, `DivContextual`
 - `AbsContextual`, `SqrtContextual`, `ExpContextual`
+- `IntegralContextual`, `AdjacentContextual`
+- `ConstantsContextual`, `HyperbolicContextual`
 - `NumericFormatContextual`
+
+`IntegralContextual::from_int_contextual` embeds a MoonBit `Int` under the
+target context and returns conversion diagnostics. Wider integer sources use
+separate capabilities. `AdjacentContextual` exposes
+`next_plus_contextual`, `next_minus_contextual`, and
+`next_toward_contextual`. `ConstantsContextual` produces `pi`, `tau`, and `e`
+under a context and may return an `ArithmeticError` whose kind is
+`ArithmeticErrorKind::CertificationFailure` when a proof-backed implementation
+cannot certify target rounding.
+
+`HyperbolicContextual` exposes contextual `sinh`, `cosh`, and `tanh`, each as
+an `ArithmeticOutcome` inside `Result`.
 
 `NumericFormatContextual` provides contextual zero, one, epsilon, minimum
 normal value, maximum finite value, and classification as `Finite`, `Infinity`,
@@ -96,7 +110,11 @@ These are relations rather than a scalar total-order abstraction.
   `Kaida-Amethyst/math`.
 - `Float` and `Double` implement the checked square-root, division, comparison,
   and integer-power surfaces.
-- `Float` and `Double` implement all contextual traits introduced in `0.3.0`.
+- `Float` and `Double` implement the original contextual surface plus
+  `IntegralContextual` and `AdjacentContextual`.
+- `Float` and `Double` intentionally do not implement `ConstantsContextual` or
+  `HyperbolicContextual`; context-faithful numeric backends provide those
+  capabilities.
 - `BigInt` and the integer family implement the narrower exact subset that
   remains closed on each concrete type.
 
@@ -109,8 +127,12 @@ These are relations rather than a scalar total-order abstraction.
   as `DomainError`; non-zero division by zero remains `DivisionByZero`.
 - Built-in contextual division and square root delegate to checked operations
   and wrap successful values with exact diagnostics.
-- Other built-in `Float` and `Double` contextual operations currently preserve
-  native behavior and also return exact diagnostics.
+- Built-in `Float` integer embedding sets `inexact` and `rounded` when the
+  source integer is not exactly representable; `Double` exactly embeds every
+  MoonBit `Int`.
+- Built-in adjacent operations follow the fixed IEEE binary representation,
+  including signed-zero and infinity boundaries. Selecting the adjacent value
+  is exact in that fixed representable set and returns empty diagnostics.
 - The built-in implementations do not apply context-controlled precision,
   rounding, exponent clamping, or status-flag detection.
 - Signed integer and `BigInt` `Power` implementations require non-negative

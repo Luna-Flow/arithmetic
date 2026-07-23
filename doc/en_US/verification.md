@@ -27,9 +27,15 @@ the detail survives `ArithmeticError::certification_failure`, that precision and
 refinement inputs are normalized, and that existing error predicates remain
 disjoint from `is_certification_failure`.
 
+The contextual tests cover exact and rounded `Int` embedding, signed-zero
+direction, NaN propagation, stationary infinities, finite-to-infinity steps,
+and minimum-subnormal-to-zero steps for the fixed IEEE `Float` and `Double`
+formats. Test-local implementations also verify contextual hyperbolic outcomes
+and certification-failure propagation for constants.
+
 The tests do not claim that `Float` or `Double` perform certified arithmetic.
-They only verify the shared capability vocabulary and its ordinary error-model
-behavior.
+They verify the shared capability vocabulary, fixed-format adjacent semantics,
+and ordinary error-model behavior.
 
 ## Release Gate
 

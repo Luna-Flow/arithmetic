@@ -38,8 +38,9 @@ status register, or mutable proof state.
 
 ## Shipped Adapter Limits
 
-`Float` and `Double` make the general boundary usable today. Their contextual
-operations preserve native scalar semantics; they do not implement arbitrary
-decimal precision, directed rounding, exponent clamping, IEEE flag detection,
-or proof-backed certification. A concrete certified backend may expose the
-same traits and produce structured certification failures.
+`Float` and `Double` implement only the contextual capabilities they can expose
+without inventing unsupported semantics. They preserve native scalar behavior,
+report detectable `Int` conversion loss, and use their fixed IEEE formats for
+adjacent values. They intentionally do not implement contextual constants or
+hyperbolic functions. A concrete certified backend may expose those traits and
+produce structured certification failures.

@@ -4,9 +4,54 @@ All notable repository-release changes are tracked here. The main
 [`README.md`](./README.md) stays focused on the current baseline and entry
 points; older release history lives in this file.
 
-## 0.4.0 - 2026-07-15
+## 0.5.0 - 2026-07-18
 
 Current repository release.
+
+### Added
+
+- Added `IntegralContextual` for context-dependent integer embedding with
+  diagnostics.
+- Added `AdjacentContextual` for the next representable value toward positive
+  infinity, negative infinity, or a target value.
+- Added `ConstantsContextual` for context-dependent `pi`, `tau`, and `e`, with
+  structured certification failure available to proof-backed implementations.
+- Added `HyperbolicContextual` for contextual `sinh`, `cosh`, and `tanh`
+  outcomes.
+- Added `Float` and `Double` adapters for integer embedding and fixed-format
+  adjacent values.
+- Added edge-case coverage for integer conversion, signed zero, NaN, infinity,
+  maximum finite values, and minimum subnormal values.
+
+### Changed
+
+- Standardized the Luna Flow test import alias on `lf_alg`.
+- Synchronized the English, Simplified Chinese, and Japanese API, design,
+  verification, getting-started, and release documentation.
+
+### Compatibility
+
+- The four contextual traits are additive public APIs; existing signatures are
+  unchanged.
+- `IntegralContextual` deliberately accepts MoonBit `Int`. Wider integer
+  sources can be added through separate capabilities without changing this
+  contract.
+- `Float` and `Double` intentionally do not implement `ConstantsContextual` or
+  `HyperbolicContextual`; those capabilities require a backend that can honor
+  the supplied context and report meaningful diagnostics or certification
+  failures.
+
+### Current Limits
+
+- Native `Float` and `Double` adapters retain their fixed IEEE binary formats
+  rather than emulating arbitrary decimal contexts.
+- `Float` integer embedding reports detectable conversion loss. Native adjacent
+  selection is exact in the fixed representable set and returns empty
+  diagnostics.
+
+## 0.4.0 - 2026-07-15
+
+Previous repository release.
 
 ### Added
 

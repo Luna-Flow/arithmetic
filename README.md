@@ -3,29 +3,27 @@
 Arithmetic capability traits and checked or contextual numeric boundaries for
 Luna Flow projects.
 
-## v0.4.0 - Certified Evaluation Failures
+## v0.5.0 - Contextual Capability Expansion
 
-This README matches the **v0.4.0** repository state. The release adds a
-structured failure boundary for proof-backed numerical evaluation while
-retaining the contextual outcomes, diagnostics, and checked capability surface
-introduced in `0.3.0`.
+This release expands the contextual capability boundary built in `0.3.0` and
+the certification-failure vocabulary added in `0.4.0`. The new traits cover
+integer embedding, adjacent representable values, context-dependent constants,
+and context-dependent hyperbolic functions without bundling unrelated numeric
+requirements.
 
 For earlier release notes and repository history, see
 [CHANGELOG.md](./CHANGELOG.md).
 
 ### Release Notes
 
-- `CertificationStage` records the proof step that could not establish a
-  result: range reduction, series evaluation, enclosure propagation, or target
-  rounding.
-- `CertificationFailureReason` distinguishes an uncertified range, missing
-  convergence, invalid enclosure, resource limit, and exhausted refinement
-  budget.
-- `CertificationFailureDetail` retains the operation, requested and working
-  precision, and the number of refinement attempts.
-- `ArithmeticErrorKind::CertificationFailure` and
-  `ArithmeticError::certification_failure` preserve that detail without
-  flattening it into an unstructured message.
+- `IntegralContextual` embeds a MoonBit `Int` under an explicit context and
+  returns conversion diagnostics.
+- `AdjacentContextual` exposes next-plus, next-minus, and next-toward
+  operations while preserving signed-zero and infinity boundaries.
+- `ConstantsContextual` and `HyperbolicContextual` define context-faithful
+  outcome surfaces for numeric backends that can report meaningful diagnostics.
+- Proof-backed constant implementations can preserve target-rounding failures
+  through `ArithmeticErrorKind::CertificationFailure`.
 
 ## Package Positioning
 
@@ -64,6 +62,8 @@ proof-backed backend cannot certify a result at the requested target.
 
 - `AddContextual`, `SubContextual`, `MulContextual`, `DivContextual`
 - `AbsContextual`, `SqrtContextual`, `ExpContextual`
+- `IntegralContextual`, `AdjacentContextual`
+- `ConstantsContextual`, `HyperbolicContextual`
 - `NumericFormatContextual`
 
 Contextual operations return `ArithmeticOutcome[Self]` inside `Result`, keeping
@@ -87,16 +87,19 @@ pretending enclosure values form a scalar total order.
   aggregate a sequence of outcomes explicitly.
 
 The built-in `Float` and `Double` contextual implementations do **not** emulate
-arbitrary decimal precision, directed rounding, exponent clamping, or IEEE
-status-flag detection. They currently return exact diagnostics for successful
-native operations; contextual division and square root delegate validation to
-their checked counterparts. The richer context and diagnostics are public
-capability boundaries for numeric backends that can implement those semantics.
+arbitrary decimal precision, directed rounding, exponent clamping, or general
+IEEE status-flag detection. Contextual division and square root delegate
+validation to their checked counterparts. Integer embedding reports
+`inexact`/`rounded` when conversion to `Float` loses information. Adjacent
+operations use the fixed IEEE binary format and treat selecting the neighboring
+value as exact. `Float` and `Double` intentionally do not implement
+`ConstantsContextual` or `HyperbolicContextual`, because their native functions
+cannot honor arbitrary contexts or report complete diagnostics.
 
 ## Installation
 
 ```bash
-moon add Luna-Flow/arithmetic@0.4.0
+moon add Luna-Flow/arithmetic@0.5.0
 moon add Luna-Flow/luna-generic@0.3.1
 ```
 

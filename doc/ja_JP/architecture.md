@@ -34,7 +34,7 @@ hidden status register、mutable proof state は必要ありません。
 
 ## 同梱 Adapter の制約
 
-`Float` と `Double` は現在この共通境界を利用可能にします。contextual operation は native
-scalar semantics を保ち、任意 decimal precision、directional rounding、exponent clamp、IEEE
-flag detection、proof-backed certification は実装しません。concrete certified backend は同じ traits
-を実装し、構造化された certification failure を返せます。
+`Float` と `Double` は、未対応の意味論を作らずに提供できる contextual capability だけを
+実装します。native scalar semantics を保ち、検出可能な `Int` 変換損失を報告し、固定 IEEE
+形式で隣接値を扱います。contextual 定数と双曲線関数は意図的に実装しません。concrete
+certified backend はこれらの traits を実装し、構造化された certification failure を返せます。

@@ -34,13 +34,19 @@ errors for operations that the implementation rejects.
 
 ## Built-in Adapter Strategy
 
-The `Float` and `Double` implementations adapt the new contextual boundary to
+The `Float` and `Double` implementations adapt the contextual boundary to
 existing native and checked operations. Division and square root reuse checked
-validation. The remaining operations preserve native scalar behavior.
+validation. Integer embedding detects native `Float` conversion loss, adjacent
+operations step through the IEEE bit representation, and fixed-format neighbor
+selection returns empty diagnostics as an exact capability operation.
 
 These adapters establish interface availability, not a software decimal
 engine. They intentionally do not pretend to honor arbitrary precision,
 directed rounding, exponent clamping, or full IEEE flag generation.
+They intentionally do not implement `ConstantsContextual` or
+`HyperbolicContextual`. Proof-backed numeric packages can implement those
+capabilities with certified evaluation and preserve failure details through
+`ArithmeticError`.
 
 ## Boundaries
 

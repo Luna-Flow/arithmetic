@@ -132,6 +132,14 @@ pub(open) trait AddContextual {
 pub impl AddContextual for Float
 pub impl AddContextual for Double
 
+pub(open) trait AdjacentContextual {
+  fn next_plus_contextual(Self, ArithmeticContext) -> Result[ArithmeticOutcome[Self], ArithmeticError]
+  fn next_minus_contextual(Self, ArithmeticContext) -> Result[ArithmeticOutcome[Self], ArithmeticError]
+  fn next_toward_contextual(Self, Self, ArithmeticContext) -> Result[ArithmeticOutcome[Self], ArithmeticError]
+}
+pub impl AdjacentContextual for Float
+pub impl AdjacentContextual for Double
+
 pub(open) trait Cbrt {
   fn cbrt(Self) -> Self
 }
@@ -151,6 +159,12 @@ pub(open) trait Constants {
 }
 pub impl Constants for Float
 pub impl Constants for Double
+
+pub(open) trait ConstantsContextual {
+  fn pi_contextual(ArithmeticContext) -> Result[ArithmeticOutcome[Self], ArithmeticError]
+  fn tau_contextual(ArithmeticContext) -> Result[ArithmeticOutcome[Self], ArithmeticError]
+  fn e_contextual(ArithmeticContext) -> Result[ArithmeticOutcome[Self], ArithmeticError]
+}
 
 pub(open) trait Contains {
   fn contains(Self, Self) -> Bool
@@ -196,6 +210,18 @@ pub(open) trait Hyperbolic {
 }
 pub impl Hyperbolic for Float
 pub impl Hyperbolic for Double
+
+pub(open) trait HyperbolicContextual {
+  fn sinh_contextual(Self, ArithmeticContext) -> Result[ArithmeticOutcome[Self], ArithmeticError]
+  fn cosh_contextual(Self, ArithmeticContext) -> Result[ArithmeticOutcome[Self], ArithmeticError]
+  fn tanh_contextual(Self, ArithmeticContext) -> Result[ArithmeticOutcome[Self], ArithmeticError]
+}
+
+pub(open) trait IntegralContextual {
+  fn from_int_contextual(Int, ArithmeticContext) -> Result[ArithmeticOutcome[Self], ArithmeticError]
+}
+pub impl IntegralContextual for Float
+pub impl IntegralContextual for Double
 
 pub(open) trait InverseHyperbolic {
   fn asinh(Self) -> Self

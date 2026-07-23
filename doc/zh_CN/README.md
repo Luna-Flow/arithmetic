@@ -1,15 +1,15 @@
 # Arithmetic 文档
 
-这里是 `arithmetic` **0.4.0** 的简体中文文档入口。更早的版本说明和仓库历史请参见
+这里是 `arithmetic` **0.5.0** 的简体中文文档入口。更早的版本说明和仓库历史请参见
 [CHANGELOG.md](../../CHANGELOG.md)。
 
 ## 本版重点
 
-- `CertificationStage` 标识无法建立证明结果的步骤。
-- `CertificationFailureReason` 标识认证停止的原因。
-- `CertificationFailureDetail` 保留操作、精度计划与细化次数。
-- `ArithmeticError` 在不改变已有 checked/contextual 错误行为的前提下，提供了结构化
-  certification-failure 变体。
+- `IntegralContextual` 嵌入 MoonBit `Int` 并返回 diagnostics。
+- `AdjacentContextual` 提供 next-plus、next-minus 和 next-toward。
+- `ConstantsContextual` 与 `HyperbolicContextual` 为更丰富的数值后端定义忠实于
+  context 的能力边界。
+- certification failure 继续通过 `ArithmeticError` 显式返回。
 
 ## 能力分层
 
@@ -27,9 +27,11 @@
 
 ## 内置实例限制
 
-内置 `Float` 与 `Double` contextual 操作目前保留原生标量语义，不执行任意 decimal
-精度、定向舍入、指数钳制或状态标志探测。因此，成功操作会返回 exact diagnostics；
-contextual 除法和平方根会复用 checked 路径完成验证。
+内置 `Float` 与 `Double` contextual 操作保留原生标量语义，不执行任意 decimal
+精度、定向舍入、指数钳制或通用状态标志探测。`Float` 的整数嵌入会报告可检测的转换
+损失；相邻值操作使用固定 IEEE 二进制格式，并因邻接选择在该表示集合中是精确操作而
+返回空 diagnostics。contextual 除法和平方根会复用 checked 路径完成验证。原生
+`Float` 与 `Double` 不实现 contextual 常量或双曲函数。
 
 ## 核心文档
 

@@ -31,6 +31,7 @@ certification evidence 保留在返回的 error 上；包不依赖全局 roundin
 
 ## 内置适配器的限制
 
-`Float` 与 `Double` 使通用边界当前即可使用。它们的 contextual 操作保留原生 scalar 语义，
-不实现任意 decimal 精度、定向舍入、指数钳制、IEEE flag 探测或证明式 certification。具体的
-certified backend 可以使用相同 traits 并产生结构化 certification failures。
+`Float` 与 `Double` 只实现无需虚构语义即可提供的 contextual 能力。它们保留原生 scalar
+行为，报告可检测的 `Int` 转换损失，并使用固定 IEEE 格式处理相邻值；它们有意不实现
+contextual 常量或双曲函数。具体 certified backend 可以实现这些 traits 并产生结构化
+certification failures。

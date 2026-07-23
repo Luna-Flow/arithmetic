@@ -6,7 +6,7 @@
 ## 安装与导入
 
 ```sh
-moon add Luna-Flow/arithmetic@0.4.0
+moon add Luna-Flow/arithmetic@0.5.0
 moon add Luna-Flow/luna-generic@0.3.1
 ```
 

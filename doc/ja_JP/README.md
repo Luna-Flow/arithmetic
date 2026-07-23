@@ -1,15 +1,15 @@
 # Arithmetic ドキュメント
 
-ここは `arithmetic` **0.4.0** の日本語ドキュメント入口です。過去のリリースノートと
-履歴は [CHANGELOG.md](../../CHANGELOG.md) を参照してください。
+ここは `arithmetic` **0.5.0** の日本語ドキュメント入口です。過去のリリースノートと履歴は
+[CHANGELOG.md](../../CHANGELOG.md) を参照してください。
 
 ## このリリースの要点
 
-- `CertificationStage` は結果を証明できなかった段階を示します。
-- `CertificationFailureReason` は certification が停止した理由を示します。
-- `CertificationFailureDetail` は演算、精度計画、refinement 回数を保持します。
-- `ArithmeticError` は既存の checked/contextual error の挙動を維持したまま、構造化
-  された certification-failure variant を提供します。
+- `IntegralContextual` は MoonBit `Int` を埋め込み diagnostics を返します。
+- `AdjacentContextual` は next-plus、next-minus、next-toward を提供します。
+- `ConstantsContextual` と `HyperbolicContextual` は、より豊かな数値 backend のために
+  context に忠実な capability 境界を定義します。
+- certification failure は引き続き `ArithmeticError` で明示されます。
 
 ## Capability レイヤー
 
@@ -27,10 +27,12 @@
 
 ## 組み込みインスタンスの制約
 
-組み込みの `Float` と `Double` の contextual 演算は、現時点ではネイティブ scalar の
-挙動を維持します。任意の decimal 精度、方向付き丸め、指数 clamp、状態フラグ検出は
-行いません。そのため成功時は exact diagnostics を返し、contextual 除算と平方根は
-checked 経路で検証します。
+組み込みの `Float` と `Double` の contextual 演算はネイティブ scalar の挙動を
+維持します。任意の decimal 精度、方向付き丸め、指数 clamp、一般的な状態フラグ検出は
+行いません。`Float` の整数埋め込みは検出可能な変換損失を報告します。隣接値演算は固定の
+IEEE バイナリ形式を使い、その表現集合での隣接選択は正確な操作なので空の diagnostics を
+返します。contextual 除算と平方根は checked 経路で検証します。ネイティブ `Float` と
+`Double` は contextual 定数または双曲線関数を実装しません。
 
 ## Core ドキュメント
 

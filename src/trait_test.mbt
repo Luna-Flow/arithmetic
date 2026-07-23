@@ -2,7 +2,7 @@
 using @test {assert_eq}
 
 ///|
-using @lg {trait AddMonoid, trait Num, trait Zero}
+using @lf_alg {trait AddMonoid, trait Num, trait Zero}
 
 ///|
 let float_eps : Float = 0.0000001

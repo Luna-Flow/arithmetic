@@ -34,6 +34,80 @@ pub impl ExpContextual for Double with fn exp_contextual(value, _context) {
 }
 
 ///|
+pub impl IntegralContextual for Double with fn from_int_contextual(
+  value,
+  _context,
+) {
+  Ok(ArithmeticOutcome::exact(Double::from_int(value)))
+}
+
+///|
+fn double_next_plus(value : Double) -> Double {
+  if Double::is_nan(value) || Double::is_pos_inf(value) {
+    return value
+  }
+  if value == 0.0 {
+    return 1UL.reinterpret_as_double()
+  }
+  let bits = value.reinterpret_as_uint64()
+  if value > 0.0 {
+    (bits + 1UL).reinterpret_as_double()
+  } else {
+    (bits - 1UL).reinterpret_as_double()
+  }
+}
+
+///|
+fn double_next_minus(value : Double) -> Double {
+  if Double::is_nan(value) || Double::is_neg_inf(value) {
+    return value
+  }
+  if value == 0.0 {
+    return 0x8000_0000_0000_0001UL.reinterpret_as_double()
+  }
+  let bits = value.reinterpret_as_uint64()
+  if value > 0.0 {
+    (bits - 1UL).reinterpret_as_double()
+  } else {
+    (bits + 1UL).reinterpret_as_double()
+  }
+}
+
+///|
+pub impl AdjacentContextual for Double with fn next_plus_contextual(
+  value,
+  _context,
+) {
+  Ok(ArithmeticOutcome::exact(double_next_plus(value)))
+}
+
+///|
+pub impl AdjacentContextual for Double with fn next_minus_contextual(
+  value,
+  _context,
+) {
+  Ok(ArithmeticOutcome::exact(double_next_minus(value)))
+}
+
+///|
+pub impl AdjacentContextual for Double with fn next_toward_contextual(
+  value,
+  target,
+  _context,
+) {
+  let result = if Double::is_nan(value) {
+    value
+  } else if Double::is_nan(target) || value == target {
+    target
+  } else if value < target {
+    double_next_plus(value)
+  } else {
+    double_next_minus(value)
+  }
+  Ok(ArithmeticOutcome::exact(result))
+}
+
+///|
 pub impl NumericFormatContextual for Double with fn zero_contextual(_context) {
   0.0
 }
@@ -106,6 +180,87 @@ pub impl SqrtContextual for Float with fn sqrt_contextual(value, context) {
 ///|
 pub impl ExpContextual for Float with fn exp_contextual(value, _context) {
   Ok(ArithmeticOutcome::exact(Exponential::exp(value)))
+}
+
+///|
+pub impl IntegralContextual for Float with fn from_int_contextual(
+  value,
+  _context,
+) {
+  let converted = Float::from_int(value)
+  let exact = converted.to_double() == Double::from_int(value)
+  let diagnostics = if exact {
+    ArithmeticDiagnostics::empty()
+  } else {
+    ArithmeticDiagnostics::new(inexact=true, rounded=true)
+  }
+  Ok(ArithmeticOutcome::with_diagnostics(converted, diagnostics))
+}
+
+///|
+fn float_next_plus(value : Float) -> Float {
+  if Float::is_nan(value) || Float::is_pos_inf(value) {
+    return value
+  }
+  if value == 0.0F {
+    return Float::reinterpret_from_uint(1U)
+  }
+  let bits = value.reinterpret_as_uint()
+  if value > 0.0F {
+    Float::reinterpret_from_uint(bits + 1U)
+  } else {
+    Float::reinterpret_from_uint(bits - 1U)
+  }
+}
+
+///|
+fn float_next_minus(value : Float) -> Float {
+  if Float::is_nan(value) || Float::is_neg_inf(value) {
+    return value
+  }
+  if value == 0.0F {
+    return Float::reinterpret_from_uint(0x8000_0001U)
+  }
+  let bits = value.reinterpret_as_uint()
+  if value > 0.0F {
+    Float::reinterpret_from_uint(bits - 1U)
+  } else {
+    Float::reinterpret_from_uint(bits + 1U)
+  }
+}
+
+///|
+pub impl AdjacentContextual for Float with fn next_plus_contextual(
+  value,
+  _context,
+) {
+  Ok(ArithmeticOutcome::exact(float_next_plus(value)))
+}
+
+///|
+pub impl AdjacentContextual for Float with fn next_minus_contextual(
+  value,
+  _context,
+) {
+  Ok(ArithmeticOutcome::exact(float_next_minus(value)))
+}
+
+///|
+pub impl AdjacentContextual for Float with fn next_toward_contextual(
+  value,
+  target,
+  _context,
+) {
+  let result = if Float::is_nan(value) {
+    value
+  } else if Float::is_nan(target) || value == target {
+    target
+  } else if value < target {
+    float_next_plus(value)
+  } else {
+    float_next_minus(value)
+  }
+  Ok(ArithmeticOutcome::exact(result))
 }
 
 ///|

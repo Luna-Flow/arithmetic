@@ -6,7 +6,7 @@
 operations, contextual outcomes, and enclosure relations. Public traits remain
 small so algorithms can request only the capabilities they use.
 
-## Unchecked Capability Traits
+## Unchecked capability traits
 
 - `Sqrt`, `Cbrt`, `Radical`
 - `Exponential`, `Logarithmic`, `Power`
@@ -17,9 +17,9 @@ small so algorithms can request only the capabilities they use.
 These traits are defined in `src/elementary.mbt` and return direct backend
 values.
 
-## Checked Surface
+## Checked surface
 
-### Shared Types
+### Shared types
 
 - `FpClass`
 - `RoundingMode`
@@ -30,7 +30,7 @@ values.
 - `ArithmeticErrorKind`
 - `ArithmeticError`
 
-### Context Construction
+### Context construction
 
 `ArithmeticContext::new` accepts precision, rounding mode, optional `e_min` and
 `e_max`, and an optional `clamp` flag. Precision is clamped to at least `1`.
@@ -46,7 +46,7 @@ The package also provides these presets:
 
 All three presets use `ToNearestEven` and enable clamping.
 
-### Checked Traits
+### Checked traits
 
 - `SqrtChecked`
 - `DivChecked`
@@ -58,9 +58,9 @@ All three presets use `ToNearestEven` and enable clamping.
 These traits return `Result[..., ArithmeticError]`. Operations that require an
 arithmetic context accept it explicitly.
 
-## Contextual Outcome Surface
+## Contextual outcome surface
 
-### Result Types
+### Result types
 
 `ArithmeticDiagnostics` contains the flags `inexact`, `rounded`, `overflow`,
 `underflow`, `subnormal`, and `clamped`. `empty` and `new` construct diagnostic
@@ -70,7 +70,7 @@ values; `combine` merges two values using logical OR for every flag.
 an outcome with empty diagnostics, while `with_diagnostics` preserves supplied
 flags.
 
-### Contextual Traits
+### Contextual traits
 
 - `AddContextual`, `SubContextual`, `MulContextual`, `DivContextual`
 - `AbsContextual`, `SqrtContextual`, `ExpContextual`
@@ -94,7 +94,7 @@ an `ArithmeticOutcome` inside `Result`.
 normal value, maximum finite value, and classification as `Finite`, `Infinity`,
 or `NaN`.
 
-## Enclosure Relations
+## Enclosure relations
 
 - `Contains`
 - `Overlaps`
@@ -104,7 +104,7 @@ or `NaN`.
 
 These are relations rather than a scalar total-order abstraction.
 
-## Shipped Instances
+## Shipped instances
 
 - `Float` and `Double` implement the broad elementary surface through
   `Kaida-Amethyst/math`.
@@ -118,7 +118,7 @@ These are relations rather than a scalar total-order abstraction.
 - `BigInt` and the integer family implement the narrower exact subset that
   remains closed on each concrete type.
 
-## Semantic Notes
+## Semantic notes
 
 - Unchecked traits leave domain restrictions and branch semantics to the
   concrete instance.

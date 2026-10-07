@@ -130,13 +130,18 @@ inspect(outcome.diagnostics.inexact, content="false")
 
 ## Documentation
 
-- English: [doc/en_US/README.md](./doc/en_US/README.md)
-- Simplified Chinese: [doc/zh_CN/README.md](./doc/zh_CN/README.md)
-- Japanese: [doc/ja_JP/README.md](./doc/ja_JP/README.md)
-- Getting started: [doc/en_US/getting_started.md](./doc/en_US/getting_started.md)
-- Architecture: [doc/en_US/architecture.md](./doc/en_US/architecture.md)
-- Verification: [doc/en_US/verification.md](./doc/en_US/verification.md)
-- Documentation standard: [doc/en_US/doc_standard.md](./doc/en_US/doc_standard.md)
+The manual is published at
+[luna-flow.github.io/en/arithmetic](https://luna-flow.github.io/en/arithmetic/)
+with Simplified Chinese and Japanese translations. Its English source lives in
+[doc/manual](./doc/manual/index.md):
+
+- [Getting started](./doc/manual/getting_started.md)
+- [Architecture](./doc/manual/architecture.md)
+- [Verification](./doc/manual/verification.md)
+- [API reference](./doc/manual/api/core.md)
+- [Repository conventions](./doc/manual/conventions.md)
+
+Translations are gettext catalogs in `doc/locale`.
 
 ## Changelog
 
@@ -157,8 +162,8 @@ moon test
 ## Release Checklist
 
 1. Bump `moon.mod` to the intended release version.
-2. Update `README.md`, all three localized documentation trees, and
-   `CHANGELOG.md`.
+2. Update `README.md`, the English manual in `doc/manual` with its catalogs
+   (`lunadoc update`), and `CHANGELOG.md`.
 3. Run `moon fmt --check`, `moon info`, `moon build --target all`,
    `moon check --target all --frozen`, and the default, JavaScript, and native
    test suites.

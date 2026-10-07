@@ -1,0 +1,707 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Luna-Flow documentation\n"
+"Report-Msgid-Bugs-To: https://github.com/Luna-Flow\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: conf.json:summary
+msgid "Arithmetic capability traits and checked analytic operations for LunaFlow numeric types, with default real-valued instances."
+msgstr "面向 LunaFlow 数值类型的算术能力 trait 与带检查的解析运算，并提供默认的实数值实例。"
+
+#: manual/api/core.md:1
+msgid "Core API"
+msgstr "Core API"
+
+#: manual/api/core.md:3
+msgid "Purpose"
+msgstr "作用"
+
+#: manual/api/core.md:5
+msgid "`arithmetic` extends `luna-generic` with analytic capabilities, checked operations, contextual outcomes, and enclosure relations. Public traits remain small so algorithms can request only the capabilities they use."
+msgstr "`arithmetic` 在 `luna-generic` 的基础上补充解析能力、checked 操作、contextual 结果和 enclosure 关系。公开 traits 保持小而专一，让算法只声明真正需要的能力。"
+
+#: manual/api/core.md:9
+msgid "Unchecked capability traits"
+msgstr "Unchecked 能力 Traits"
+
+#: manual/api/core.md:17
+msgid "These traits are defined in `src/elementary.mbt` and return direct backend values."
+msgstr "这些 traits 定义在 `src/elementary.mbt`，直接返回后端值。"
+
+#: manual/api/core.md:20
+msgid "Checked surface"
+msgstr "Checked 表面"
+
+#: manual/api/core.md:22
+msgid "Shared types"
+msgstr "共享类型"
+
+#: manual/api/core.md:33
+msgid "Context construction"
+msgstr "Context 构造"
+
+#: manual/api/core.md:35
+msgid "`ArithmeticContext::new` accepts precision, rounding mode, optional `e_min` and `e_max`, and an optional `clamp` flag. Precision is clamped to at least `1`. Construction aborts when both exponent limits are present and `e_min` exceeds `e_max`."
+msgstr "`ArithmeticContext::new` 接收 precision、rounding mode、可选的 `e_min`、`e_max` 和 `clamp`。precision 最低会被调整为 `1`。如果同时提供两个指数边界且 `e_min` 大于 `e_max`，构造会 abort。"
+
+#: manual/api/core.md:40
+msgid "The package also provides these presets:"
+msgstr "包内还提供以下预设："
+
+#: manual/api/core.md:42
+msgid "`ArithmeticContext::decimal32`: precision `7`, exponent range `-95...96`"
+msgstr "`ArithmeticContext::decimal32`：precision `7`，指数范围 `-95...96`"
+
+#: manual/api/core.md:43
+msgid "`ArithmeticContext::decimal64`: precision `16`, exponent range `-383...384`"
+msgstr "`ArithmeticContext::decimal64`：precision `16`，指数范围 `-383...384`"
+
+#: manual/api/core.md:44
+msgid "`ArithmeticContext::decimal128`: precision `34`, exponent range `-6143...6144`"
+msgstr "`ArithmeticContext::decimal128`：precision `34`，指数范围 `-6143...6144`"
+
+#: manual/api/core.md:47
+msgid "All three presets use `ToNearestEven` and enable clamping."
+msgstr "三组预设均使用 `ToNearestEven` 并启用钳制。"
+
+#: manual/api/core.md:49
+msgid "Checked traits"
+msgstr "Checked Traits"
+
+#: manual/api/core.md:58
+msgid "These traits return `Result[..., ArithmeticError]`. Operations that require an arithmetic context accept it explicitly."
+msgstr "这些 traits 返回 `Result[..., ArithmeticError]`。需要算术上下文的操作会显式接收 `ArithmeticContext`。"
+
+#: manual/api/core.md:61
+msgid "Contextual outcome surface"
+msgstr "Contextual Outcome 表面"
+
+#: manual/api/core.md:63
+msgid "Result types"
+msgstr "结果类型"
+
+#: manual/api/core.md:65
+msgid "`ArithmeticDiagnostics` contains the flags `inexact`, `rounded`, `overflow`, `underflow`, `subnormal`, and `clamped`. `empty` and `new` construct diagnostic values; `combine` merges two values using logical OR for every flag."
+msgstr "`ArithmeticDiagnostics` 包含 `inexact`、`rounded`、`overflow`、`underflow`、 `subnormal` 和 `clamped` 标志。`empty` 与 `new` 用于构造诊断值；`combine` 对每个标志执行逻辑 OR。"
+
+#: manual/api/core.md:69
+msgid "`ArithmeticOutcome[T]` stores `value : T` and its diagnostics. `exact` creates an outcome with empty diagnostics, while `with_diagnostics` preserves supplied flags."
+msgstr "`ArithmeticOutcome[T]` 保存 `value : T` 与对应 diagnostics。`exact` 创建空诊断结果， `with_diagnostics` 保留调用方提供的标志。"
+
+#: manual/api/core.md:73
+msgid "Contextual traits"
+msgstr "Contextual Traits"
+
+#: manual/api/core.md:81
+msgid "`IntegralContextual::from_int_contextual` embeds a MoonBit `Int` under the target context and returns conversion diagnostics. Wider integer sources use separate capabilities. `AdjacentContextual` exposes `next_plus_contextual`, `next_minus_contextual`, and `next_toward_contextual`. `ConstantsContextual` produces `pi`, `tau`, and `e` under a context and may return an `ArithmeticError` whose kind is `ArithmeticErrorKind::CertificationFailure` when a proof-backed implementation cannot certify target rounding."
+msgstr "`IntegralContextual::from_int_contextual` 在目标 context 下嵌入 MoonBit `Int` 并返回转换 diagnostics；更宽的整数来源使用独立 capability。`AdjacentContextual` 提供 `next_plus_contextual`、 `next_minus_contextual` 和 `next_toward_contextual`。`ConstantsContextual` 按 context 生成 `pi`、`tau` 与 `e`；采用证明式计算的实现无法认证目标舍入时，可以返回 kind 为 `ArithmeticErrorKind::CertificationFailure` 的 `ArithmeticError`。"
+
+#: manual/api/core.md:90
+msgid "`HyperbolicContextual` exposes contextual `sinh`, `cosh`, and `tanh`, each as an `ArithmeticOutcome` inside `Result`."
+msgstr "`HyperbolicContextual` 提供 contextual `sinh`、`cosh` 与 `tanh`，每项都在 `Result` 中返回 `ArithmeticOutcome`。"
+
+#: manual/api/core.md:93
+msgid "`NumericFormatContextual` provides contextual zero, one, epsilon, minimum normal value, maximum finite value, and classification as `Finite`, `Infinity`, or `NaN`."
+msgstr "`NumericFormatContextual` 提供 contextual zero、one、epsilon、最小正规值、最大有限值，并把数值分类为 `Finite`、`Infinity` 或 `NaN`。"
+
+#: manual/api/core.md:97
+msgid "Enclosure relations"
+msgstr "Enclosure 关系"
+
+#: manual/api/core.md:105
+msgid "These are relations rather than a scalar total-order abstraction."
+msgstr "这些接口表达关系，不伪装成标量总序。"
+
+#: manual/api/core.md:107
+msgid "Shipped instances"
+msgstr "内置实例"
+
+#: manual/api/core.md:109
+msgid "`Float` and `Double` implement the broad elementary surface through `Kaida-Amethyst/math`."
+msgstr "`Float` 与 `Double` 通过 `Kaida-Amethyst/math` 实现较完整的 elementary 表面。"
+
+#: manual/api/core.md:111
+msgid "`Float` and `Double` implement the checked square-root, division, comparison, and integer-power surfaces."
+msgstr "`Float` 与 `Double` 实现 checked 平方根、除法、比较和整数幂能力。"
+
+#: manual/api/core.md:113
+msgid "`Float` and `Double` implement the original contextual surface plus `IntegralContextual` and `AdjacentContextual`."
+msgstr "`Float` 与 `Double` 实现原有 contextual 表面以及 `IntegralContextual`、 `AdjacentContextual`。"
+
+#: manual/api/core.md:115
+msgid "`Float` and `Double` intentionally do not implement `ConstantsContextual` or `HyperbolicContextual`; context-faithful numeric backends provide those capabilities."
+msgstr "`Float` 与 `Double` 有意不实现 `ConstantsContextual` 或 `HyperbolicContextual`；忠实于 context 的数值后端负责提供这些能力。"
+
+#: manual/api/core.md:118
+msgid "`BigInt` and the integer family implement the narrower exact subset that remains closed on each concrete type."
+msgstr "`BigInt` 与整数族只实现能够在具体类型上保持闭合的精确子集。"
+
+#: manual/api/core.md:121
+msgid "Semantic notes"
+msgstr "语义说明"
+
+#: manual/api/core.md:123
+msgid "Unchecked traits leave domain restrictions and branch semantics to the concrete instance."
+msgstr "unchecked traits 的定义域和 branch 语义由具体实例决定。"
+
+#: manual/api/core.md:125
+msgid "Built-in checked square root returns `DomainError` for negative real input."
+msgstr "内置 checked 平方根遇到负实数输入时返回 `DomainError`。"
+
+#: manual/api/core.md:126
+msgid "Built-in checked division classifies `0 / 0` and infinity divided by infinity as `DomainError`; non-zero division by zero remains `DivisionByZero`."
+msgstr "内置 checked 除法把 `0 / 0` 和 infinity 除以 infinity 归为 `DomainError`；非零数除以零仍归为 `DivisionByZero`。"
+
+#: manual/api/core.md:128
+msgid "Built-in contextual division and square root delegate to checked operations and wrap successful values with exact diagnostics."
+msgstr "内置 contextual 除法与平方根委托给 checked 操作，并把成功值包装为 exact diagnostics。"
+
+#: manual/api/core.md:130
+msgid "Built-in `Float` integer embedding sets `inexact` and `rounded` when the source integer is not exactly representable; `Double` exactly embeds every MoonBit `Int`."
+msgstr "内置 `Float` 整数嵌入在源整数无法精确表示时设置 `inexact` 与 `rounded`；`Double` 可以精确嵌入所有 MoonBit `Int`。"
+
+#: manual/api/core.md:133
+msgid "Built-in adjacent operations follow the fixed IEEE binary representation, including signed-zero and infinity boundaries. Selecting the adjacent value is exact in that fixed representable set and returns empty diagnostics."
+msgstr "内置相邻值操作遵循固定 IEEE 二进制表示，包括带符号零和 infinity 边界；邻接选择在固定表示集合中是精确操作，因此返回空 diagnostics。"
+
+#: manual/api/core.md:136
+msgid "The built-in implementations do not apply context-controlled precision, rounding, exponent clamping, or status-flag detection."
+msgstr "内置实现不会执行 context 控制的 precision、rounding、指数钳制或状态标志探测。"
+
+#: manual/api/core.md:138
+msgid "Signed integer and `BigInt` `Power` implementations require non-negative exponents; negative exponents abort."
+msgstr "有符号整数与 `BigInt` 的 `Power` 要求指数非负；负指数会 abort。"
+
+#: manual/api/core.md:140
+msgid "`PowNatChecked` treats `x^0` as the multiplicative identity, including `0^0`."
+msgstr "`PowNatChecked` 把 `x^0` 视为乘法单位元，包括 `0^0`。"
+
+#: manual/architecture.md:1
+msgid "Architecture"
+msgstr "架构"
+
+#: manual/architecture.md:3
+msgid "Boundary model"
+msgstr "边界模型"
+
+#: manual/architecture.md:5
+msgid "`luna-generic` owns algebraic structure. `arithmetic` adds analytic, checked, contextual, and enclosure capabilities without introducing a bundled scalar abstraction. Algorithms compose the smallest traits that state their requirements."
+msgstr "`luna-generic` 负责代数结构；`arithmetic` 提供解析、checked、contextual 和 enclosure 能力，但不引入一个打包的 scalar 抽象。算法应组合能说明需求的最小 trait 集合。"
+
+#: manual/architecture.md:10
+msgid "Boundary"
+msgstr "边界"
+
+#: manual/architecture.md:10
+msgid "Result"
+msgstr "返回值"
+
+#: manual/architecture.md:10
+msgid "Meaning"
+msgstr "含义"
+
+#: manual/architecture.md:12
+msgid "Unchecked trait"
+msgstr "Unchecked trait"
+
+#: manual/architecture.md:12
+msgid "Direct concrete-backend behavior"
+msgstr "具体后端的直接行为"
+
+#: manual/architecture.md:13
+msgid "Checked trait"
+msgstr "Checked trait"
+
+#: manual/architecture.md:13
+msgid "Rejected operation is explicit"
+msgstr "被拒绝的操作显式可见"
+
+#: manual/architecture.md:14
+msgid "Contextual trait"
+msgstr "Contextual trait"
+
+#: manual/architecture.md:14
+msgid "Explicit context plus successful diagnostics"
+msgstr "显式 context 加成功 diagnostics"
+
+#: manual/architecture.md:15
+msgid "Enclosure relation"
+msgstr "Enclosure relation"
+
+#: manual/architecture.md:15
+msgid "Containment or definite/possible relation"
+msgstr "包含、确定关系或可能关系"
+
+#: manual/architecture.md:17
+msgid "Errors, diagnostics, and certification"
+msgstr "Errors、Diagnostics 与 Certification"
+
+#: manual/architecture.md:19
+msgid "Errors represent operations that do not yield an accepted result. Diagnostics describe successful results with notable conditions and combine using logical OR. They are deliberately separate: a flag must not hide an error, and an error must not be invented merely to transport a flag."
+msgstr "error 表示不能产生可接受结果的操作；diagnostics 描述具有值得注意条件的成功结果，并以逻辑 OR 组合。两者必须分开：flag 不能隐藏 error，也不能为了传递 flag 而虚构 error。"
+
+#: manual/architecture.md:24
+msgid "`CertificationFailure` is a third, precise distinction within errors. A proof-backed implementation uses it when it cannot establish that its candidate result satisfies the requested target. Its detail separates the failed stage (`RangeReduction`, `SeriesEvaluation`, `EnclosurePropagation`, or `TargetRounding`) from the reason. No retry policy is imposed by this package; callers and concrete backends choose resource or precision escalation."
+msgstr "`CertificationFailure` 在 error 内再做精确区分：支持证明的实现无法建立候选结果满足目标时使用它。detail 将失败阶段（`RangeReduction`、`SeriesEvaluation`、 `EnclosurePropagation` 或 `TargetRounding`）与原因分开。本包不规定重试策略；调用方和具体后端决定是否增加资源或精度。"
+
+#: manual/architecture.md:31
+msgid "Context and state"
+msgstr "Context 与状态"
+
+#: manual/architecture.md:33
+msgid "`ArithmeticContext`, `ArithmeticDiagnostics`, `ArithmeticOutcome`, and `CertificationFailureDetail` are immutable ordinary values. Context passes as an argument, diagnostics combine explicitly, and certification evidence stays on the returned error. The package requires no global rounding mode, hidden status register, or mutable proof state."
+msgstr "`ArithmeticContext`、`ArithmeticDiagnostics`、`ArithmeticOutcome` 与 `CertificationFailureDetail` 都是不可变普通值。context 显式传入，diagnostics 显式组合， certification evidence 保留在返回的 error 上；包不依赖全局 rounding mode、隐藏状态寄存器或可变证明状态。"
+
+#: manual/architecture.md:39
+msgid "Shipped adapter limits"
+msgstr "内置适配器的限制"
+
+#: manual/architecture.md:41
+msgid "`Float` and `Double` implement only the contextual capabilities they can expose without inventing unsupported semantics. They preserve native scalar behavior, report detectable `Int` conversion loss, and use their fixed IEEE formats for adjacent values. They intentionally do not implement contextual constants or hyperbolic functions. A concrete certified backend may expose those traits and produce structured certification failures."
+msgstr "`Float` 与 `Double` 只实现无需虚构语义即可提供的 contextual 能力。它们保留原生 scalar 行为，报告可检测的 `Int` 转换损失，并使用固定 IEEE 格式处理相邻值；它们有意不实现 contextual 常量或双曲函数。具体 certified backend 可以实现这些 traits 并产生结构化 certification failures。"
+
+#: manual/conventions.md:1
+msgid "Repository conventions"
+msgstr "仓库约定"
+
+#: manual/conventions.md:3
+msgid "These rules apply to the `arithmetic` manual in addition to the Luna-Flow documentation standard."
+msgstr "除 Luna-Flow 文档规范外，`arithmetic` 手册还遵循以下规则。"
+
+#: manual/conventions.md:5
+msgid "Baseline and history"
+msgstr "基线与历史"
+
+#: manual/conventions.md:7
+msgid "The manual describes the current release baseline, `0.5.0`. The [overview](index.md) explains the active release, the package positioning and the entry points. [CHANGELOG.md](../../CHANGELOG.md) owns the release timeline and older release notes, so the overview and the repository README stay focused on the active baseline."
+msgstr "本手册描述当前发布基线 `0.5.0`。[概览](index.md)说明当前版本、包定位和入口。[CHANGELOG.md](../../CHANGELOG.md) 负责维护历史版本时间线和较旧的发布说明，因此概览和仓库 README 只聚焦当前基线。"
+
+#: manual/conventions.md:9
+msgid "Writing requirements"
+msgstr "写作要求"
+
+#: manual/conventions.md:11
+msgid "Separate API guarantees from implementation strategy and known limitations."
+msgstr "明确区分 API 保证、实现策略与已知限制。"
+
+#: manual/conventions.md:12
+msgid "State when a capability is only an interface boundary and a shipped instance does not implement every possible semantic behavior."
+msgstr "如果某项能力只是接口边界，而内置实例没有实现全部可能语义，必须明确写出。"
+
+#: manual/conventions.md:14
+msgid "Prefer short, direct technical sentences over promotional release prose."
+msgstr "使用简短、直接的技术表述，避免宣传式发布文案。"
+
+#: manual/conventions.md:15
+msgid "Use explicit Luna Flow aliases in MoonBit examples: `@lf_alg` for `Luna-Flow/luna-generic` and `@lf_arith` for `Luna-Flow/arithmetic`."
+msgstr "MoonBit 示例统一使用 Luna Flow 别名：`Luna-Flow/luna-generic` 使用 `@lf_alg`， `Luna-Flow/arithmetic` 使用 `@lf_arith`。"
+
+#: manual/conventions.md:18
+msgid "Translation"
+msgstr "翻译"
+
+#: manual/conventions.md:20
+msgid "Do not translate identifiers, type names, trait names, package names, paths, commands, or version strings."
+msgstr "不翻译标识符、类型名、trait 名、包名、路径、命令和版本号。"
+
+#: manual/conventions.md:22
+msgid "Chinese should read as natural written technical Chinese. Japanese should use natural technical Japanese rather than literal translation."
+msgstr "中文应使用自然的书面技术表达，日文应使用自然的技术文体，避免逐词硬译。"
+
+#: manual/design/core.md:1
+msgid "Core design"
+msgstr "Core 设计"
+
+#: manual/design/core.md:3
+msgid "Design goal"
+msgstr "设计目标"
+
+#: manual/design/core.md:5
+msgid "`arithmetic` extends Luna Flow from algebraic structure into analytic and context-dependent numeric capabilities while keeping backend semantics explicit."
+msgstr "`arithmetic` 让 Luna Flow 从代数结构扩展到解析能力和上下文相关的数值能力，同时保持后端语义清晰可见。"
+
+#: manual/design/core.md:9
+msgid "Capability boundaries"
+msgstr "能力边界"
+
+#: manual/design/core.md:11
+msgid "Unchecked traits describe direct, context-free backend operations."
+msgstr "unchecked traits 描述直接、无 context 的后端操作。"
+
+#: manual/design/core.md:12
+msgid "Checked traits add explicit domain or arithmetic failure without changing successful values into a diagnostic record."
+msgstr "checked traits 显式增加定义域或算术失败，但不会把成功值改成诊断记录。"
+
+#: manual/design/core.md:14
+msgid "Contextual traits accept `ArithmeticContext` and return `ArithmeticOutcome[T]`, allowing implementations to report rounding and exceptional-condition flags."
+msgstr "contextual traits 接收 `ArithmeticContext` 并返回 `ArithmeticOutcome[T]`，让实现可以报告舍入和异常条件标志。"
+
+#: manual/design/core.md:17
+msgid "Enclosure relations remain separate from scalar comparison."
+msgstr "enclosure 关系与标量比较保持分离。"
+
+#: manual/design/core.md:19
+msgid "Algorithms should depend on the smallest existing trait composition that states their requirements. A broad local “number” or “real” trait would hide meaningful differences between numeric domains."
+msgstr "算法应组合最小的现有 traits 来表达需求。宽泛的本地 “number” 或 “real” trait 会掩盖不同数值域之间的重要差异。"
+
+#: manual/design/core.md:23
+msgid "Data and effects"
+msgstr "数据与效果"
+
+#: manual/design/core.md:25
+msgid "`ArithmeticContext`, `ArithmeticDiagnostics`, and `ArithmeticOutcome` are ordinary values. Context is passed explicitly, diagnostic accumulation uses the pure `combine` operation, and no package-global arithmetic state is required. This keeps contextual computation deterministic for a given implementation and input set."
+msgstr "`ArithmeticContext`、`ArithmeticDiagnostics` 和 `ArithmeticOutcome` 都是普通值。 context 显式传入，diagnostics 通过纯函数式的 `combine` 累积，不需要包级全局算术状态。"
+
+#: manual/design/core.md:31
+msgid "Errors remain explicit through `Result[..., ArithmeticError]`. Diagnostic flags represent successful computations with notable conditions; they do not replace errors for operations that the implementation rejects."
+msgstr "错误继续通过 `Result[..., ArithmeticError]` 显式返回。诊断标志表示一次成功计算中值得关注的条件，不能替代实现明确拒绝某项操作时返回的错误。"
+
+#: manual/design/core.md:35
+msgid "Built-in adapter strategy"
+msgstr "内置适配策略"
+
+#: manual/design/core.md:37
+msgid "The `Float` and `Double` implementations adapt the contextual boundary to existing native and checked operations. Division and square root reuse checked validation. Integer embedding detects native `Float` conversion loss, adjacent operations step through the IEEE bit representation, and fixed-format neighbor selection returns empty diagnostics as an exact capability operation."
+msgstr "`Float` 与 `Double` 把 contextual 边界适配到现有原生和 checked 操作上。除法与平方根复用 checked 验证；整数嵌入检测原生 `Float` 转换损失，相邻值操作按 IEEE 位表示移动，固定格式中的邻接选择作为精确 capability 操作返回空 diagnostics。"
+
+#: manual/design/core.md:43
+msgid "These adapters establish interface availability, not a software decimal engine. They intentionally do not pretend to honor arbitrary precision, directed rounding, exponent clamping, or full IEEE flag generation. They intentionally do not implement `ConstantsContextual` or `HyperbolicContextual`. Proof-backed numeric packages can implement those capabilities with certified evaluation and preserve failure details through `ArithmeticError`."
+msgstr "这些适配器只保证接口可用，并不是软件 decimal 引擎。它们不会假装支持任意精度、定向舍入、指数钳制或完整 IEEE 状态标志生成。它们有意不实现 `ConstantsContextual` 或 `HyperbolicContextual`。采用证明式数值计算的包可以实现这些能力，并通过 `ArithmeticError` 保留认证失败细节。"
+
+#: manual/design/core.md:51
+msgid "Boundaries"
+msgstr "边界"
+
+#: manual/design/core.md:53
+msgid "This package does not define vectors, matrices, complex numbers, symbolic objects, or arbitrary-precision decimal storage."
+msgstr "本包不定义向量、矩阵、复数、符号对象或任意精度 decimal 存储。"
+
+#: manual/design/core.md:55
+msgid "It does not hide branch cuts or exceptional values behind one bundled abstraction."
+msgstr "本包不会把 branch cut 或特殊值压平到一个宽泛抽象中。"
+
+#: manual/design/core.md:57
+msgid "Concrete numeric backends own the semantics of contextual rounding, exponent handling, and diagnostic production."
+msgstr "contextual rounding、指数处理和 diagnostics 生成语义由具体数值后端负责。"
+
+#: manual/getting_started.md:1
+msgid "Getting started"
+msgstr "快速上手"
+
+#: manual/getting_started.md:3
+msgid "`arithmetic` supplies small capability traits for analytic operations and a shared checked-error vocabulary. It does not define a universal number type."
+msgstr "`arithmetic` 提供解析运算的小型 capability traits，以及共享的 checked error 词汇；它不定义通用的数值类型。"
+
+#: manual/getting_started.md:6
+msgid "Install and import"
+msgstr "安装与导入"
+
+#: manual/getting_started.md:20
+msgid "Request only needed capabilities"
+msgstr "只声明所需能力"
+
+#: manual/getting_started.md:31
+msgid "Choose an unchecked trait only when the concrete backend's direct behavior is acceptable. Use a checked trait when callers must handle a rejected operation."
+msgstr "只有在可接受具体后端的直接语义时才使用 unchecked trait；调用方需要处理被拒绝的操作时，使用 checked trait。"
+
+#: manual/getting_started.md:34
+msgid "Handle checked and certified failures"
+msgstr "处理 Checked 与 Certification 失败"
+
+#: manual/getting_started.md:48
+msgid "`CertificationFailureDetail` is present only for `ArithmeticErrorKind::CertificationFailure`. It identifies the operation, proof stage, reason, target precision, working precision, and refinement count. It lets a proof-backed backend report an inconclusive evaluation without misclassifying it as a domain or format failure."
+msgstr "仅当 error 为 `ArithmeticErrorKind::CertificationFailure` 时，才会有 `CertificationFailureDetail`。它记录操作、证明阶段、原因、目标精度、工作精度和 refinement 次数，使支持证明的后端能报告无法确定的求值，而不把它误报为定义域或格式错误。"
+
+#: manual/getting_started.md:54
+msgid "Continue reading"
+msgstr "后续阅读"
+
+#: manual/getting_started.md:56
+msgid "[Core tutorial](./tutorial/core.md) for contexts and diagnostics."
+msgstr "[核心教程](./tutorial/core.md)：context 与 diagnostics。"
+
+#: manual/getting_started.md:57
+msgid "[Core API](./api/core.md) for public names and semantic notes."
+msgstr "[核心 API](./api/core.md)：公开名称与语义说明。"
+
+#: manual/getting_started.md:58
+msgid "[Architecture](./architecture.md) for effect and error boundaries."
+msgstr "[架构](./architecture.md)：effect 和 error 边界。"
+
+#: manual/getting_started.md:59
+msgid "[Verification](./verification.md) for the repository gate and release checks."
+msgstr "[验证](./verification.md)：仓库门禁与发布检查。"
+
+#: manual/index.md:1
+msgid "arithmetic"
+msgstr "arithmetic"
+
+#: manual/index.md:3
+msgid "This manual documents `arithmetic` **0.5.0**. Earlier release history lives in [CHANGELOG.md](../../CHANGELOG.md)."
+msgstr "本手册介绍 `arithmetic` **0.5.0**。更早的版本说明和仓库历史请参见 [CHANGELOG.md](../../CHANGELOG.md)。"
+
+#: manual/index.md:6
+msgid "Release focus"
+msgstr "本版重点"
+
+#: manual/index.md:8
+msgid "`IntegralContextual` embeds MoonBit `Int` values and returns diagnostics."
+msgstr "`IntegralContextual` 嵌入 MoonBit `Int` 并返回 diagnostics。"
+
+#: manual/index.md:9
+msgid "`AdjacentContextual` exposes next-plus, next-minus, and next-toward."
+msgstr "`AdjacentContextual` 提供 next-plus、next-minus 和 next-toward。"
+
+#: manual/index.md:10
+msgid "`ConstantsContextual` and `HyperbolicContextual` define context-faithful capability boundaries for richer numeric backends."
+msgstr "`ConstantsContextual` 与 `HyperbolicContextual` 为更丰富的数值后端定义忠实于 context 的能力边界。"
+
+#: manual/index.md:12
+msgid "Certification failures remain explicit through `ArithmeticError`."
+msgstr "certification failure 继续通过 `ArithmeticError` 显式返回。"
+
+#: manual/index.md:14
+msgid "Capability layers"
+msgstr "能力分层"
+
+#: manual/index.md:16
+msgid "Unchecked elementary traits expose direct backend behavior."
+msgstr "unchecked elementary traits 直接保留后端行为。"
+
+#: manual/index.md:17
+msgid "Checked traits expose structured domain and division failures."
+msgstr "checked traits 显式返回定义域错误和除法错误。"
+
+#: manual/index.md:18
+msgid "Contextual traits return a value plus diagnostics under an explicit `ArithmeticContext`."
+msgstr "contextual traits 接收 `ArithmeticContext`，返回结果值及诊断信息。"
+
+#: manual/index.md:20
+msgid "Enclosure traits model containment and definite or possible relations."
+msgstr "enclosure traits 表达包含、确定关系和可能关系。"
+
+#: manual/index.md:22
+msgid "Context contract"
+msgstr "Context 契约"
+
+#: manual/index.md:24
+msgid "Precision is clamped to at least `1`."
+msgstr "precision 下限为 `1`。"
+
+#: manual/index.md:25
+msgid "`e_min` must not exceed `e_max` when both are supplied."
+msgstr "同时提供 `e_min` 与 `e_max` 时，`e_min` 不能大于 `e_max`。"
+
+#: manual/index.md:26
+msgid "Decimal presets define precision, exponent range, and clamping together."
+msgstr "decimal 预设会一起确定 precision、指数范围与钳制开关。"
+
+#: manual/index.md:27
+msgid "Diagnostics combine with logical OR and remain ordinary immutable values."
+msgstr "诊断标志通过逻辑 OR 合并，始终作为普通不可变值传递。"
+
+#: manual/index.md:29
+msgid "Built-in instance limits"
+msgstr "内置实例限制"
+
+#: manual/index.md:31
+msgid "The built-in `Float` and `Double` contextual operations preserve native scalar behavior. They do not apply arbitrary decimal precision, directed rounding, exponent clamping, or general status-flag detection. `Float` integer embedding reports detectable conversion loss; adjacent operations use the fixed IEEE binary format and return empty diagnostics because neighbor selection is exact. Contextual division and square root reuse the checked validation paths. Native `Float` and `Double` do not implement contextual constants or hyperbolic functions."
+msgstr "内置 `Float` 与 `Double` contextual 操作保留原生标量语义，不执行任意 decimal 精度、定向舍入、指数钳制或通用状态标志探测。`Float` 的整数嵌入会报告可检测的转换损失；相邻值操作使用固定 IEEE 二进制格式，并因邻接选择在该表示集合中是精确操作而返回空 diagnostics。contextual 除法和平方根会复用 checked 路径完成验证。原生 `Float` 与 `Double` 不实现 contextual 常量或双曲函数。"
+
+#: manual/index.md:40
+msgid "Core documents"
+msgstr "核心文档"
+
+#: manual/index.md:42
+msgid "[Getting started](./getting_started.md)"
+msgstr "[快速上手](./getting_started.md)"
+
+#: manual/index.md:43
+msgid "[Architecture](./architecture.md)"
+msgstr "[架构](./architecture.md)"
+
+#: manual/index.md:44
+msgid "[Verification](./verification.md)"
+msgstr "[验证](./verification.md)"
+
+#: manual/index.md:45
+msgid "[API reference](./api/core.md)"
+msgstr "[API 参考](./api/core.md)"
+
+#: manual/index.md:46
+msgid "[Tutorial](./tutorial/core.md)"
+msgstr "[教程](./tutorial/core.md)"
+
+#: manual/index.md:47
+msgid "[Design](./design/core.md)"
+msgstr "[设计](./design/core.md)"
+
+#: manual/index.md:48
+msgid "[Repository conventions](./conventions.md)"
+msgstr "[仓库约定](./conventions.md)"
+
+#: manual/tutorial/core.md:1
+msgid "Core tutorial"
+msgstr "Core 教程"
+
+#: manual/tutorial/core.md:3
+msgid "Generic analytic helper"
+msgstr "泛型解析辅助函数"
+
+#: manual/tutorial/core.md:11
+msgid "This signature requests only the capabilities the algorithm uses."
+msgstr "这个签名只声明算法真正使用的能力。"
+
+#: manual/tutorial/core.md:13
+msgid "Construct an arithmetic context"
+msgstr "构造 Arithmetic Context"
+
+#: manual/tutorial/core.md:26
+msgid "Use a preset when its decimal format matches the backend contract. Use `new` when a concrete backend supports a different working context."
+msgstr "当后端契约与某个 decimal 格式一致时使用预设；当具体后端支持不同工作上下文时使用 `new`。"
+
+#: manual/tutorial/core.md:29
+msgid "Contextual division"
+msgstr "Contextual 除法"
+
+#: manual/tutorial/core.md:42
+msgid "The built-in `Double` instance validates division through `DivChecked` and wraps a successful result with exact diagnostics. A decimal backend may use the same trait while producing rounding or clamping flags."
+msgstr "内置 `Double` 实例通过 `DivChecked` 验证除法，并用 exact diagnostics 包装成功结果。 decimal 后端可以实现相同 trait，同时返回舍入或钳制标志。"
+
+#: manual/tutorial/core.md:46
+msgid "Combine diagnostics"
+msgstr "合并 Diagnostics"
+
+#: manual/tutorial/core.md:53
+msgid "Combining diagnostics is an explicit value transformation. It does not mutate either input or package-global state."
+msgstr "合并 diagnostics 是显式的值转换，不会修改输入，也不会修改包级全局状态。"
+
+#: manual/tutorial/core.md:56
+msgid "Checked comparison"
+msgstr "Checked 比较"
+
+#: manual/tutorial/core.md:67
+msgid "Use the checked path when unordered values such as NaN must not be silently coerced into a total order."
+msgstr "当 NaN 等无序值不能被静默折叠成总序时，应使用 checked 路径。"
+
+#: manual/tutorial/core.md:70
+msgid "Practical guidance"
+msgstr "实践建议"
+
+#: manual/tutorial/core.md:72
+msgid "Use unchecked traits when direct backend semantics are acceptable."
+msgstr "接受直接后端语义时使用 unchecked traits。"
+
+#: manual/tutorial/core.md:73
+msgid "Use checked traits when failure must be explicit but diagnostics are not needed."
+msgstr "需要显式失败但不需要诊断标志时使用 checked traits。"
+
+#: manual/tutorial/core.md:75
+msgid "Use contextual traits when an algorithm must pass working context and retain diagnostic flags."
+msgstr "算法需要传递工作 context 并保留诊断标志时使用 contextual traits。"
+
+#: manual/tutorial/core.md:77
+msgid "Do not assume the built-in `Float` or `Double` contextual instances emulate decimal precision or directed rounding."
+msgstr "不要假设内置 `Float` 或 `Double` contextual 实例会模拟 decimal precision 或定向舍入。"
+
+#: manual/tutorial/core.md:79
+msgid "Keep algebraic structure in `luna-generic`; use `arithmetic` for analytic and contextual capabilities."
+msgstr "代数结构属于 `luna-generic`；解析和 contextual 能力属于 `arithmetic`。"
+
+#: manual/verification.md:1
+msgid "Verification"
+msgstr "验证"
+
+#: manual/verification.md:3
+msgid "Local gate"
+msgstr "本地门禁"
+
+#: manual/verification.md:5
+msgid "Run the same checks required before a release:"
+msgstr "发布前运行同一组检查："
+
+#: manual/verification.md:19
+msgid "`moon info` regenerates public-interface snapshots. The following diff check requires the tracked `pkg.generated.mbti` file to agree with the source API."
+msgstr "`moon info` 会生成 public-interface snapshot；随后 diff 检查保证已跟踪的 `pkg.generated.mbti` 与源 API 一致。"
+
+#: manual/verification.md:22
+msgid "What the tests establish"
+msgstr "测试所能证明的内容"
+
+#: manual/verification.md:24
+msgid "The checked tests cover error classification and the public construction and inspection paths for certification failures. In particular, they establish that the detail survives `ArithmeticError::certification_failure`, that precision and refinement inputs are normalized, and that existing error predicates remain disjoint from `is_certification_failure`."
+msgstr "checked tests 覆盖 certification failure 的分类、公开构造和检查路径：detail 经过 `ArithmeticError::certification_failure` 后仍被保留，precision/refinement 输入会规范化，且已有 error predicates 与 `is_certification_failure` 保持互斥。"
+
+#: manual/verification.md:30
+msgid "The contextual tests cover exact and rounded `Int` embedding, signed-zero direction, NaN propagation, stationary infinities, finite-to-infinity steps, and minimum-subnormal-to-zero steps for the fixed IEEE `Float` and `Double` formats. Test-local implementations also verify contextual hyperbolic outcomes and certification-failure propagation for constants."
+msgstr "contextual tests 覆盖精确与发生舍入的 `Int` 嵌入、带符号零方向、NaN 传播、静止 infinity、有限值到 infinity 的步进，以及固定 IEEE `Float`/`Double` 格式中最小 subnormal 到零的步进。测试包内的实现还验证 contextual 双曲结果和常量认证失败传播。"
+
+#: manual/verification.md:36
+msgid "The tests do not claim that `Float` or `Double` perform certified arithmetic. They verify the shared capability vocabulary, fixed-format adjacent semantics, and ordinary error-model behavior."
+msgstr "测试不声称 `Float` 或 `Double` 执行 certified arithmetic；它们只验证共享 capability vocabulary、固定格式的相邻值语义及其普通 error-model 行为。"
+
+#: manual/verification.md:40
+msgid "Release gate"
+msgstr "发布门禁"
+
+#: manual/verification.md:42
+msgid "The `publish-package` GitHub workflow accepts an explicit release version and requires it to equal the version in `moon.mod`. It then updates the registry, builds and checks all targets, runs default, JavaScript, and native tests, publishes with the `LUNA_MOONCAKE` secret, and creates the corresponding GitHub release."
+msgstr "`publish-package` GitHub workflow 接受显式 release version，并要求它与 `moon.mod` 相等。之后它更新 registry，构建并检查所有 target，运行 default/JavaScript/native tests，使用 `LUNA_MOONCAKE` 发布，最后创建对应 GitHub release。"
+
+#: manual/verification.md:48
+msgid "CI runs on pull requests and pushes to `main`. It repeats all-target builds and checks, default/JavaScript/native tests, interface snapshot validation, and formatting. A passing CI run is repository evidence, not a numerical conformance claim for any concrete backend."
+msgstr "CI 会在 pull request 和 push 到 `main` 时运行，并重复 all-target build/check、 default/JavaScript/native tests、interface snapshot 验证和 formatting。通过 CI 是仓库证据，并不构成任何具体后端的数值 conformance 声明。"
+
+#~ msgid "Documentation Standard"
+#~ msgstr "文档规范"
+
+#~ msgid "The documentation in this repository describes the **current implementation on the branch**. As of `2026-07-18`, the active documentation baseline is **`0.5.0`**."
+#~ msgstr "本仓库文档描述**当前分支中的真实实现**。截至 `2026-07-18`，当前文档基线为 **`0.5.0`**。"
+
+#~ msgid "Document Types and Organization"
+#~ msgstr "文档类型与组织"
+
+#~ msgid "Main Document Types"
+#~ msgstr "主要文档类型"
+
+#~ msgid "**API reference (`api.md`)**: specifications for public interfaces and observable behavior"
+#~ msgstr "**API 参考（`api.md`）**：说明公开接口规格与可观察行为"
+
+#~ msgid "**Tutorial (`tutorial.md`)**: user-oriented examples and selection guidance"
+#~ msgstr "**教程（`tutorial.md`）**：提供面向使用者的示例和选择建议"
+
+#~ msgid "**Design document (`design.md`)**: capability boundaries, responsibilities, and implementation tradeoffs"
+#~ msgstr "**设计文档（`design.md`）**：说明能力边界、职责与实现取舍"
+
+#~ msgid "`README.md` is the current-baseline document. It explains the active release, package positioning, entry points, and reader guidance. `CHANGELOG.md` owns the historical release timeline and older release notes."
+#~ msgstr "`README.md` 是当前基线文档，负责说明当前版本、包定位、入口和阅读路径。 `CHANGELOG.md` 负责维护历史版本时间线和较旧的发布说明。"
+
+#~ msgid "Organization Principles"
+#~ msgstr "组织原则"
+
+#~ msgid "Organize subsystem documents under the real package or capability boundary."
+#~ msgstr "按真实包边界或能力边界组织子系统文档。"
+
+#~ msgid "Keep `api.md`, `tutorial.md`, and `design.md` distinct in purpose."
+#~ msgstr "明确区分 `api.md`、`tutorial.md` 与 `design.md` 的用途。"
+
+#~ msgid "Document only APIs and behavior present in the current branch."
+#~ msgstr "只记录当前分支已经存在的 API 和行为。"
+
+#~ msgid "Keep the Markdown file set aligned across `en_US`, `zh_CN`, and `ja_JP`."
+#~ msgstr "`en_US`、`zh_CN`、`ja_JP` 三种语言保持相同的 Markdown 文件集合。"
+
+#~ msgid "Keep top-level and second-level section order aligned across languages unless a code fact requires a structural difference."
+#~ msgstr "除非代码事实要求不同结构，否则三种语言应保持一级、二级小节顺序一致。"
+
+#~ msgid "Treat English as the structural source of truth, then localize the same facts naturally into Chinese and Japanese."
+#~ msgstr "以英文文档作为结构基准，再把相同事实自然地本地化为中文和日文。"
+
+#~ msgid "Keep `README.md` focused on the active baseline and move older release summaries into `CHANGELOG.md`."
+#~ msgstr "`README.md` 只聚焦当前基线，较旧版本摘要移入 `CHANGELOG.md`。"
+
+#~ msgid "[Documentation standard](./conventions.md)"
+#~ msgstr "[文档规范](./conventions.md)"

@@ -1,9 +1,9 @@
-# Getting Started
+# Getting started
 
 `arithmetic` supplies small capability traits for analytic operations and a
 shared checked-error vocabulary. It does not define a universal number type.
 
-## Install and Import
+## Install and import
 
 ```sh
 moon add Luna-Flow/arithmetic@0.5.0
@@ -17,7 +17,7 @@ import {
 }
 ```
 
-## Request Only Needed Capabilities
+## Request only needed capabilities
 
 ```moonbit
 using @lf_alg { trait Add, trait Mul }
@@ -31,7 +31,7 @@ fn hypot2[T : Add + Mul + Sqrt](x : T, y : T) -> T {
 Choose an unchecked trait only when the concrete backend's direct behavior is
 acceptable. Use a checked trait when callers must handle a rejected operation.
 
-## Handle Checked and Certified Failures
+## Handle checked and certified failures
 
 ```moonbit nocheck
 let context = @lf_arith.ArithmeticContext::decimal64()
@@ -51,9 +51,9 @@ proof stage, reason, target precision, working precision, and refinement count.
 It lets a proof-backed backend report an inconclusive evaluation without
 misclassifying it as a domain or format failure.
 
-## Continue Reading
+## Continue reading
 
-- [Core tutorial](./core/tutorial.md) for contexts and diagnostics.
-- [Core API](./core/api.md) for public names and semantic notes.
+- [Core tutorial](./tutorial/core.md) for contexts and diagnostics.
+- [Core API](./api/core.md) for public names and semantic notes.
 - [Architecture](./architecture.md) for effect and error boundaries.
 - [Verification](./verification.md) for the repository gate and release checks.

@@ -1,0 +1,707 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Luna-Flow documentation\n"
+"Report-Msgid-Bugs-To: https://github.com/Luna-Flow\n"
+"Language: ja_JP\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: conf.json:summary
+msgid "Arithmetic capability traits and checked analytic operations for LunaFlow numeric types, with default real-valued instances."
+msgstr "LunaFlow の数値型向けの算術 capability trait とチェック付き解析演算。実数値の既定インスタンスを含みます。"
+
+#: manual/api/core.md:1
+msgid "Core API"
+msgstr "Core API"
+
+#: manual/api/core.md:3
+msgid "Purpose"
+msgstr "役割"
+
+#: manual/api/core.md:5
+msgid "`arithmetic` extends `luna-generic` with analytic capabilities, checked operations, contextual outcomes, and enclosure relations. Public traits remain small so algorithms can request only the capabilities they use."
+msgstr "`arithmetic` は `luna-generic` の上に解析 capability、checked 演算、contextual 結果、enclosure 関係を追加します。公開 traits は小さく保ち、アルゴリズムが必要な能力だけを要求できるようにします。"
+
+#: manual/api/core.md:9
+msgid "Unchecked capability traits"
+msgstr "Unchecked Capability Traits"
+
+#: manual/api/core.md:17
+msgid "These traits are defined in `src/elementary.mbt` and return direct backend values."
+msgstr "これらは `src/elementary.mbt` で定義され、後端の値を直接返します。"
+
+#: manual/api/core.md:20
+msgid "Checked surface"
+msgstr "Checked Surface"
+
+#: manual/api/core.md:22
+msgid "Shared types"
+msgstr "共有型"
+
+#: manual/api/core.md:33
+msgid "Context construction"
+msgstr "Context の構築"
+
+#: manual/api/core.md:35
+msgid "`ArithmeticContext::new` accepts precision, rounding mode, optional `e_min` and `e_max`, and an optional `clamp` flag. Precision is clamped to at least `1`. Construction aborts when both exponent limits are present and `e_min` exceeds `e_max`."
+msgstr "`ArithmeticContext::new` は precision、rounding mode、省略可能な `e_min`、 `e_max`、`clamp` を受け取ります。precision は最低 `1` に補正されます。両方の指数境界を指定し、`e_min` が `e_max` を上回る場合は abort します。"
+
+#: manual/api/core.md:40
+msgid "The package also provides these presets:"
+msgstr "次のプリセットも提供します。"
+
+#: manual/api/core.md:42
+msgid "`ArithmeticContext::decimal32`: precision `7`, exponent range `-95...96`"
+msgstr "`ArithmeticContext::decimal32`：precision `7`、指数範囲 `-95...96`"
+
+#: manual/api/core.md:43
+msgid "`ArithmeticContext::decimal64`: precision `16`, exponent range `-383...384`"
+msgstr "`ArithmeticContext::decimal64`：precision `16`、指数範囲 `-383...384`"
+
+#: manual/api/core.md:44
+msgid "`ArithmeticContext::decimal128`: precision `34`, exponent range `-6143...6144`"
+msgstr "`ArithmeticContext::decimal128`：precision `34`、指数範囲 `-6143...6144`"
+
+#: manual/api/core.md:47
+msgid "All three presets use `ToNearestEven` and enable clamping."
+msgstr "3 つのプリセットはすべて `ToNearestEven` を使い、clamp を有効にします。"
+
+#: manual/api/core.md:49
+msgid "Checked traits"
+msgstr "Checked Traits"
+
+#: manual/api/core.md:58
+msgid "These traits return `Result[..., ArithmeticError]`. Operations that require an arithmetic context accept it explicitly."
+msgstr "これらは `Result[..., ArithmeticError]` を返します。算術 context が必要な演算は `ArithmeticContext` を明示的に受け取ります。"
+
+#: manual/api/core.md:61
+msgid "Contextual outcome surface"
+msgstr "Contextual Outcome Surface"
+
+#: manual/api/core.md:63
+msgid "Result types"
+msgstr "結果型"
+
+#: manual/api/core.md:65
+msgid "`ArithmeticDiagnostics` contains the flags `inexact`, `rounded`, `overflow`, `underflow`, `subnormal`, and `clamped`. `empty` and `new` construct diagnostic values; `combine` merges two values using logical OR for every flag."
+msgstr "`ArithmeticDiagnostics` は `inexact`、`rounded`、`overflow`、`underflow`、 `subnormal`、`clamped` を保持します。`empty` と `new` で診断値を作り、`combine` は各フラグを論理 OR で合成します。"
+
+#: manual/api/core.md:69
+msgid "`ArithmeticOutcome[T]` stores `value : T` and its diagnostics. `exact` creates an outcome with empty diagnostics, while `with_diagnostics` preserves supplied flags."
+msgstr "`ArithmeticOutcome[T]` は `value : T` と diagnostics を保持します。`exact` は空の diagnostics を持つ結果を作り、`with_diagnostics` は指定されたフラグを保持します。"
+
+#: manual/api/core.md:73
+msgid "Contextual traits"
+msgstr "Contextual Traits"
+
+#: manual/api/core.md:81
+msgid "`IntegralContextual::from_int_contextual` embeds a MoonBit `Int` under the target context and returns conversion diagnostics. Wider integer sources use separate capabilities. `AdjacentContextual` exposes `next_plus_contextual`, `next_minus_contextual`, and `next_toward_contextual`. `ConstantsContextual` produces `pi`, `tau`, and `e` under a context and may return an `ArithmeticError` whose kind is `ArithmeticErrorKind::CertificationFailure` when a proof-backed implementation cannot certify target rounding."
+msgstr "`IntegralContextual::from_int_contextual` は対象 context で MoonBit `Int` を埋め込み、変換の diagnostics を返します。より広い整数 source は別 capability を使います。 `AdjacentContextual` は `next_plus_contextual`、 `next_minus_contextual`、`next_toward_contextual` を提供します。 `ConstantsContextual` は context に従って `pi`、`tau`、`e` を生成し、証明ベースの実装が対象丸めを認証できない場合は、kind が `ArithmeticErrorKind::CertificationFailure` の `ArithmeticError` を返せます。"
+
+#: manual/api/core.md:90
+msgid "`HyperbolicContextual` exposes contextual `sinh`, `cosh`, and `tanh`, each as an `ArithmeticOutcome` inside `Result`."
+msgstr "`HyperbolicContextual` は contextual `sinh`、`cosh`、`tanh` を提供し、それぞれ `Result` 内の `ArithmeticOutcome` として返します。"
+
+#: manual/api/core.md:93
+msgid "`NumericFormatContextual` provides contextual zero, one, epsilon, minimum normal value, maximum finite value, and classification as `Finite`, `Infinity`, or `NaN`."
+msgstr "`NumericFormatContextual` は contextual zero、one、epsilon、最小正規値、最大有限値を提供し、値を `Finite`、`Infinity`、`NaN` に分類します。"
+
+#: manual/api/core.md:97
+msgid "Enclosure relations"
+msgstr "Enclosure 関係"
+
+#: manual/api/core.md:105
+msgid "These are relations rather than a scalar total-order abstraction."
+msgstr "これらは関係を表すもので、scalar の全順序ではありません。"
+
+#: manual/api/core.md:107
+msgid "Shipped instances"
+msgstr "同梱インスタンス"
+
+#: manual/api/core.md:109
+msgid "`Float` and `Double` implement the broad elementary surface through `Kaida-Amethyst/math`."
+msgstr "`Float` と `Double` は `Kaida-Amethyst/math` を通じて広い elementary surface を実装します。"
+
+#: manual/api/core.md:111
+msgid "`Float` and `Double` implement the checked square-root, division, comparison, and integer-power surfaces."
+msgstr "`Float` と `Double` は checked 平方根、除算、比較、整数冪を実装します。"
+
+#: manual/api/core.md:113
+msgid "`Float` and `Double` implement the original contextual surface plus `IntegralContextual` and `AdjacentContextual`."
+msgstr "`Float` と `Double` は既存 contextual surface に加えて `IntegralContextual` と `AdjacentContextual` を実装します。"
+
+#: manual/api/core.md:115
+msgid "`Float` and `Double` intentionally do not implement `ConstantsContextual` or `HyperbolicContextual`; context-faithful numeric backends provide those capabilities."
+msgstr "`Float` と `Double` は意図的に `ConstantsContextual` と `HyperbolicContextual` を実装しません。context に忠実な数値 backend がこれらを提供します。"
+
+#: manual/api/core.md:118
+msgid "`BigInt` and the integer family implement the narrower exact subset that remains closed on each concrete type."
+msgstr "`BigInt` と整数族は、それぞれの型で閉じた正確な部分集合だけを実装します。"
+
+#: manual/api/core.md:121
+msgid "Semantic notes"
+msgstr "意味論メモ"
+
+#: manual/api/core.md:123
+msgid "Unchecked traits leave domain restrictions and branch semantics to the concrete instance."
+msgstr "unchecked traits の定義域と branch は具体インスタンスに依存します。"
+
+#: manual/api/core.md:125
+msgid "Built-in checked square root returns `DomainError` for negative real input."
+msgstr "組み込み checked 平方根は負の実数入力に `DomainError` を返します。"
+
+#: manual/api/core.md:126
+msgid "Built-in checked division classifies `0 / 0` and infinity divided by infinity as `DomainError`; non-zero division by zero remains `DivisionByZero`."
+msgstr "組み込み checked 除算は `0 / 0` と infinity 同士の除算を `DomainError` とし、非ゼロ値のゼロ除算は `DivisionByZero` とします。"
+
+#: manual/api/core.md:128
+msgid "Built-in contextual division and square root delegate to checked operations and wrap successful values with exact diagnostics."
+msgstr "組み込み contextual 除算と平方根は checked 演算へ委譲し、成功値を exact diagnostics で包みます。"
+
+#: manual/api/core.md:130
+msgid "Built-in `Float` integer embedding sets `inexact` and `rounded` when the source integer is not exactly representable; `Double` exactly embeds every MoonBit `Int`."
+msgstr "組み込み `Float` の整数埋め込みは、元の整数を正確に表現できない場合に `inexact` と `rounded` を設定します。`Double` はすべての MoonBit `Int` を正確に埋め込めます。"
+
+#: manual/api/core.md:133
+msgid "Built-in adjacent operations follow the fixed IEEE binary representation, including signed-zero and infinity boundaries. Selecting the adjacent value is exact in that fixed representable set and returns empty diagnostics."
+msgstr "組み込み隣接値演算は、符号付きゼロと infinity の境界を含む固定 IEEE バイナリ表現に従います。固定表現集合での隣接選択は正確なので、空の diagnostics を返します。"
+
+#: manual/api/core.md:136
+msgid "The built-in implementations do not apply context-controlled precision, rounding, exponent clamping, or status-flag detection."
+msgstr "組み込み実装は context による precision、rounding、指数 clamp、状態フラグ検出を行いません。"
+
+#: manual/api/core.md:138
+msgid "Signed integer and `BigInt` `Power` implementations require non-negative exponents; negative exponents abort."
+msgstr "符号付き整数と `BigInt` の `Power` は非負指数を要求し、負指数では abort します。"
+
+#: manual/api/core.md:140
+msgid "`PowNatChecked` treats `x^0` as the multiplicative identity, including `0^0`."
+msgstr "`PowNatChecked` は `0^0` を含め、`x^0` を乗法単位元として扱います。"
+
+#: manual/architecture.md:1
+msgid "Architecture"
+msgstr "アーキテクチャ"
+
+#: manual/architecture.md:3
+msgid "Boundary model"
+msgstr "境界モデル"
+
+#: manual/architecture.md:5
+msgid "`luna-generic` owns algebraic structure. `arithmetic` adds analytic, checked, contextual, and enclosure capabilities without introducing a bundled scalar abstraction. Algorithms compose the smallest traits that state their requirements."
+msgstr "`luna-generic` は代数構造を担当します。`arithmetic` は解析、checked、contextual、 enclosure capability を加えますが、一体化した scalar abstraction は導入しません。 algorithm は要件を表す最小の trait 集合を合成します。"
+
+#: manual/architecture.md:10
+msgid "Boundary"
+msgstr "境界"
+
+#: manual/architecture.md:10
+msgid "Result"
+msgstr "戻り値"
+
+#: manual/architecture.md:10
+msgid "Meaning"
+msgstr "意味"
+
+#: manual/architecture.md:12
+msgid "Unchecked trait"
+msgstr "Unchecked trait"
+
+#: manual/architecture.md:12
+msgid "Direct concrete-backend behavior"
+msgstr "具体 backend の直接的な挙動"
+
+#: manual/architecture.md:13
+msgid "Checked trait"
+msgstr "Checked trait"
+
+#: manual/architecture.md:13
+msgid "Rejected operation is explicit"
+msgstr "拒否された操作を明示"
+
+#: manual/architecture.md:14
+msgid "Contextual trait"
+msgstr "Contextual trait"
+
+#: manual/architecture.md:14
+msgid "Explicit context plus successful diagnostics"
+msgstr "明示的 context と成功 diagnostics"
+
+#: manual/architecture.md:15
+msgid "Enclosure relation"
+msgstr "Enclosure relation"
+
+#: manual/architecture.md:15
+msgid "Containment or definite/possible relation"
+msgstr "包含、確定関係、可能関係"
+
+#: manual/architecture.md:17
+msgid "Errors, diagnostics, and certification"
+msgstr "Errors、Diagnostics、Certification"
+
+#: manual/architecture.md:19
+msgid "Errors represent operations that do not yield an accepted result. Diagnostics describe successful results with notable conditions and combine using logical OR. They are deliberately separate: a flag must not hide an error, and an error must not be invented merely to transport a flag."
+msgstr "error は受理できる結果を返せない操作を表します。diagnostics は注目すべき条件を伴う成功結果を表し、logical OR で合成します。両者は分けます。flag が error を隠したり、flag を運ぶために error を作ったりしてはいけません。"
+
+#: manual/architecture.md:24
+msgid "`CertificationFailure` is a third, precise distinction within errors. A proof-backed implementation uses it when it cannot establish that its candidate result satisfies the requested target. Its detail separates the failed stage (`RangeReduction`, `SeriesEvaluation`, `EnclosurePropagation`, or `TargetRounding`) from the reason. No retry policy is imposed by this package; callers and concrete backends choose resource or precision escalation."
+msgstr "`CertificationFailure` は error 内でのより精密な区別です。proof-backed implementation が candidate result が target を満たすと確立できない場合に使います。detail は失敗した stage （`RangeReduction`、`SeriesEvaluation`、`EnclosurePropagation`、`TargetRounding`）と reason を分けます。この package は retry policy を定めません。caller と concrete backend が resource や precision を増やすかを決めます。"
+
+#: manual/architecture.md:31
+msgid "Context and state"
+msgstr "Context と State"
+
+#: manual/architecture.md:33
+msgid "`ArithmeticContext`, `ArithmeticDiagnostics`, `ArithmeticOutcome`, and `CertificationFailureDetail` are immutable ordinary values. Context passes as an argument, diagnostics combine explicitly, and certification evidence stays on the returned error. The package requires no global rounding mode, hidden status register, or mutable proof state."
+msgstr "`ArithmeticContext`、`ArithmeticDiagnostics`、`ArithmeticOutcome`、 `CertificationFailureDetail` はすべて不変な通常の値です。context は引数で渡し、diagnostics は明示的に合成し、certification evidence は返された error に保持します。global rounding mode、 hidden status register、mutable proof state は必要ありません。"
+
+#: manual/architecture.md:39
+msgid "Shipped adapter limits"
+msgstr "同梱 Adapter の制約"
+
+#: manual/architecture.md:41
+msgid "`Float` and `Double` implement only the contextual capabilities they can expose without inventing unsupported semantics. They preserve native scalar behavior, report detectable `Int` conversion loss, and use their fixed IEEE formats for adjacent values. They intentionally do not implement contextual constants or hyperbolic functions. A concrete certified backend may expose those traits and produce structured certification failures."
+msgstr "`Float` と `Double` は、未対応の意味論を作らずに提供できる contextual capability だけを実装します。native scalar semantics を保ち、検出可能な `Int` 変換損失を報告し、固定 IEEE 形式で隣接値を扱います。contextual 定数と双曲線関数は意図的に実装しません。concrete certified backend はこれらの traits を実装し、構造化された certification failure を返せます。"
+
+#: manual/conventions.md:1
+msgid "Repository conventions"
+msgstr "リポジトリの規約"
+
+#: manual/conventions.md:3
+msgid "These rules apply to the `arithmetic` manual in addition to the Luna-Flow documentation standard."
+msgstr "`arithmetic` のマニュアルには、Luna-Flow のドキュメント標準に加えて次の規則が適用されます。"
+
+#: manual/conventions.md:5
+msgid "Baseline and history"
+msgstr "基準とリリース履歴"
+
+#: manual/conventions.md:7
+msgid "The manual describes the current release baseline, `0.5.0`. The [overview](index.md) explains the active release, the package positioning and the entry points. [CHANGELOG.md](../../CHANGELOG.md) owns the release timeline and older release notes, so the overview and the repository README stay focused on the active baseline."
+msgstr "このマニュアルは現在のリリース基準 `0.5.0` を記述します。[概要](index.md)は現在のリリース、パッケージの位置づけ、入口を説明します。過去バージョンの時系列と古いリリースノートは [CHANGELOG.md](../../CHANGELOG.md) が担当するため、概要とリポジトリの README は現行基準に集中します。"
+
+#: manual/conventions.md:9
+msgid "Writing requirements"
+msgstr "記述要件"
+
+#: manual/conventions.md:11
+msgid "Separate API guarantees from implementation strategy and known limitations."
+msgstr "API の保証、実装戦略、既知の制約を明確に分けます。"
+
+#: manual/conventions.md:12
+msgid "State when a capability is only an interface boundary and a shipped instance does not implement every possible semantic behavior."
+msgstr "capability がインターフェース境界にとどまり、組み込みインスタンスがすべての意味論を実装していない場合は、その点を明記します。"
+
+#: manual/conventions.md:14
+msgid "Prefer short, direct technical sentences over promotional release prose."
+msgstr "宣伝的な文体を避け、短く直接的な技術文を使います。"
+
+#: manual/conventions.md:15
+msgid "Use explicit Luna Flow aliases in MoonBit examples: `@lf_alg` for `Luna-Flow/luna-generic` and `@lf_arith` for `Luna-Flow/arithmetic`."
+msgstr "MoonBit の例では、`Luna-Flow/luna-generic` に `@lf_alg`、 `Luna-Flow/arithmetic` に `@lf_arith` を使います。"
+
+#: manual/conventions.md:18
+msgid "Translation"
+msgstr "翻訳"
+
+#: manual/conventions.md:20
+msgid "Do not translate identifiers, type names, trait names, package names, paths, commands, or version strings."
+msgstr "識別子、型名、trait 名、パッケージ名、パス、コマンド、バージョン文字列は翻訳しません。"
+
+#: manual/conventions.md:22
+msgid "Chinese should read as natural written technical Chinese. Japanese should use natural technical Japanese rather than literal translation."
+msgstr "中国語と日本語は逐語訳ではなく、それぞれ自然な技術文体で記述します。"
+
+#: manual/design/core.md:1
+msgid "Core design"
+msgstr "Core 設計"
+
+#: manual/design/core.md:3
+msgid "Design goal"
+msgstr "設計目標"
+
+#: manual/design/core.md:5
+msgid "`arithmetic` extends Luna Flow from algebraic structure into analytic and context-dependent numeric capabilities while keeping backend semantics explicit."
+msgstr "`arithmetic` は Luna Flow を代数構造から解析 capability と context 依存の数値能力へ拡張しつつ、後端ごとの意味論を明示したまま扱います。"
+
+#: manual/design/core.md:9
+msgid "Capability boundaries"
+msgstr "Capability 境界"
+
+#: manual/design/core.md:11
+msgid "Unchecked traits describe direct, context-free backend operations."
+msgstr "unchecked traits は context を持たない直接的な後端演算を表します。"
+
+#: manual/design/core.md:12
+msgid "Checked traits add explicit domain or arithmetic failure without changing successful values into a diagnostic record."
+msgstr "checked traits は、成功値を診断レコードへ変えずに定義域や算術エラーを明示します。"
+
+#: manual/design/core.md:14
+msgid "Contextual traits accept `ArithmeticContext` and return `ArithmeticOutcome[T]`, allowing implementations to report rounding and exceptional-condition flags."
+msgstr "contextual traits は `ArithmeticContext` を受け取り `ArithmeticOutcome[T]` を返し、丸めや例外条件のフラグを報告できるようにします。"
+
+#: manual/design/core.md:17
+msgid "Enclosure relations remain separate from scalar comparison."
+msgstr "enclosure 関係は scalar 比較から分離します。"
+
+#: manual/design/core.md:19
+msgid "Algorithms should depend on the smallest existing trait composition that states their requirements. A broad local “number” or “real” trait would hide meaningful differences between numeric domains."
+msgstr "アルゴリズムは、要件を表す最小の既存 trait 構成に依存すべきです。広すぎるローカルな “number” や “real” trait は、数値領域ごとの重要な違いを隠してしまいます。"
+
+#: manual/design/core.md:23
+msgid "Data and effects"
+msgstr "データと効果"
+
+#: manual/design/core.md:25
+msgid "`ArithmeticContext`, `ArithmeticDiagnostics`, and `ArithmeticOutcome` are ordinary values. Context is passed explicitly, diagnostic accumulation uses the pure `combine` operation, and no package-global arithmetic state is required. This keeps contextual computation deterministic for a given implementation and input set."
+msgstr "`ArithmeticContext`、`ArithmeticDiagnostics`、`ArithmeticOutcome` は通常の値です。 context は明示的に渡し、diagnostics は純粋な `combine` で集約します。パッケージ全体の算術状態は必要ありません。"
+
+#: manual/design/core.md:31
+msgid "Errors remain explicit through `Result[..., ArithmeticError]`. Diagnostic flags represent successful computations with notable conditions; they do not replace errors for operations that the implementation rejects."
+msgstr "エラーは `Result[..., ArithmeticError]` で明示します。診断フラグは成功した計算に伴う注目すべき条件を表し、実装が拒否した操作のエラーを置き換えるものではありません。"
+
+#: manual/design/core.md:35
+msgid "Built-in adapter strategy"
+msgstr "組み込み Adapter 戦略"
+
+#: manual/design/core.md:37
+msgid "The `Float` and `Double` implementations adapt the contextual boundary to existing native and checked operations. Division and square root reuse checked validation. Integer embedding detects native `Float` conversion loss, adjacent operations step through the IEEE bit representation, and fixed-format neighbor selection returns empty diagnostics as an exact capability operation."
+msgstr "`Float` と `Double` は contextual 境界を既存のネイティブ演算と checked 演算へ接続します。除算と平方根は checked 検証を再利用し、整数埋め込みはネイティブ `Float` の変換損失を検出します。隣接値演算は IEEE のビット表現を移動し、固定形式の隣接選択を正確な capability 操作として空の diagnostics で返します。"
+
+#: manual/design/core.md:43
+msgid "These adapters establish interface availability, not a software decimal engine. They intentionally do not pretend to honor arbitrary precision, directed rounding, exponent clamping, or full IEEE flag generation. They intentionally do not implement `ConstantsContextual` or `HyperbolicContextual`. Proof-backed numeric packages can implement those capabilities with certified evaluation and preserve failure details through `ArithmeticError`."
+msgstr "これらはインターフェースを利用可能にする adapter であり、software decimal engine ではありません。任意精度、方向付き丸め、指数 clamp、完全な IEEE フラグ生成を実装したようには扱いません。これらは意図的に `ConstantsContextual` と `HyperbolicContextual` を実装しません。証明ベースの数値パッケージはこれらの capability を実装し、認証失敗の詳細を `ArithmeticError` で保持できます。"
+
+#: manual/design/core.md:51
+msgid "Boundaries"
+msgstr "境界"
+
+#: manual/design/core.md:53
+msgid "This package does not define vectors, matrices, complex numbers, symbolic objects, or arbitrary-precision decimal storage."
+msgstr "このパッケージはベクトル、行列、複素数、記号オブジェクト、任意精度 decimal ストレージを定義しません。"
+
+#: manual/design/core.md:55
+msgid "It does not hide branch cuts or exceptional values behind one bundled abstraction."
+msgstr "branch cut や特殊値を 1 つの広い抽象へ押し込みません。"
+
+#: manual/design/core.md:57
+msgid "Concrete numeric backends own the semantics of contextual rounding, exponent handling, and diagnostic production."
+msgstr "contextual rounding、指数処理、diagnostics 生成は具体的な数値後端が担当します。"
+
+#: manual/getting_started.md:1
+msgid "Getting started"
+msgstr "はじめに"
+
+#: manual/getting_started.md:3
+msgid "`arithmetic` supplies small capability traits for analytic operations and a shared checked-error vocabulary. It does not define a universal number type."
+msgstr "`arithmetic` は解析演算のための小さな capability traits と、checked error の共通語彙を提供します。汎用の数値型は定義しません。"
+
+#: manual/getting_started.md:6
+msgid "Install and import"
+msgstr "インストールと Import"
+
+#: manual/getting_started.md:20
+msgid "Request only needed capabilities"
+msgstr "必要な Capability だけを要求する"
+
+#: manual/getting_started.md:31
+msgid "Choose an unchecked trait only when the concrete backend's direct behavior is acceptable. Use a checked trait when callers must handle a rejected operation."
+msgstr "具体的な backend の直接的な意味論を受け入れられる場合だけ unchecked trait を使います。呼び出し側が拒否された操作を扱う必要がある場合は checked trait を使います。"
+
+#: manual/getting_started.md:34
+msgid "Handle checked and certified failures"
+msgstr "Checked と Certification の失敗を処理する"
+
+#: manual/getting_started.md:48
+msgid "`CertificationFailureDetail` is present only for `ArithmeticErrorKind::CertificationFailure`. It identifies the operation, proof stage, reason, target precision, working precision, and refinement count. It lets a proof-backed backend report an inconclusive evaluation without misclassifying it as a domain or format failure."
+msgstr "`CertificationFailureDetail` が存在するのは error が `ArithmeticErrorKind::CertificationFailure` のときだけです。演算、証明段階、理由、 target precision、working precision、refinement 回数を記録します。これにより proof-backed backend は、結論が出ない評価を domain error や format error と取り違えずに報告できます。"
+
+#: manual/getting_started.md:54
+msgid "Continue reading"
+msgstr "次に読むもの"
+
+#: manual/getting_started.md:56
+msgid "[Core tutorial](./tutorial/core.md) for contexts and diagnostics."
+msgstr "[Core チュートリアル](./tutorial/core.md)：context と diagnostics。"
+
+#: manual/getting_started.md:57
+msgid "[Core API](./api/core.md) for public names and semantic notes."
+msgstr "[Core API](./api/core.md)：公開名と意味論の注意点。"
+
+#: manual/getting_started.md:58
+msgid "[Architecture](./architecture.md) for effect and error boundaries."
+msgstr "[アーキテクチャ](./architecture.md)：effect と error の境界。"
+
+#: manual/getting_started.md:59
+msgid "[Verification](./verification.md) for the repository gate and release checks."
+msgstr "[検証](./verification.md)：リポジトリ gate と release check。"
+
+#: manual/index.md:1
+msgid "arithmetic"
+msgstr "arithmetic"
+
+#: manual/index.md:3
+msgid "This manual documents `arithmetic` **0.5.0**. Earlier release history lives in [CHANGELOG.md](../../CHANGELOG.md)."
+msgstr "このマニュアルは `arithmetic` **0.5.0** を説明します。過去のリリースノートと履歴は [CHANGELOG.md](../../CHANGELOG.md) を参照してください。"
+
+#: manual/index.md:6
+msgid "Release focus"
+msgstr "このリリースの要点"
+
+#: manual/index.md:8
+msgid "`IntegralContextual` embeds MoonBit `Int` values and returns diagnostics."
+msgstr "`IntegralContextual` は MoonBit `Int` を埋め込み diagnostics を返します。"
+
+#: manual/index.md:9
+msgid "`AdjacentContextual` exposes next-plus, next-minus, and next-toward."
+msgstr "`AdjacentContextual` は next-plus、next-minus、next-toward を提供します。"
+
+#: manual/index.md:10
+msgid "`ConstantsContextual` and `HyperbolicContextual` define context-faithful capability boundaries for richer numeric backends."
+msgstr "`ConstantsContextual` と `HyperbolicContextual` は、より豊かな数値 backend のために context に忠実な capability 境界を定義します。"
+
+#: manual/index.md:12
+msgid "Certification failures remain explicit through `ArithmeticError`."
+msgstr "certification failure は引き続き `ArithmeticError` で明示されます。"
+
+#: manual/index.md:14
+msgid "Capability layers"
+msgstr "Capability レイヤー"
+
+#: manual/index.md:16
+msgid "Unchecked elementary traits expose direct backend behavior."
+msgstr "unchecked elementary traits は後端の直接的な挙動を公開します。"
+
+#: manual/index.md:17
+msgid "Checked traits expose structured domain and division failures."
+msgstr "checked traits は定義域エラーや除算エラーを明示します。"
+
+#: manual/index.md:18
+msgid "Contextual traits return a value plus diagnostics under an explicit `ArithmeticContext`."
+msgstr "contextual traits は `ArithmeticContext` を受け取り、値と diagnostics を返します。"
+
+#: manual/index.md:20
+msgid "Enclosure traits model containment and definite or possible relations."
+msgstr "enclosure traits は包含、確定関係、可能関係を表します。"
+
+#: manual/index.md:22
+msgid "Context contract"
+msgstr "Context の契約"
+
+#: manual/index.md:24
+msgid "Precision is clamped to at least `1`."
+msgstr "precision は最低 `1` に補正されます。"
+
+#: manual/index.md:25
+msgid "`e_min` must not exceed `e_max` when both are supplied."
+msgstr "`e_min` と `e_max` を両方指定する場合、`e_min` は `e_max` 以下である必要があります。"
+
+#: manual/index.md:26
+msgid "Decimal presets define precision, exponent range, and clamping together."
+msgstr "decimal プリセットは precision、指数範囲、clamp をまとめて定義します。"
+
+#: manual/index.md:27
+msgid "Diagnostics combine with logical OR and remain ordinary immutable values."
+msgstr "diagnostics は論理 OR で合成され、通常の不変値として扱われます。"
+
+#: manual/index.md:29
+msgid "Built-in instance limits"
+msgstr "組み込みインスタンスの制約"
+
+#: manual/index.md:31
+msgid "The built-in `Float` and `Double` contextual operations preserve native scalar behavior. They do not apply arbitrary decimal precision, directed rounding, exponent clamping, or general status-flag detection. `Float` integer embedding reports detectable conversion loss; adjacent operations use the fixed IEEE binary format and return empty diagnostics because neighbor selection is exact. Contextual division and square root reuse the checked validation paths. Native `Float` and `Double` do not implement contextual constants or hyperbolic functions."
+msgstr "組み込みの `Float` と `Double` の contextual 演算はネイティブ scalar の挙動を維持します。任意の decimal 精度、方向付き丸め、指数 clamp、一般的な状態フラグ検出は行いません。`Float` の整数埋め込みは検出可能な変換損失を報告します。隣接値演算は固定の IEEE バイナリ形式を使い、その表現集合での隣接選択は正確な操作なので空の diagnostics を返します。contextual 除算と平方根は checked 経路で検証します。ネイティブ `Float` と `Double` は contextual 定数または双曲線関数を実装しません。"
+
+#: manual/index.md:40
+msgid "Core documents"
+msgstr "Core ドキュメント"
+
+#: manual/index.md:42
+msgid "[Getting started](./getting_started.md)"
+msgstr "[はじめに](./getting_started.md)"
+
+#: manual/index.md:43
+msgid "[Architecture](./architecture.md)"
+msgstr "[アーキテクチャ](./architecture.md)"
+
+#: manual/index.md:44
+msgid "[Verification](./verification.md)"
+msgstr "[検証](./verification.md)"
+
+#: manual/index.md:45
+msgid "[API reference](./api/core.md)"
+msgstr "[API リファレンス](./api/core.md)"
+
+#: manual/index.md:46
+msgid "[Tutorial](./tutorial/core.md)"
+msgstr "[チュートリアル](./tutorial/core.md)"
+
+#: manual/index.md:47
+msgid "[Design](./design/core.md)"
+msgstr "[設計](./design/core.md)"
+
+#: manual/index.md:48
+msgid "[Repository conventions](./conventions.md)"
+msgstr "[リポジトリの規約](./conventions.md)"
+
+#: manual/tutorial/core.md:1
+msgid "Core tutorial"
+msgstr "Core チュートリアル"
+
+#: manual/tutorial/core.md:3
+msgid "Generic analytic helper"
+msgstr "汎用解析 Helper"
+
+#: manual/tutorial/core.md:11
+msgid "This signature requests only the capabilities the algorithm uses."
+msgstr "このシグネチャは、アルゴリズムが実際に使う capability だけを要求します。"
+
+#: manual/tutorial/core.md:13
+msgid "Construct an arithmetic context"
+msgstr "Arithmetic Context の構築"
+
+#: manual/tutorial/core.md:26
+msgid "Use a preset when its decimal format matches the backend contract. Use `new` when a concrete backend supports a different working context."
+msgstr "後端の契約が decimal 形式と一致する場合はプリセットを使います。異なる working context を持つ後端では `new` を使います。"
+
+#: manual/tutorial/core.md:29
+msgid "Contextual division"
+msgstr "Contextual 除算"
+
+#: manual/tutorial/core.md:42
+msgid "The built-in `Double` instance validates division through `DivChecked` and wraps a successful result with exact diagnostics. A decimal backend may use the same trait while producing rounding or clamping flags."
+msgstr "組み込みの `Double` インスタンスは `DivChecked` で除算を検証し、成功結果を exact diagnostics で包みます。decimal 後端は同じ trait を実装し、丸めや clamp のフラグを返すことができます。"
+
+#: manual/tutorial/core.md:46
+msgid "Combine diagnostics"
+msgstr "Diagnostics の合成"
+
+#: manual/tutorial/core.md:53
+msgid "Combining diagnostics is an explicit value transformation. It does not mutate either input or package-global state."
+msgstr "diagnostics の合成は明示的な値変換です。入力やパッケージ全体の状態は変更しません。"
+
+#: manual/tutorial/core.md:56
+msgid "Checked comparison"
+msgstr "Checked 比較"
+
+#: manual/tutorial/core.md:67
+msgid "Use the checked path when unordered values such as NaN must not be silently coerced into a total order."
+msgstr "NaN のような非順序値を全順序へ暗黙変換してはいけない場合に checked 経路を使います。"
+
+#: manual/tutorial/core.md:70
+msgid "Practical guidance"
+msgstr "実践ガイド"
+
+#: manual/tutorial/core.md:72
+msgid "Use unchecked traits when direct backend semantics are acceptable."
+msgstr "後端の直接的な意味論で十分な場合は unchecked traits を使います。"
+
+#: manual/tutorial/core.md:73
+msgid "Use checked traits when failure must be explicit but diagnostics are not needed."
+msgstr "失敗を明示し、diagnostics が不要な場合は checked traits を使います。"
+
+#: manual/tutorial/core.md:75
+msgid "Use contextual traits when an algorithm must pass working context and retain diagnostic flags."
+msgstr "working context と診断フラグを保持する必要がある場合は contextual traits を使います。"
+
+#: manual/tutorial/core.md:77
+msgid "Do not assume the built-in `Float` or `Double` contextual instances emulate decimal precision or directed rounding."
+msgstr "組み込みの `Float` と `Double` が decimal precision や方向付き丸めを模倣すると仮定してはいけません。"
+
+#: manual/tutorial/core.md:79
+msgid "Keep algebraic structure in `luna-generic`; use `arithmetic` for analytic and contextual capabilities."
+msgstr "代数構造は `luna-generic`、解析と contextual capability は `arithmetic` に置きます。"
+
+#: manual/verification.md:1
+msgid "Verification"
+msgstr "検証"
+
+#: manual/verification.md:3
+msgid "Local gate"
+msgstr "Local Gate"
+
+#: manual/verification.md:5
+msgid "Run the same checks required before a release:"
+msgstr "release 前に同じ checks を実行します。"
+
+#: manual/verification.md:19
+msgid "`moon info` regenerates public-interface snapshots. The following diff check requires the tracked `pkg.generated.mbti` file to agree with the source API."
+msgstr "`moon info` は public-interface snapshot を生成します。続く diff check は追跡されている `pkg.generated.mbti` が source API と一致することを要求します。"
+
+#: manual/verification.md:22
+msgid "What the tests establish"
+msgstr "Tests が確立する内容"
+
+#: manual/verification.md:24
+msgid "The checked tests cover error classification and the public construction and inspection paths for certification failures. In particular, they establish that the detail survives `ArithmeticError::certification_failure`, that precision and refinement inputs are normalized, and that existing error predicates remain disjoint from `is_certification_failure`."
+msgstr "checked tests は certification failure の分類、public construction、inspection path を対象にします。detail が `ArithmeticError::certification_failure` 後も保持されること、 precision/refinement input が正規化されること、既存 error predicates が `is_certification_failure` と別であることを確立します。"
+
+#: manual/verification.md:30
+msgid "The contextual tests cover exact and rounded `Int` embedding, signed-zero direction, NaN propagation, stationary infinities, finite-to-infinity steps, and minimum-subnormal-to-zero steps for the fixed IEEE `Float` and `Double` formats. Test-local implementations also verify contextual hyperbolic outcomes and certification-failure propagation for constants."
+msgstr "contextual tests は、正確な `Int` 埋め込みと丸めを伴う埋め込み、符号付きゼロの方向、 NaN 伝播、停止する infinity、有限値から infinity への step、固定 IEEE `Float`/`Double` 形式での最小 subnormal からゼロへの step を対象にします。test package 内の実装は contextual hyperbolic outcome と定数の certification-failure 伝播も検証します。"
+
+#: manual/verification.md:36
+msgid "The tests do not claim that `Float` or `Double` perform certified arithmetic. They verify the shared capability vocabulary, fixed-format adjacent semantics, and ordinary error-model behavior."
+msgstr "tests は `Float` または `Double` が certified arithmetic を実行するとは主張しません。共有の capability vocabulary、固定形式の adjacent semantics、通常の error-model behavior を検証します。"
+
+#: manual/verification.md:40
+msgid "Release gate"
+msgstr "Release Gate"
+
+#: manual/verification.md:42
+msgid "The `publish-package` GitHub workflow accepts an explicit release version and requires it to equal the version in `moon.mod`. It then updates the registry, builds and checks all targets, runs default, JavaScript, and native tests, publishes with the `LUNA_MOONCAKE` secret, and creates the corresponding GitHub release."
+msgstr "`publish-package` GitHub workflow は明示的な release version を受け取り、それが `moon.mod` と一致することを要求します。その後 registry を更新し、全 target を build/check し、 default/JavaScript/native tests を実行し、`LUNA_MOONCAKE` で publish して対応する GitHub release を作成します。"
+
+#: manual/verification.md:48
+msgid "CI runs on pull requests and pushes to `main`. It repeats all-target builds and checks, default/JavaScript/native tests, interface snapshot validation, and formatting. A passing CI run is repository evidence, not a numerical conformance claim for any concrete backend."
+msgstr "CI は pull request と `main` への push で動作し、all-target build/check、 default/JavaScript/native tests、interface snapshot verification、formatting を繰り返します。 CI の成功は repository evidence であり、具体 backend の numerical conformance claim ではありません。"
+
+#~ msgid "Documentation Standard"
+#~ msgstr "ドキュメント標準"
+
+#~ msgid "The documentation in this repository describes the **current implementation on the branch**. As of `2026-07-18`, the active documentation baseline is **`0.5.0`**."
+#~ msgstr "このリポジトリのドキュメントは、**現在のブランチ実装**を基準に記述します。 `2026-07-18` 時点の文書基準は **`0.5.0`** です。"
+
+#~ msgid "Document Types and Organization"
+#~ msgstr "ドキュメントの種類と構成"
+
+#~ msgid "Main Document Types"
+#~ msgstr "主なドキュメントの種類"
+
+#~ msgid "**API reference (`api.md`)**: specifications for public interfaces and observable behavior"
+#~ msgstr "**API リファレンス（`api.md`）**：公開インターフェースと可観測な挙動の仕様"
+
+#~ msgid "**Tutorial (`tutorial.md`)**: user-oriented examples and selection guidance"
+#~ msgstr "**チュートリアル（`tutorial.md`）**：利用例と選択指針"
+
+#~ msgid "**Design document (`design.md`)**: capability boundaries, responsibilities, and implementation tradeoffs"
+#~ msgstr "**設計ドキュメント（`design.md`）**：能力境界、責務、実装上のトレードオフ"
+
+#~ msgid "`README.md` is the current-baseline document. It explains the active release, package positioning, entry points, and reader guidance. `CHANGELOG.md` owns the historical release timeline and older release notes."
+#~ msgstr "`README.md` は現行基準の文書で、現在のリリース、パッケージの位置づけ、入口、読者向け案内をまとめます。`CHANGELOG.md` は過去バージョンの時系列と古いリリースノートを担当します。"
+
+#~ msgid "Organization Principles"
+#~ msgstr "構成原則"
+
+#~ msgid "Organize subsystem documents under the real package or capability boundary."
+#~ msgstr "実際のパッケージ境界または capability 境界に沿って文書を配置します。"
+
+#~ msgid "Keep `api.md`, `tutorial.md`, and `design.md` distinct in purpose."
+#~ msgstr "`api.md`、`tutorial.md`、`design.md` の役割を分けます。"
+
+#~ msgid "Document only APIs and behavior present in the current branch."
+#~ msgstr "現在のブランチに存在する API と挙動だけを記述します。"
+
+#~ msgid "Keep the Markdown file set aligned across `en_US`, `zh_CN`, and `ja_JP`."
+#~ msgstr "`en_US`、`zh_CN`、`ja_JP` で同じ Markdown ファイル集合を維持します。"
+
+#~ msgid "Keep top-level and second-level section order aligned across languages unless a code fact requires a structural difference."
+#~ msgstr "コード上の事実が別構成を要求しない限り、各言語の見出し順を揃えます。"
+
+#~ msgid "Treat English as the structural source of truth, then localize the same facts naturally into Chinese and Japanese."
+#~ msgstr "英語文書を構成上の基準とし、同じ事実を中国語と日本語へ自然にローカライズします。"
+
+#~ msgid "Keep `README.md` focused on the active baseline and move older release summaries into `CHANGELOG.md`."
+#~ msgstr "`README.md` は現行基準に集中させ、古い要約は `CHANGELOG.md` へ移します。"
+
+#~ msgid "[Documentation standard](./conventions.md)"
+#~ msgstr "[ドキュメント標準](./conventions.md)"

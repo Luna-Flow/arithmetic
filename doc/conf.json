@@ -1,0 +1,8 @@
+{
+  "title": "arithmetic",
+  "summary": "Arithmetic capability traits and checked analytic operations for LunaFlow numeric types, with default real-valued instances.",
+  "locales": [
+    "zh_CN",
+    "ja_JP"
+  ]
+}

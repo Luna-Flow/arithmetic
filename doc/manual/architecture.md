@@ -1,6 +1,6 @@
 # Architecture
 
-## Boundary Model
+## Boundary model
 
 `luna-generic` owns algebraic structure. `arithmetic` adds analytic,
 checked, contextual, and enclosure capabilities without introducing a bundled
@@ -14,7 +14,7 @@ requirements.
 | Contextual trait | `Result[ArithmeticOutcome[T], ArithmeticError]` | Explicit context plus successful diagnostics |
 | Enclosure relation | `Bool` | Containment or definite/possible relation |
 
-## Errors, Diagnostics, and Certification
+## Errors, diagnostics, and certification
 
 Errors represent operations that do not yield an accepted result. Diagnostics
 describe successful results with notable conditions and combine using logical
@@ -28,7 +28,7 @@ result satisfies the requested target. Its detail separates the failed stage
 `TargetRounding`) from the reason. No retry policy is imposed by this package;
 callers and concrete backends choose resource or precision escalation.
 
-## Context and State
+## Context and state
 
 `ArithmeticContext`, `ArithmeticDiagnostics`, `ArithmeticOutcome`, and
 `CertificationFailureDetail` are immutable ordinary values. Context passes as
@@ -36,7 +36,7 @@ an argument, diagnostics combine explicitly, and certification evidence stays
 on the returned error. The package requires no global rounding mode, hidden
 status register, or mutable proof state.
 
-## Shipped Adapter Limits
+## Shipped adapter limits
 
 `Float` and `Double` implement only the contextual capabilities they can expose
 without inventing unsupported semantics. They preserve native scalar behavior,

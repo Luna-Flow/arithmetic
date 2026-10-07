@@ -1,0 +1,656 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Luna-Flow documentation\n"
+"Report-Msgid-Bugs-To: https://github.com/Luna-Flow\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: conf.json:summary
+msgid "Arithmetic capability traits and checked analytic operations for LunaFlow numeric types, with default real-valued instances."
+msgstr ""
+
+#: manual/api/core.md:1
+msgid "Core API"
+msgstr ""
+
+#: manual/api/core.md:3
+msgid "Purpose"
+msgstr ""
+
+#: manual/api/core.md:5
+msgid "`arithmetic` extends `luna-generic` with analytic capabilities, checked operations, contextual outcomes, and enclosure relations. Public traits remain small so algorithms can request only the capabilities they use."
+msgstr ""
+
+#: manual/api/core.md:9
+msgid "Unchecked capability traits"
+msgstr ""
+
+#: manual/api/core.md:17
+msgid "These traits are defined in `src/elementary.mbt` and return direct backend values."
+msgstr ""
+
+#: manual/api/core.md:20
+msgid "Checked surface"
+msgstr ""
+
+#: manual/api/core.md:22
+msgid "Shared types"
+msgstr ""
+
+#: manual/api/core.md:33
+msgid "Context construction"
+msgstr ""
+
+#: manual/api/core.md:35
+msgid "`ArithmeticContext::new` accepts precision, rounding mode, optional `e_min` and `e_max`, and an optional `clamp` flag. Precision is clamped to at least `1`. Construction aborts when both exponent limits are present and `e_min` exceeds `e_max`."
+msgstr ""
+
+#: manual/api/core.md:40
+msgid "The package also provides these presets:"
+msgstr ""
+
+#: manual/api/core.md:42
+msgid "`ArithmeticContext::decimal32`: precision `7`, exponent range `-95...96`"
+msgstr ""
+
+#: manual/api/core.md:43
+msgid "`ArithmeticContext::decimal64`: precision `16`, exponent range `-383...384`"
+msgstr ""
+
+#: manual/api/core.md:44
+msgid "`ArithmeticContext::decimal128`: precision `34`, exponent range `-6143...6144`"
+msgstr ""
+
+#: manual/api/core.md:47
+msgid "All three presets use `ToNearestEven` and enable clamping."
+msgstr ""
+
+#: manual/api/core.md:49
+msgid "Checked traits"
+msgstr ""
+
+#: manual/api/core.md:58
+msgid "These traits return `Result[..., ArithmeticError]`. Operations that require an arithmetic context accept it explicitly."
+msgstr ""
+
+#: manual/api/core.md:61
+msgid "Contextual outcome surface"
+msgstr ""
+
+#: manual/api/core.md:63
+msgid "Result types"
+msgstr ""
+
+#: manual/api/core.md:65
+msgid "`ArithmeticDiagnostics` contains the flags `inexact`, `rounded`, `overflow`, `underflow`, `subnormal`, and `clamped`. `empty` and `new` construct diagnostic values; `combine` merges two values using logical OR for every flag."
+msgstr ""
+
+#: manual/api/core.md:69
+msgid "`ArithmeticOutcome[T]` stores `value : T` and its diagnostics. `exact` creates an outcome with empty diagnostics, while `with_diagnostics` preserves supplied flags."
+msgstr ""
+
+#: manual/api/core.md:73
+msgid "Contextual traits"
+msgstr ""
+
+#: manual/api/core.md:81
+msgid "`IntegralContextual::from_int_contextual` embeds a MoonBit `Int` under the target context and returns conversion diagnostics. Wider integer sources use separate capabilities. `AdjacentContextual` exposes `next_plus_contextual`, `next_minus_contextual`, and `next_toward_contextual`. `ConstantsContextual` produces `pi`, `tau`, and `e` under a context and may return an `ArithmeticError` whose kind is `ArithmeticErrorKind::CertificationFailure` when a proof-backed implementation cannot certify target rounding."
+msgstr ""
+
+#: manual/api/core.md:90
+msgid "`HyperbolicContextual` exposes contextual `sinh`, `cosh`, and `tanh`, each as an `ArithmeticOutcome` inside `Result`."
+msgstr ""
+
+#: manual/api/core.md:93
+msgid "`NumericFormatContextual` provides contextual zero, one, epsilon, minimum normal value, maximum finite value, and classification as `Finite`, `Infinity`, or `NaN`."
+msgstr ""
+
+#: manual/api/core.md:97
+msgid "Enclosure relations"
+msgstr ""
+
+#: manual/api/core.md:105
+msgid "These are relations rather than a scalar total-order abstraction."
+msgstr ""
+
+#: manual/api/core.md:107
+msgid "Shipped instances"
+msgstr ""
+
+#: manual/api/core.md:109
+msgid "`Float` and `Double` implement the broad elementary surface through `Kaida-Amethyst/math`."
+msgstr ""
+
+#: manual/api/core.md:111
+msgid "`Float` and `Double` implement the checked square-root, division, comparison, and integer-power surfaces."
+msgstr ""
+
+#: manual/api/core.md:113
+msgid "`Float` and `Double` implement the original contextual surface plus `IntegralContextual` and `AdjacentContextual`."
+msgstr ""
+
+#: manual/api/core.md:115
+msgid "`Float` and `Double` intentionally do not implement `ConstantsContextual` or `HyperbolicContextual`; context-faithful numeric backends provide those capabilities."
+msgstr ""
+
+#: manual/api/core.md:118
+msgid "`BigInt` and the integer family implement the narrower exact subset that remains closed on each concrete type."
+msgstr ""
+
+#: manual/api/core.md:121
+msgid "Semantic notes"
+msgstr ""
+
+#: manual/api/core.md:123
+msgid "Unchecked traits leave domain restrictions and branch semantics to the concrete instance."
+msgstr ""
+
+#: manual/api/core.md:125
+msgid "Built-in checked square root returns `DomainError` for negative real input."
+msgstr ""
+
+#: manual/api/core.md:126
+msgid "Built-in checked division classifies `0 / 0` and infinity divided by infinity as `DomainError`; non-zero division by zero remains `DivisionByZero`."
+msgstr ""
+
+#: manual/api/core.md:128
+msgid "Built-in contextual division and square root delegate to checked operations and wrap successful values with exact diagnostics."
+msgstr ""
+
+#: manual/api/core.md:130
+msgid "Built-in `Float` integer embedding sets `inexact` and `rounded` when the source integer is not exactly representable; `Double` exactly embeds every MoonBit `Int`."
+msgstr ""
+
+#: manual/api/core.md:133
+msgid "Built-in adjacent operations follow the fixed IEEE binary representation, including signed-zero and infinity boundaries. Selecting the adjacent value is exact in that fixed representable set and returns empty diagnostics."
+msgstr ""
+
+#: manual/api/core.md:136
+msgid "The built-in implementations do not apply context-controlled precision, rounding, exponent clamping, or status-flag detection."
+msgstr ""
+
+#: manual/api/core.md:138
+msgid "Signed integer and `BigInt` `Power` implementations require non-negative exponents; negative exponents abort."
+msgstr ""
+
+#: manual/api/core.md:140
+msgid "`PowNatChecked` treats `x^0` as the multiplicative identity, including `0^0`."
+msgstr ""
+
+#: manual/architecture.md:1
+msgid "Architecture"
+msgstr ""
+
+#: manual/architecture.md:3
+msgid "Boundary model"
+msgstr ""
+
+#: manual/architecture.md:5
+msgid "`luna-generic` owns algebraic structure. `arithmetic` adds analytic, checked, contextual, and enclosure capabilities without introducing a bundled scalar abstraction. Algorithms compose the smallest traits that state their requirements."
+msgstr ""
+
+#: manual/architecture.md:10
+msgid "Boundary"
+msgstr ""
+
+#: manual/architecture.md:10
+msgid "Result"
+msgstr ""
+
+#: manual/architecture.md:10
+msgid "Meaning"
+msgstr ""
+
+#: manual/architecture.md:12
+msgid "Unchecked trait"
+msgstr ""
+
+#: manual/architecture.md:12
+msgid "Direct concrete-backend behavior"
+msgstr ""
+
+#: manual/architecture.md:13
+msgid "Checked trait"
+msgstr ""
+
+#: manual/architecture.md:13
+msgid "Rejected operation is explicit"
+msgstr ""
+
+#: manual/architecture.md:14
+msgid "Contextual trait"
+msgstr ""
+
+#: manual/architecture.md:14
+msgid "Explicit context plus successful diagnostics"
+msgstr ""
+
+#: manual/architecture.md:15
+msgid "Enclosure relation"
+msgstr ""
+
+#: manual/architecture.md:15
+msgid "Containment or definite/possible relation"
+msgstr ""
+
+#: manual/architecture.md:17
+msgid "Errors, diagnostics, and certification"
+msgstr ""
+
+#: manual/architecture.md:19
+msgid "Errors represent operations that do not yield an accepted result. Diagnostics describe successful results with notable conditions and combine using logical OR. They are deliberately separate: a flag must not hide an error, and an error must not be invented merely to transport a flag."
+msgstr ""
+
+#: manual/architecture.md:24
+msgid "`CertificationFailure` is a third, precise distinction within errors. A proof-backed implementation uses it when it cannot establish that its candidate result satisfies the requested target. Its detail separates the failed stage (`RangeReduction`, `SeriesEvaluation`, `EnclosurePropagation`, or `TargetRounding`) from the reason. No retry policy is imposed by this package; callers and concrete backends choose resource or precision escalation."
+msgstr ""
+
+#: manual/architecture.md:31
+msgid "Context and state"
+msgstr ""
+
+#: manual/architecture.md:33
+msgid "`ArithmeticContext`, `ArithmeticDiagnostics`, `ArithmeticOutcome`, and `CertificationFailureDetail` are immutable ordinary values. Context passes as an argument, diagnostics combine explicitly, and certification evidence stays on the returned error. The package requires no global rounding mode, hidden status register, or mutable proof state."
+msgstr ""
+
+#: manual/architecture.md:39
+msgid "Shipped adapter limits"
+msgstr ""
+
+#: manual/architecture.md:41
+msgid "`Float` and `Double` implement only the contextual capabilities they can expose without inventing unsupported semantics. They preserve native scalar behavior, report detectable `Int` conversion loss, and use their fixed IEEE formats for adjacent values. They intentionally do not implement contextual constants or hyperbolic functions. A concrete certified backend may expose those traits and produce structured certification failures."
+msgstr ""
+
+#: manual/conventions.md:1
+msgid "Repository conventions"
+msgstr ""
+
+#: manual/conventions.md:3
+msgid "These rules apply to the `arithmetic` manual in addition to the Luna-Flow documentation standard."
+msgstr ""
+
+#: manual/conventions.md:5
+msgid "Baseline and history"
+msgstr ""
+
+#: manual/conventions.md:7
+msgid "The manual describes the current release baseline, `0.5.0`. The [overview](index.md) explains the active release, the package positioning and the entry points. [CHANGELOG.md](../../CHANGELOG.md) owns the release timeline and older release notes, so the overview and the repository README stay focused on the active baseline."
+msgstr ""
+
+#: manual/conventions.md:9
+msgid "Writing requirements"
+msgstr ""
+
+#: manual/conventions.md:11
+msgid "Separate API guarantees from implementation strategy and known limitations."
+msgstr ""
+
+#: manual/conventions.md:12
+msgid "State when a capability is only an interface boundary and a shipped instance does not implement every possible semantic behavior."
+msgstr ""
+
+#: manual/conventions.md:14
+msgid "Prefer short, direct technical sentences over promotional release prose."
+msgstr ""
+
+#: manual/conventions.md:15
+msgid "Use explicit Luna Flow aliases in MoonBit examples: `@lf_alg` for `Luna-Flow/luna-generic` and `@lf_arith` for `Luna-Flow/arithmetic`."
+msgstr ""
+
+#: manual/conventions.md:18
+msgid "Translation"
+msgstr ""
+
+#: manual/conventions.md:20
+msgid "Do not translate identifiers, type names, trait names, package names, paths, commands, or version strings."
+msgstr ""
+
+#: manual/conventions.md:22
+msgid "Chinese should read as natural written technical Chinese. Japanese should use natural technical Japanese rather than literal translation."
+msgstr ""
+
+#: manual/design/core.md:1
+msgid "Core design"
+msgstr ""
+
+#: manual/design/core.md:3
+msgid "Design goal"
+msgstr ""
+
+#: manual/design/core.md:5
+msgid "`arithmetic` extends Luna Flow from algebraic structure into analytic and context-dependent numeric capabilities while keeping backend semantics explicit."
+msgstr ""
+
+#: manual/design/core.md:9
+msgid "Capability boundaries"
+msgstr ""
+
+#: manual/design/core.md:11
+msgid "Unchecked traits describe direct, context-free backend operations."
+msgstr ""
+
+#: manual/design/core.md:12
+msgid "Checked traits add explicit domain or arithmetic failure without changing successful values into a diagnostic record."
+msgstr ""
+
+#: manual/design/core.md:14
+msgid "Contextual traits accept `ArithmeticContext` and return `ArithmeticOutcome[T]`, allowing implementations to report rounding and exceptional-condition flags."
+msgstr ""
+
+#: manual/design/core.md:17
+msgid "Enclosure relations remain separate from scalar comparison."
+msgstr ""
+
+#: manual/design/core.md:19
+msgid "Algorithms should depend on the smallest existing trait composition that states their requirements. A broad local “number” or “real” trait would hide meaningful differences between numeric domains."
+msgstr ""
+
+#: manual/design/core.md:23
+msgid "Data and effects"
+msgstr ""
+
+#: manual/design/core.md:25
+msgid "`ArithmeticContext`, `ArithmeticDiagnostics`, and `ArithmeticOutcome` are ordinary values. Context is passed explicitly, diagnostic accumulation uses the pure `combine` operation, and no package-global arithmetic state is required. This keeps contextual computation deterministic for a given implementation and input set."
+msgstr ""
+
+#: manual/design/core.md:31
+msgid "Errors remain explicit through `Result[..., ArithmeticError]`. Diagnostic flags represent successful computations with notable conditions; they do not replace errors for operations that the implementation rejects."
+msgstr ""
+
+#: manual/design/core.md:35
+msgid "Built-in adapter strategy"
+msgstr ""
+
+#: manual/design/core.md:37
+msgid "The `Float` and `Double` implementations adapt the contextual boundary to existing native and checked operations. Division and square root reuse checked validation. Integer embedding detects native `Float` conversion loss, adjacent operations step through the IEEE bit representation, and fixed-format neighbor selection returns empty diagnostics as an exact capability operation."
+msgstr ""
+
+#: manual/design/core.md:43
+msgid "These adapters establish interface availability, not a software decimal engine. They intentionally do not pretend to honor arbitrary precision, directed rounding, exponent clamping, or full IEEE flag generation. They intentionally do not implement `ConstantsContextual` or `HyperbolicContextual`. Proof-backed numeric packages can implement those capabilities with certified evaluation and preserve failure details through `ArithmeticError`."
+msgstr ""
+
+#: manual/design/core.md:51
+msgid "Boundaries"
+msgstr ""
+
+#: manual/design/core.md:53
+msgid "This package does not define vectors, matrices, complex numbers, symbolic objects, or arbitrary-precision decimal storage."
+msgstr ""
+
+#: manual/design/core.md:55
+msgid "It does not hide branch cuts or exceptional values behind one bundled abstraction."
+msgstr ""
+
+#: manual/design/core.md:57
+msgid "Concrete numeric backends own the semantics of contextual rounding, exponent handling, and diagnostic production."
+msgstr ""
+
+#: manual/getting_started.md:1
+msgid "Getting started"
+msgstr ""
+
+#: manual/getting_started.md:3
+msgid "`arithmetic` supplies small capability traits for analytic operations and a shared checked-error vocabulary. It does not define a universal number type."
+msgstr ""
+
+#: manual/getting_started.md:6
+msgid "Install and import"
+msgstr ""
+
+#: manual/getting_started.md:20
+msgid "Request only needed capabilities"
+msgstr ""
+
+#: manual/getting_started.md:31
+msgid "Choose an unchecked trait only when the concrete backend's direct behavior is acceptable. Use a checked trait when callers must handle a rejected operation."
+msgstr ""
+
+#: manual/getting_started.md:34
+msgid "Handle checked and certified failures"
+msgstr ""
+
+#: manual/getting_started.md:48
+msgid "`CertificationFailureDetail` is present only for `ArithmeticErrorKind::CertificationFailure`. It identifies the operation, proof stage, reason, target precision, working precision, and refinement count. It lets a proof-backed backend report an inconclusive evaluation without misclassifying it as a domain or format failure."
+msgstr ""
+
+#: manual/getting_started.md:54
+msgid "Continue reading"
+msgstr ""
+
+#: manual/getting_started.md:56
+msgid "[Core tutorial](./tutorial/core.md) for contexts and diagnostics."
+msgstr ""
+
+#: manual/getting_started.md:57
+msgid "[Core API](./api/core.md) for public names and semantic notes."
+msgstr ""
+
+#: manual/getting_started.md:58
+msgid "[Architecture](./architecture.md) for effect and error boundaries."
+msgstr ""
+
+#: manual/getting_started.md:59
+msgid "[Verification](./verification.md) for the repository gate and release checks."
+msgstr ""
+
+#: manual/index.md:1
+msgid "arithmetic"
+msgstr ""
+
+#: manual/index.md:3
+msgid "This manual documents `arithmetic` **0.5.0**. Earlier release history lives in [CHANGELOG.md](../../CHANGELOG.md)."
+msgstr ""
+
+#: manual/index.md:6
+msgid "Release focus"
+msgstr ""
+
+#: manual/index.md:8
+msgid "`IntegralContextual` embeds MoonBit `Int` values and returns diagnostics."
+msgstr ""
+
+#: manual/index.md:9
+msgid "`AdjacentContextual` exposes next-plus, next-minus, and next-toward."
+msgstr ""
+
+#: manual/index.md:10
+msgid "`ConstantsContextual` and `HyperbolicContextual` define context-faithful capability boundaries for richer numeric backends."
+msgstr ""
+
+#: manual/index.md:12
+msgid "Certification failures remain explicit through `ArithmeticError`."
+msgstr ""
+
+#: manual/index.md:14
+msgid "Capability layers"
+msgstr ""
+
+#: manual/index.md:16
+msgid "Unchecked elementary traits expose direct backend behavior."
+msgstr ""
+
+#: manual/index.md:17
+msgid "Checked traits expose structured domain and division failures."
+msgstr ""
+
+#: manual/index.md:18
+msgid "Contextual traits return a value plus diagnostics under an explicit `ArithmeticContext`."
+msgstr ""
+
+#: manual/index.md:20
+msgid "Enclosure traits model containment and definite or possible relations."
+msgstr ""
+
+#: manual/index.md:22
+msgid "Context contract"
+msgstr ""
+
+#: manual/index.md:24
+msgid "Precision is clamped to at least `1`."
+msgstr ""
+
+#: manual/index.md:25
+msgid "`e_min` must not exceed `e_max` when both are supplied."
+msgstr ""
+
+#: manual/index.md:26
+msgid "Decimal presets define precision, exponent range, and clamping together."
+msgstr ""
+
+#: manual/index.md:27
+msgid "Diagnostics combine with logical OR and remain ordinary immutable values."
+msgstr ""
+
+#: manual/index.md:29
+msgid "Built-in instance limits"
+msgstr ""
+
+#: manual/index.md:31
+msgid "The built-in `Float` and `Double` contextual operations preserve native scalar behavior. They do not apply arbitrary decimal precision, directed rounding, exponent clamping, or general status-flag detection. `Float` integer embedding reports detectable conversion loss; adjacent operations use the fixed IEEE binary format and return empty diagnostics because neighbor selection is exact. Contextual division and square root reuse the checked validation paths. Native `Float` and `Double` do not implement contextual constants or hyperbolic functions."
+msgstr ""
+
+#: manual/index.md:40
+msgid "Core documents"
+msgstr ""
+
+#: manual/index.md:42
+msgid "[Getting started](./getting_started.md)"
+msgstr ""
+
+#: manual/index.md:43
+msgid "[Architecture](./architecture.md)"
+msgstr ""
+
+#: manual/index.md:44
+msgid "[Verification](./verification.md)"
+msgstr ""
+
+#: manual/index.md:45
+msgid "[API reference](./api/core.md)"
+msgstr ""
+
+#: manual/index.md:46
+msgid "[Tutorial](./tutorial/core.md)"
+msgstr ""
+
+#: manual/index.md:47
+msgid "[Design](./design/core.md)"
+msgstr ""
+
+#: manual/index.md:48
+msgid "[Repository conventions](./conventions.md)"
+msgstr ""
+
+#: manual/tutorial/core.md:1
+msgid "Core tutorial"
+msgstr ""
+
+#: manual/tutorial/core.md:3
+msgid "Generic analytic helper"
+msgstr ""
+
+#: manual/tutorial/core.md:11
+msgid "This signature requests only the capabilities the algorithm uses."
+msgstr ""
+
+#: manual/tutorial/core.md:13
+msgid "Construct an arithmetic context"
+msgstr ""
+
+#: manual/tutorial/core.md:26
+msgid "Use a preset when its decimal format matches the backend contract. Use `new` when a concrete backend supports a different working context."
+msgstr ""
+
+#: manual/tutorial/core.md:29
+msgid "Contextual division"
+msgstr ""
+
+#: manual/tutorial/core.md:42
+msgid "The built-in `Double` instance validates division through `DivChecked` and wraps a successful result with exact diagnostics. A decimal backend may use the same trait while producing rounding or clamping flags."
+msgstr ""
+
+#: manual/tutorial/core.md:46
+msgid "Combine diagnostics"
+msgstr ""
+
+#: manual/tutorial/core.md:53
+msgid "Combining diagnostics is an explicit value transformation. It does not mutate either input or package-global state."
+msgstr ""
+
+#: manual/tutorial/core.md:56
+msgid "Checked comparison"
+msgstr ""
+
+#: manual/tutorial/core.md:67
+msgid "Use the checked path when unordered values such as NaN must not be silently coerced into a total order."
+msgstr ""
+
+#: manual/tutorial/core.md:70
+msgid "Practical guidance"
+msgstr ""
+
+#: manual/tutorial/core.md:72
+msgid "Use unchecked traits when direct backend semantics are acceptable."
+msgstr ""
+
+#: manual/tutorial/core.md:73
+msgid "Use checked traits when failure must be explicit but diagnostics are not needed."
+msgstr ""
+
+#: manual/tutorial/core.md:75
+msgid "Use contextual traits when an algorithm must pass working context and retain diagnostic flags."
+msgstr ""
+
+#: manual/tutorial/core.md:77
+msgid "Do not assume the built-in `Float` or `Double` contextual instances emulate decimal precision or directed rounding."
+msgstr ""
+
+#: manual/tutorial/core.md:79
+msgid "Keep algebraic structure in `luna-generic`; use `arithmetic` for analytic and contextual capabilities."
+msgstr ""
+
+#: manual/verification.md:1
+msgid "Verification"
+msgstr ""
+
+#: manual/verification.md:3
+msgid "Local gate"
+msgstr ""
+
+#: manual/verification.md:5
+msgid "Run the same checks required before a release:"
+msgstr ""
+
+#: manual/verification.md:19
+msgid "`moon info` regenerates public-interface snapshots. The following diff check requires the tracked `pkg.generated.mbti` file to agree with the source API."
+msgstr ""
+
+#: manual/verification.md:22
+msgid "What the tests establish"
+msgstr ""
+
+#: manual/verification.md:24
+msgid "The checked tests cover error classification and the public construction and inspection paths for certification failures. In particular, they establish that the detail survives `ArithmeticError::certification_failure`, that precision and refinement inputs are normalized, and that existing error predicates remain disjoint from `is_certification_failure`."
+msgstr ""
+
+#: manual/verification.md:30
+msgid "The contextual tests cover exact and rounded `Int` embedding, signed-zero direction, NaN propagation, stationary infinities, finite-to-infinity steps, and minimum-subnormal-to-zero steps for the fixed IEEE `Float` and `Double` formats. Test-local implementations also verify contextual hyperbolic outcomes and certification-failure propagation for constants."
+msgstr ""
+
+#: manual/verification.md:36
+msgid "The tests do not claim that `Float` or `Double` perform certified arithmetic. They verify the shared capability vocabulary, fixed-format adjacent semantics, and ordinary error-model behavior."
+msgstr ""
+
+#: manual/verification.md:40
+msgid "Release gate"
+msgstr ""
+
+#: manual/verification.md:42
+msgid "The `publish-package` GitHub workflow accepts an explicit release version and requires it to equal the version in `moon.mod`. It then updates the registry, builds and checks all targets, runs default, JavaScript, and native tests, publishes with the `LUNA_MOONCAKE` secret, and creates the corresponding GitHub release."
+msgstr ""
+
+#: manual/verification.md:48
+msgid "CI runs on pull requests and pushes to `main`. It repeats all-target builds and checks, default/JavaScript/native tests, interface snapshot validation, and formatting. A passing CI run is repository evidence, not a numerical conformance claim for any concrete backend."
+msgstr ""

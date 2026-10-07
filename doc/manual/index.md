@@ -1,10 +1,9 @@
-# Arithmetic Documentation
+# arithmetic
 
-This directory contains the English documentation baseline for `arithmetic`
-**0.5.0**. Earlier release history lives in
+This manual documents `arithmetic` **0.5.0**. Earlier release history lives in
 [CHANGELOG.md](../../CHANGELOG.md).
 
-## Release Focus
+## Release focus
 
 - `IntegralContextual` embeds MoonBit `Int` values and returns diagnostics.
 - `AdjacentContextual` exposes next-plus, next-minus, and next-toward.
@@ -12,7 +11,7 @@ This directory contains the English documentation baseline for `arithmetic`
   capability boundaries for richer numeric backends.
 - Certification failures remain explicit through `ArithmeticError`.
 
-## Capability Layers
+## Capability layers
 
 - Unchecked elementary traits expose direct backend behavior.
 - Checked traits expose structured domain and division failures.
@@ -20,14 +19,14 @@ This directory contains the English documentation baseline for `arithmetic`
   `ArithmeticContext`.
 - Enclosure traits model containment and definite or possible relations.
 
-## Context Contract
+## Context contract
 
 - Precision is clamped to at least `1`.
 - `e_min` must not exceed `e_max` when both are supplied.
 - Decimal presets define precision, exponent range, and clamping together.
 - Diagnostics combine with logical OR and remain ordinary immutable values.
 
-## Built-in Instance Limits
+## Built-in instance limits
 
 The built-in `Float` and `Double` contextual operations preserve native scalar
 behavior. They do not apply arbitrary decimal precision, directed rounding,
@@ -38,12 +37,12 @@ Contextual division and square root reuse the checked validation paths. Native
 `Float` and `Double` do not implement contextual constants or hyperbolic
 functions.
 
-## Core Documents
+## Core documents
 
 - [Getting started](./getting_started.md)
 - [Architecture](./architecture.md)
 - [Verification](./verification.md)
-- [API reference](./core/api.md)
-- [Tutorial](./core/tutorial.md)
-- [Design](./core/design.md)
-- [Documentation standard](./doc_standard.md)
+- [API reference](./api/core.md)
+- [Tutorial](./tutorial/core.md)
+- [Design](./design/core.md)
+- [Repository conventions](./conventions.md)

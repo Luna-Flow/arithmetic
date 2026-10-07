@@ -1,6 +1,6 @@
-# Core Tutorial
+# Core tutorial
 
-## Generic Analytic Helper
+## Generic analytic helper
 
 ```moonbit
 fn hypot2[T : Add + Mul + Sqrt](x : T, y : T) -> T {
@@ -10,7 +10,7 @@ fn hypot2[T : Add + Mul + Sqrt](x : T, y : T) -> T {
 
 This signature requests only the capabilities the algorithm uses.
 
-## Construct an Arithmetic Context
+## Construct an arithmetic context
 
 ```moonbit
 let custom = ArithmeticContext::new(
@@ -26,7 +26,7 @@ let standard = ArithmeticContext::decimal64()
 Use a preset when its decimal format matches the backend contract. Use `new`
 when a concrete backend supports a different working context.
 
-## Contextual Division
+## Contextual division
 
 ```moonbit
 let outcome = DivContextual::div_contextual(
@@ -43,7 +43,7 @@ The built-in `Double` instance validates division through `DivChecked` and
 wraps a successful result with exact diagnostics. A decimal backend may use the
 same trait while producing rounding or clamping flags.
 
-## Combine Diagnostics
+## Combine diagnostics
 
 ```moonbit
 let diagnostics = first.diagnostics.combine(second.diagnostics)
@@ -53,7 +53,7 @@ let result = ArithmeticOutcome::with_diagnostics(second.value, diagnostics)
 Combining diagnostics is an explicit value transformation. It does not mutate
 either input or package-global state.
 
-## Checked Comparison
+## Checked comparison
 
 ```moonbit
 fn ordering_or_error[T : CompareChecked](
@@ -67,7 +67,7 @@ fn ordering_or_error[T : CompareChecked](
 Use the checked path when unordered values such as NaN must not be silently
 coerced into a total order.
 
-## Practical Guidance
+## Practical guidance
 
 - Use unchecked traits when direct backend semantics are acceptable.
 - Use checked traits when failure must be explicit but diagnostics are not

@@ -1,12 +1,12 @@
-# Core Design
+# Core design
 
-## Design Goal
+## Design goal
 
 `arithmetic` extends Luna Flow from algebraic structure into analytic and
 context-dependent numeric capabilities while keeping backend semantics
 explicit.
 
-## Capability Boundaries
+## Capability boundaries
 
 - Unchecked traits describe direct, context-free backend operations.
 - Checked traits add explicit domain or arithmetic failure without changing
@@ -20,7 +20,7 @@ Algorithms should depend on the smallest existing trait composition that
 states their requirements. A broad local “number” or “real” trait would hide
 meaningful differences between numeric domains.
 
-## Data and Effects
+## Data and effects
 
 `ArithmeticContext`, `ArithmeticDiagnostics`, and `ArithmeticOutcome` are
 ordinary values. Context is passed explicitly, diagnostic accumulation uses the
@@ -32,7 +32,7 @@ Errors remain explicit through `Result[..., ArithmeticError]`. Diagnostic flags
 represent successful computations with notable conditions; they do not replace
 errors for operations that the implementation rejects.
 
-## Built-in Adapter Strategy
+## Built-in adapter strategy
 
 The `Float` and `Double` implementations adapt the contextual boundary to
 existing native and checked operations. Division and square root reuse checked

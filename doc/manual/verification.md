@@ -1,6 +1,6 @@
 # Verification
 
-## Local Gate
+## Local gate
 
 Run the same checks required before a release:
 
@@ -19,7 +19,7 @@ moon fmt --check
 `moon info` regenerates public-interface snapshots. The following diff check
 requires the tracked `pkg.generated.mbti` file to agree with the source API.
 
-## What the Tests Establish
+## What the tests establish
 
 The checked tests cover error classification and the public construction and
 inspection paths for certification failures. In particular, they establish that
@@ -37,7 +37,7 @@ The tests do not claim that `Float` or `Double` perform certified arithmetic.
 They verify the shared capability vocabulary, fixed-format adjacent semantics,
 and ordinary error-model behavior.
 
-## Release Gate
+## Release gate
 
 The `publish-package` GitHub workflow accepts an explicit release version and
 requires it to equal the version in `moon.mod`. It then updates the registry,

@@ -938,8 +938,8 @@ pub(open) trait ParseChecked {
 
 The context lets a decimal backend round the parsed value to its precision.
 Failures use `ParseError`, or `FormatError` when the text is well formed but
-the format cannot hold it. This package ships no instance; the decimal types of
-[`floating`](https://lunaflow.cn/en/floating/) implement it.
+the format cannot hold it. This package ships no instance; parsing belongs to
+backends with a textual format, such as decimal types.
 
 ## Contextual capability traits
 
@@ -1190,8 +1190,7 @@ a set, such as an interval or a ball. These five traits relate two enclosures
 $X$ and $Y$. They are relations, not an order: for overlapping enclosures both
 `definitely_lt(X, Y)` and `definitely_lt(Y, X)` are false. Read them as
 statements about every pair of points $x \in X$, $y \in Y$. This package ships
-no instance; `BallFloat` in
-[`floating`](https://lunaflow.cn/en/floating/) implements all five.
+no instance; interval and ball backends implement them.
 The [design page](../design/core.md#enclosures-and-three-valued-comparison)
 derives the interval formulas below.
 

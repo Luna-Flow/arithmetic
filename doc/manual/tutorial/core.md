@@ -329,8 +329,8 @@ test "three-valued comparison" {
 An `Unknown` answer is not a failure: narrow the enclosures (compute with more
 precision) and ask again. A `Yes` or `No` never changes when the enclosures
 shrink; the [design page](../design/core.md#soundness-and-monotonicity-of-enclosure-relations)
-proves why. `BallFloat` in [`floating`](https://lunaflow.cn/en/floating/)
-implements these traits.
+proves why. Interval and ball backends implement the same traits, so `less`
+works with them unchanged.
 
 ### Combine with algebraic structure
 
@@ -372,8 +372,8 @@ code is specialised per type, so a trait bound costs nothing at run time.
 - **Empty diagnostics from `Float` and `Double` do not mean exact.** Their
   contextual arithmetic ignores the context and does not detect rounding:
   `add_contextual(0.1, 0.2, ctx)` returns `0.30000000000000004` with empty
-  diagnostics. Only the `Float` integer embedding detects loss. Use a backend
-  from `floating` when the flags matter.
+  diagnostics. Only the `Float` integer embedding detects loss. Use a
+  context-faithful backend when the flags matter.
 - **The context is a request.** `ArithmeticContext::new(16)` does not make
   `Double` arithmetic decimal; it tells a backend what to do if it can.
   `ArithmeticContext::new(0)` silently becomes precision `1`, and `e_min`
@@ -404,6 +404,4 @@ code is specialised per type, so a trait bound costs nothing at run time.
   context and the enclosure logic, with the rounding-error and correctness
   derivations.
 - [`luna-generic`](https://lunaflow.cn/en/luna-generic/) provides the
-  algebraic traits, and [`floating`](https://lunaflow.cn/en/floating/)
-  provides decimal, binary and ball backends that implement the contextual and
-  enclosure traits faithfully.
+  algebraic traits that combine with these capabilities.

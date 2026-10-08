@@ -15,11 +15,8 @@ migration listed in [CHANGELOG.md](../../CHANGELOG.md).
 
 [`luna-generic`](https://lunaflow.cn/en/luna-generic/) says what a type is
 (`Ring`, `Field`, ...). `arithmetic` says which analytic operations it
-supports and how they fail. Backends such as
-[`floating`](https://lunaflow.cn/en/floating/) implement the traits for
-decimal, binary and ball arithmetic, and higher packages such as
-`linear-algebra`, `luna-complex` and `calculus-numerical` depend on the traits
-instead of on concrete number types.
+supports and how they fail. Numeric backends implement the traits, and
+algorithms depend on the traits instead of on concrete number types.
 
 | Tier | Example | Returns | Use it when |
 | --- | --- | --- | --- |

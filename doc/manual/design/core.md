@@ -14,8 +14,7 @@ capabilities whose semantics it can honour.
 The package ships the vocabulary (traits, the context, diagnostics and
 errors) and a baseline of instances for the native `Float`, `Double` and
 integer types. Correctly rounded, context-faithful and certified arithmetic
-lives in backends such as [`floating`](https://lunaflow.cn/en/floating/), which
-implement these traits.
+lives in numeric backends, which implement these traits.
 
 ## Mathematical background
 
@@ -654,11 +653,10 @@ loops, such as the target-rounding stage above, correct: a decision once made
 stays valid. `Contains` is how such a loop checks that a refined enclosure
 $X'$ is inside the old one, $\texttt{contains}(X, X')$.
 
-The traits do not fix the convention for empty enclosures. Under the
-quantifier reading, the definite relations would hold vacuously for an empty
-argument; the `BallFloat` type of `floating` instead returns `false` for every
-relation with an empty argument except `contains(X, ∅)`, so that $\mathsf{T}$
-never comes from an absence of information.
+The traits do not fix the convention for empty enclosures; each backend
+documents its own. Under the quantifier reading the definite relations would
+hold vacuously for an empty argument, so a backend that wants $\mathsf{T}$ never
+to come from an absence of information returns `false` for them instead.
 
 ## Alternatives rejected
 

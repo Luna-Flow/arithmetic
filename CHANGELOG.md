@@ -8,6 +8,9 @@ points; older release history lives in this file.
 
 ### Changed
 
+- The test-only dependency `Luna-Flow/luna-generic` is bumped from 0.3.1 to
+  0.4.0. The tests use only `Zero`, `AddMonoid` and `Num`, so no code change
+  is needed and nothing deprecated in 0.4.0 is used.
 - Migrated the package to MoonBit 0.10. Trait methods that were implicitly
   promoted to methods are now promoted explicitly in `src/extends.mbt`:
   `equal` stays available on `FpClass`, `RoundingMode`, `ArithmeticContext`,

@@ -21,6 +21,7 @@ pub struct ArithmeticContext {
 pub fn ArithmeticContext::decimal128() -> Self
 pub fn ArithmeticContext::decimal32() -> Self
 pub fn ArithmeticContext::decimal64() -> Self
+pub fn ArithmeticContext::equal(Self, Self) -> Bool
 pub fn ArithmeticContext::new(Int, rounding? : RoundingMode, e_min? : Int, e_max? : Int, clamp? : Bool) -> Self
 
 pub struct ArithmeticDiagnostics {
@@ -33,6 +34,7 @@ pub struct ArithmeticDiagnostics {
 } derive(Eq, @debug.Debug)
 pub fn ArithmeticDiagnostics::combine(Self, Self) -> Self
 pub fn ArithmeticDiagnostics::empty() -> Self
+pub fn ArithmeticDiagnostics::equal(Self, Self) -> Bool
 pub fn ArithmeticDiagnostics::new(inexact? : Bool, rounded? : Bool, overflow? : Bool, underflow? : Bool, subnormal? : Bool, clamped? : Bool) -> Self
 
 pub struct ArithmeticError {
@@ -43,6 +45,7 @@ pub fn ArithmeticError::certification_failure(CertificationFailureDetail) -> Sel
 pub fn ArithmeticError::certification_failure_detail(Self) -> CertificationFailureDetail?
 pub fn ArithmeticError::division_by_zero(String) -> Self
 pub fn ArithmeticError::domain_error(String) -> Self
+pub fn ArithmeticError::equal(Self, Self) -> Bool
 pub fn ArithmeticError::format_error(String) -> Self
 pub fn ArithmeticError::is_certification_failure(Self) -> Bool
 pub fn ArithmeticError::is_division_by_zero(Self) -> Bool
@@ -64,11 +67,13 @@ pub enum ArithmeticErrorKind {
   UnorderedComparison
   CertificationFailure(CertificationFailureDetail)
 } derive(Eq)
+pub fn ArithmeticErrorKind::equal(Self, Self) -> Bool
 
 pub struct ArithmeticOutcome[T] {
   value : T
   diagnostics : ArithmeticDiagnostics
 } derive(Eq, @debug.Debug)
+pub fn[T : Eq] ArithmeticOutcome::equal(Self[T], Self[T]) -> Bool
 pub fn[T] ArithmeticOutcome::exact(T) -> Self[T]
 pub fn[T] ArithmeticOutcome::with_diagnostics(T, ArithmeticDiagnostics) -> Self[T]
 
@@ -80,6 +85,7 @@ pub struct CertificationFailureDetail {
   work_precision : Int
   refinements : Int
 } derive(Eq)
+pub fn CertificationFailureDetail::equal(Self, Self) -> Bool
 pub fn CertificationFailureDetail::new(String, CertificationStage, CertificationFailureReason, Int, Int, Int) -> Self
 pub fn CertificationFailureDetail::operation(Self) -> String
 pub fn CertificationFailureDetail::reason(Self) -> CertificationFailureReason
@@ -95,6 +101,7 @@ pub(all) enum CertificationFailureReason {
   ResourceLimit
   RefinementBudgetExhausted
 } derive(Eq)
+pub fn CertificationFailureReason::equal(Self, Self) -> Bool
 
 pub(all) enum CertificationStage {
   RangeReduction
@@ -102,12 +109,14 @@ pub(all) enum CertificationStage {
   EnclosurePropagation
   TargetRounding
 } derive(Eq)
+pub fn CertificationStage::equal(Self, Self) -> Bool
 
 pub(all) enum FpClass {
   Finite
   Infinity
   NaN
 } derive(Eq, @debug.Debug)
+pub fn FpClass::equal(Self, Self) -> Bool
 
 pub(all) enum RoundingMode {
   ToNearestEven
@@ -116,6 +125,7 @@ pub(all) enum RoundingMode {
   TowardNegative
   AwayFromZero
 } derive(Eq)
+pub fn RoundingMode::equal(Self, Self) -> Bool
 
 // Type aliases
 
@@ -338,4 +348,3 @@ pub(open) trait Trigonometric {
 }
 pub impl Trigonometric for Float
 pub impl Trigonometric for Double
-

@@ -1,6 +1,7 @@
 import {
   "Kaida-Amethyst/math" @km,
   "moonbitlang/core/math",
+  "moonbitlang/core/debug",
 }
 
 import {

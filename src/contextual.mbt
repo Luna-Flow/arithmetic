@@ -29,7 +29,7 @@ pub fn ArithmeticDiagnostics::new(
   subnormal? : Bool = false,
   clamped? : Bool = false,
 ) -> ArithmeticDiagnostics {
-  { inexact, rounded, overflow, underflow, subnormal, clamped }
+  { inexact, rounded, overflow, underflow, subnormal, clamped, }
 }
 
 ///|
@@ -55,7 +55,7 @@ pub struct ArithmeticOutcome[T] {
 
 ///|
 pub fn[T] ArithmeticOutcome::exact(value : T) -> ArithmeticOutcome[T] {
-  { value, diagnostics: ArithmeticDiagnostics::empty() }
+  { value, diagnostics: ArithmeticDiagnostics::empty(), }
 }
 
 ///|
@@ -63,7 +63,7 @@ pub fn[T] ArithmeticOutcome::with_diagnostics(
   value : T,
   diagnostics : ArithmeticDiagnostics,
 ) -> ArithmeticOutcome[T] {
-  { value, diagnostics }
+  { value, diagnostics, }
 }
 
 ///|

@@ -97,7 +97,7 @@ pub fn ArithmeticContext::new(
   guard e_min is None || e_max is None || e_min.unwrap() <= e_max.unwrap() else {
     abort("ArithmeticContext::new: e_min must not exceed e_max")
   }
-  { precision: Int::max(1, precision), rounding, e_min, e_max, clamp }
+  { precision: Int::max(1, precision), rounding, e_min, e_max, clamp, }
 }
 
 ///|
@@ -178,34 +178,34 @@ pub fn CertificationFailureDetail::refinements(
 
 ///|
 pub fn ArithmeticError::division_by_zero(message : String) -> ArithmeticError {
-  { kind: ArithmeticErrorKind::DivisionByZero, message }
+  { kind: ArithmeticErrorKind::DivisionByZero, message, }
 }
 
 ///|
 pub fn ArithmeticError::parse_error(message : String) -> ArithmeticError {
-  { kind: ArithmeticErrorKind::ParseError, message }
+  { kind: ArithmeticErrorKind::ParseError, message, }
 }
 
 ///|
 pub fn ArithmeticError::domain_error(message : String) -> ArithmeticError {
-  { kind: ArithmeticErrorKind::DomainError, message }
+  { kind: ArithmeticErrorKind::DomainError, message, }
 }
 
 ///|
 pub fn ArithmeticError::format_error(message : String) -> ArithmeticError {
-  { kind: ArithmeticErrorKind::FormatError, message }
+  { kind: ArithmeticErrorKind::FormatError, message, }
 }
 
 ///|
 pub fn ArithmeticError::unsupported(message : String) -> ArithmeticError {
-  { kind: ArithmeticErrorKind::UnsupportedOperation, message }
+  { kind: ArithmeticErrorKind::UnsupportedOperation, message, }
 }
 
 ///|
 pub fn ArithmeticError::unordered_comparison(
   message : String,
 ) -> ArithmeticError {
-  { kind: ArithmeticErrorKind::UnorderedComparison, message }
+  { kind: ArithmeticErrorKind::UnorderedComparison, message, }
 }
 
 ///|

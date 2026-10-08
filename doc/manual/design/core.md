@@ -539,7 +539,7 @@ This is the writer monad over $(D, \vee, \mathbf{0})$ stacked on the error
 monad, and the monoid laws above are exactly what makes
 $\bar\circ$ associative with `ArithmeticOutcome::exact` as its identity.[^writer]
 The package ships the pieces (`exact`, `with_diagnostics`, `combine`) rather
-than a combinator; the [tutorial](../tutorial/core.md) shows a two-line
+than a combinator; the [tutorial](../tutorial/core.md) shows a short
 helper.
 
 [^writer]: Associativity of $\bar\circ$ reduces to associativity of $\vee$

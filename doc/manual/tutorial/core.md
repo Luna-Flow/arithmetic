@@ -140,7 +140,7 @@ test "checked maximum" {
 
 A contextual operation returns an `ArithmeticOutcome`: the value plus the
 diagnostics raised while computing it. To chain steps, pass the value on and
-`combine` the diagnostics. Two small helpers do this for any contextual
+`combine` the diagnostics. A small helper does this for any contextual
 operation:
 
 ```moonbit

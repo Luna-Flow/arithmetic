@@ -1,51 +1,85 @@
 # Verification
 
+This guide lists the checks a change must pass, what the tests establish, and
+what they deliberately do not claim.
+
 ## Local gate
 
-Run the same checks required before a release:
+Run from the repository root before opening a pull request:
 
 ```sh
 moon update
-moon build --target all
-moon check --target all --frozen
-moon test --frozen
-moon test --target js --frozen
-moon test --target native --frozen
+moon fmt
 moon info
-git diff --exit-code -- 'src/pkg.generated.mbti'
-moon fmt --check
+git diff -- src/pkg.generated.mbti
+moon check --target all
+moon test
+moon test --target js
+moon test --target native
 ```
 
-`moon info` regenerates public-interface snapshots. The following diff check
-requires the tracked `pkg.generated.mbti` file to agree with the source API.
+`moon info` regenerates the interface file; its diff is the list of public API
+changes and must be intended. `moon check --target all` must finish without
+warnings in this package.
+
+When `arithmetic` is developed together with an unreleased `luna-generic`,
+run `moon check` and `moon test` from a workspace whose `moon.work` lists both
+checkouts, so that the test dependency resolves to the local copy.
+
+## Documentation gate
+
+The manual is checked by `lunadoc`:
+
+```sh
+lunadoc update .
+lunadoc check --compile .
+lunadoc status --pages .
+```
+
+`update` regenerates `doc/locale/manual.pot` and merges it into the Chinese
+and Japanese catalogs; `check` fails on broken relative links, catalogs that
+do not match the English pages and Typst attachments that do not compile.
+Every `moonbit` block that is not marked `nocheck` is a complete test or
+definition: copy the blocks of a page into a `_test.mbt` file of a scratch
+package that imports `Luna-Flow/arithmetic` as `@lf_arith` (and
+`Luna-Flow/luna-generic` as `@lf_alg` for the tutorial) and run `moon test`.
 
 ## What the tests establish
 
-The checked tests cover error classification and the public construction and
-inspection paths for certification failures. In particular, they establish that
-the detail survives `ArithmeticError::certification_failure`, that precision and
-refinement inputs are normalized, and that existing error predicates remain
-disjoint from `is_certification_failure`.
+`trait_test.mbt` checks that the unchecked traits compose in generic code
+together with `luna-generic` bounds; representative values of every
+elementary function for `Float` and `Double`; that `Constants` satisfy
+$\tau = 2\pi$ and $\ln e = 1$ in both types; exact `Power` for every integer
+type and `BigInt`; the checked square
+root and division on valid input, negative input, $0/0$, $\infty/\infty$ and
+zero divisors; NaN rejection by `CompareChecked`; and checked integer powers
+with zero exponents, negative exponents, zero bases and the most negative `Int`.
 
-The contextual tests cover exact and rounded `Int` embedding, signed-zero
-direction, NaN propagation, stationary infinities, finite-to-infinity steps,
-and minimum-subnormal-to-zero steps for the fixed IEEE `Float` and `Double`
-formats. Test-local implementations also verify contextual hyperbolic outcomes
-and certification-failure propagation for constants.
+`contextual_test.mbt` checks exact and rounded `Int` embedding into `Float`
+and exact embedding into `Double`; the IEEE boundaries of the adjacent
+operations (signed zeros, smallest subnormals, largest finite values,
+infinities and NaN); and, through test-local types, that contextual
+hyperbolic outcomes and certification failures of contextual constants pass
+through the traits unchanged.
 
-The tests do not claim that `Float` or `Double` perform certified arithmetic.
-They verify the shared capability vocabulary, fixed-format adjacent semantics,
-and ordinary error-model behavior.
+`certification_error_wbtest.mbt` checks that a `CertificationFailureDetail`
+survives `ArithmeticError::certification_failure` with every field, and that
+the error predicates stay disjoint.
 
-## Release gate
+## What the tests do not claim
 
-The `publish-package` GitHub workflow accepts an explicit release version and
-requires it to equal the version in `moon.mod`. It then updates the registry,
-builds and checks all targets, runs default, JavaScript, and native tests,
-publishes with the `LUNA_MOONCAKE` secret, and creates the corresponding GitHub
-release.
+The tests do not claim that `Float` or `Double` arithmetic is certified, that
+their elementary functions are correctly rounded, or that their contextual
+instances detect rounding. They verify the capability vocabulary, the
+fixed-format adjacent semantics and the error classification.
 
-CI runs on pull requests and pushes to `main`. It repeats all-target builds and
-checks, default/JavaScript/native tests, interface snapshot validation, and
-formatting. A passing CI run is repository evidence, not a numerical
-conformance claim for any concrete backend.
+## Continuous integration
+
+CI runs on pull requests and on pushes to `main`: it builds and checks all
+targets, runs the default, JavaScript and native test suites, verifies that
+`pkg.generated.mbti` matches the source, and checks formatting. A separate
+workflow runs the shared Luna Flow documentation check on changes under
+`doc/`. The `publish-package` workflow accepts an explicit version, requires
+it to equal the version in `moon.mod`, repeats the checks, publishes to
+mooncakes and creates the GitHub release. A passing run is repository
+evidence, not a numerical conformance claim for any backend.

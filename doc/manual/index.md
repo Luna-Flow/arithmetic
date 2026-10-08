@@ -1,48 +1,85 @@
 # arithmetic
 
-This manual documents `arithmetic` **0.5.0**. Earlier release history lives in
-[CHANGELOG.md](../../CHANGELOG.md).
+`Luna-Flow/arithmetic` defines the analytic capabilities of Luna Flow numeric
+types: elementary functions, checked operations that return structured errors,
+contextual operations that report how a result was rounded under an explicit
+precision and rounding mode, and relations between enclosures such as
+intervals. It ships default instances for `Float`, `Double` and the integer
+types, and leaves context-faithful and certified arithmetic to backends that
+implement the same traits.
 
-## Release focus
+This manual describes version `0.5.0` together with the unreleased MoonBit 0.10
+migration listed in [CHANGELOG.md](../../CHANGELOG.md).
 
-- `IntegralContextual` embeds MoonBit `Int` values and returns diagnostics.
-- `AdjacentContextual` exposes next-plus, next-minus, and next-toward.
-- `ConstantsContextual` and `HyperbolicContextual` define context-faithful
-  capability boundaries for richer numeric backends.
-- Certification failures remain explicit through `ArithmeticError`.
+## Where it sits
 
-## Capability layers
+[`luna-generic`](https://lunaflow.cn/en/luna-generic/) says what a type is
+(`Ring`, `Field`, ...). `arithmetic` says which analytic operations it
+supports and how they fail. Backends such as
+[`floating`](https://lunaflow.cn/en/floating/) implement the traits for
+decimal, binary and ball arithmetic, and higher packages such as
+`linear-algebra`, `luna-complex` and `calculus-numerical` depend on the traits
+instead of on concrete number types.
 
-- Unchecked elementary traits expose direct backend behavior.
-- Checked traits expose structured domain and division failures.
-- Contextual traits return a value plus diagnostics under an explicit
-  `ArithmeticContext`.
-- Enclosure traits model containment and definite or possible relations.
+| Tier | Example | Returns | Use it when |
+| --- | --- | --- | --- |
+| Unchecked | `Sqrt::sqrt` | `Self` | the type's own special-value behaviour is acceptable |
+| Checked | `SqrtChecked::sqrt_checked` | `Result[Self, ArithmeticError]` | invalid input must become a handled error |
+| Contextual | `SqrtContextual::sqrt_contextual` | `Result[ArithmeticOutcome[Self], ArithmeticError]` | precision and rounding are explicit and diagnostics matter |
+| Enclosure relation | `DefinitelyLt::definitely_lt` | `Bool` | values are intervals or balls, not points |
 
-## Context contract
+## Packages
 
-- Precision is clamped to at least `1`.
-- `e_min` must not exceed `e_max` when both are supplied.
-- Decimal presets define precision, exponent range, and clamping together.
-- Diagnostics combine with logical OR and remain ordinary immutable values.
+The module has one package, at the source root `src/`, documented as `core`.
 
-## Built-in instance limits
+| Package | Import path | Contents | Pages |
+| --- | --- | --- | --- |
+| `core` | `Luna-Flow/arithmetic` | capability traits, `ArithmeticContext`, diagnostics, errors and certification details, `Float`/`Double`/integer instances | [API](api/core.md), [tutorial](tutorial/core.md), [design](design/core.md) |
 
-The built-in `Float` and `Double` contextual operations preserve native scalar
-behavior. They do not apply arbitrary decimal precision, directed rounding,
-exponent clamping, or general status-flag detection. `Float` integer embedding
-reports detectable conversion loss; adjacent operations use the fixed IEEE
-binary format and return empty diagnostics because neighbor selection is exact.
-Contextual division and square root reuse the checked validation paths. Native
-`Float` and `Double` do not implement contextual constants or hyperbolic
-functions.
+The blackbox tests (`src/*_test.mbt`) and the whitebox test
+(`src/certification_error_wbtest.mbt`) belong to the same package; the
+[verification guide](verification.md) lists what they establish.
 
-## Core documents
+## Reading paths
 
-- [Getting started](./getting_started.md)
-- [Architecture](./architecture.md)
-- [Verification](./verification.md)
-- [API reference](./api/core.md)
-- [Tutorial](./tutorial/core.md)
-- [Design](./design/core.md)
-- [Repository conventions](./conventions.md)
+- **New to the package:** read [getting started](getting_started.md), then the
+  [core tutorial](tutorial/core.md).
+- **Using it in a library:** keep the [core API](api/core.md) at hand; its
+  tables say what each shipped instance actually does at the edges (NaN, zero,
+  infinities, overflow).
+- **Implementing a backend or contributing:** read the
+  [core design](design/core.md) for the contracts and their mathematics,
+  [architecture](architecture.md) for the layout, and
+  [verification](verification.md) and [conventions](conventions.md) before
+  opening a pull request.
+
+## Install
+
+```sh
+moon add Luna-Flow/arithmetic@0.5.0
+```
+
+```moonbit nocheck
+import {
+  "Luna-Flow/arithmetic" @lf_arith,
+}
+```
+
+The package depends on `Kaida-Amethyst/math` for the `Float` and `Double`
+elementary functions. Its tests also use `Luna-Flow/luna-generic`.
+
+## Toolchain
+
+The code targets MoonBit `moonc` 0.10 or later with the `moon.mod` and
+`moon.pkg` manifests, and is checked on the `wasm-gc`, `wasm`, `js` and
+`native` backends.
+
+## Guides
+
+- [Getting started](getting_started.md): install, first generic function,
+  first checked and contextual calls.
+- [Architecture](architecture.md): source layout, tiers, errors and state.
+- [Verification](verification.md): the local gate, CI and what the tests
+  establish.
+- [Repository conventions](conventions.md): rules for this manual on top of
+  the Luna Flow standard.

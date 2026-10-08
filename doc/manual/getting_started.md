@@ -1,59 +1,87 @@
 # Getting started
 
-`arithmetic` supplies small capability traits for analytic operations and a
-shared checked-error vocabulary. It does not define a universal number type.
+This guide takes you from an empty MoonBit module to code that uses each
+`arithmetic` tier once. The [core tutorial](tutorial/core.md) continues from
+here with complete tasks.
 
 ## Install and import
 
+Add the package to `moon.mod`:
+
 ```sh
 moon add Luna-Flow/arithmetic@0.5.0
-moon add Luna-Flow/luna-generic@0.3.1
 ```
+
+Import it in the `moon.pkg` of every package that uses it, with the alias Luna
+Flow code uses:
 
 ```moonbit nocheck
 import {
-  "Luna-Flow/luna-generic" @lf_alg
-  "Luna-Flow/arithmetic" @lf_arith
+  "Luna-Flow/arithmetic" @lf_arith,
 }
 ```
 
-## Request only needed capabilities
+If you also need algebraic traits such as `Ring` or `Field`, add
+`Luna-Flow/luna-generic` with the alias `@lf_alg`.
+
+## Ask for capabilities, not types
+
+Write a function against the traits it uses. `Add` and `Mul` are MoonBit's
+operator traits; `Sqrt` comes from this package:
 
 ```moonbit
-using @lf_alg { trait Add, trait Mul }
-using @lf_arith { trait Sqrt }
+fn[T : Add + Mul + @lf_arith.Sqrt] norm2(x : T, y : T) -> T {
+  @lf_arith.Sqrt::sqrt(x * x + y * y)
+}
 
-fn hypot2[T : Add + Mul + Sqrt](x : T, y : T) -> T {
-  Sqrt::sqrt(x * x + y * y)
+test "norm" {
+  inspect(norm2(3.0, 4.0), content="5")
 }
 ```
 
-Choose an unchecked trait only when the concrete backend's direct behavior is
-acceptable. Use a checked trait when callers must handle a rejected operation.
+`norm2` accepts `Float`, `Double` and any type of yours that implements the
+three traits.
 
-## Handle checked and certified failures
+## Make failures explicit
 
-```moonbit nocheck
-let context = @lf_arith.ArithmeticContext::decimal64()
-match @lf_arith.DivChecked::div_checked(1.0, 0.0, context) {
-  Ok(value) => value.to_string()
-  Err(error) if error.is_certification_failure() => {
-    let detail = error.certification_failure_detail().unwrap()
-    detail.operation() + " was not certified"
+A checked trait returns a `Result`. Pass an `ArithmeticContext`; the native
+instances do not read it, but a decimal backend would:
+
+```moonbit
+test "checked division" {
+  let ctx = @lf_arith.ArithmeticContext::decimal64()
+  inspect(@lf_arith.DivChecked::div_checked(1.0, 8.0, ctx).unwrap(), content="0.125")
+  match @lf_arith.DivChecked::div_checked(1.0, 0.0, ctx) {
+    Ok(_) => fail("unexpected quotient")
+    Err(e) => inspect(e.message, content="division by zero")
   }
-  Err(error) => error.message
 }
 ```
 
-`CertificationFailureDetail` is present only for
-`ArithmeticErrorKind::CertificationFailure`. It identifies the operation,
-proof stage, reason, target precision, working precision, and refinement count.
-It lets a proof-backed backend report an inconclusive evaluation without
-misclassifying it as a domain or format failure.
+## Read the diagnostics
+
+A contextual trait also returns diagnostics. Converting $2^{24} + 1$ to
+`Float` loses the last bit, and the outcome says so:
+
+```moonbit
+test "contextual conversion" {
+  let ctx = @lf_arith.ArithmeticContext::new(24)
+  let out : @lf_arith.ArithmeticOutcome[Float] = @lf_arith.IntegralContextual::from_int_contextual(
+    16_777_217, ctx,
+  ).unwrap()
+  inspect(out.value, content="16777216")
+  inspect(out.diagnostics.inexact, content="true")
+}
+```
+
+Most `Float` and `Double` contextual operations do not detect rounding; the
+[API page](api/core.md#contextual-capability-traits) says which do.
 
 ## Continue reading
 
-- [Core tutorial](./tutorial/core.md) for contexts and diagnostics.
-- [Core API](./api/core.md) for public names and semantic notes.
-- [Architecture](./architecture.md) for effect and error boundaries.
-- [Verification](./verification.md) for the repository gate and release checks.
+- [Core tutorial](tutorial/core.md): worked tasks, your own instances,
+  enclosures.
+- [Core API](api/core.md): every public item.
+- [Core design](design/core.md): why the tiers exist, and the mathematics.
+- [Architecture](architecture.md) and [verification](verification.md) for
+  contributors.

@@ -1,6 +1,6 @@
 {
   "title": "arithmetic",
-  "summary": "Arithmetic capability traits and checked analytic operations for LunaFlow numeric types, with default real-valued instances.",
+  "summary": "Analytic capability traits for Luna Flow numeric types: elementary functions, checked and contextual operations with explicit precision and diagnostics, and enclosure relations.",
   "locales": [
     "zh_CN",
     "ja_JP"

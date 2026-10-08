@@ -16,872 +16,897 @@ msgid "core API"
 msgstr "core API"
 
 #: manual/api/core.md:3
-msgid "This page lists every public item of the `Luna-Flow/arithmetic` package (the package at `src/`, documented as `core`). The examples import it as `@lf_arith`:"
-msgstr "このページは `Luna-Flow/arithmetic` パッケージ（`src/` にあり、`core` として文書化される）のすべての公開項目を列挙する。例ではこれを `@lf_arith` としてインポートする。"
+msgid "Purpose"
+msgstr "役割"
 
-#: manual/api/core.md:13
-msgid "The items fall into four capability tiers and the shared values they use."
-msgstr "項目は四つの能力層と、それらが共有する値に分かれる。"
+#: manual/api/core.md:5
+msgid "`Luna-Flow/arithmetic` (the package at `src/`, documented as `core`) is the capability layer between algebraic structure and concrete numbers. It does not implement numeric algorithms by itself: it defines which analytic operations a number type offers and how they fail, and ships baseline instances for the native `Float`, `Double` and integer types."
+msgstr "`Luna-Flow/arithmetic`（`src/` にあるパッケージで、文書では `core` と呼ぶ）は、代数構造と具体的な数値のあいだにある能力層である。それ自体は数値アルゴリズムを実装しない。数値型がどの解析的演算を提供し、それがどう失敗するかを定め、ネイティブの `Float`、`Double` と整数型に基本インスタンスを提供する。"
 
-#: manual/api/core.md:15
-#: manual/index.md:21
+#: manual/api/core.md:11
+msgid "This page lists every public item of the package. The items fall into four capability tiers and the shared values they use."
+msgstr "このページはパッケージのすべての公開項目を挙げる。項目は四つの能力層と、それらが共有する値に分かれる。"
+
+#: manual/api/core.md:14
+#: manual/index.md:22
 msgid "Tier"
 msgstr "層"
 
-#: manual/api/core.md:15
+#: manual/api/core.md:14
 msgid "Typical signature"
 msgstr "典型的なシグネチャ"
 
-#: manual/api/core.md:15
+#: manual/api/core.md:14
 msgid "Failure channel"
 msgstr "失敗の伝え方"
 
-#: manual/api/core.md:15
+#: manual/api/core.md:14
 msgid "Defined in"
 msgstr "定義場所"
 
-#: manual/api/core.md:17
-#: manual/index.md:23
+#: manual/api/core.md:16
+#: manual/index.md:24
 msgid "Unchecked"
 msgstr "非検査"
 
-#: manual/api/core.md:17
+#: manual/api/core.md:16
 msgid "none: the backend decides (NaN, abort, wrap)"
 msgstr "なし：バックエンドが決める（NaN、中断、ラップアラウンド）"
 
-#: manual/api/core.md:18
-#: manual/index.md:24
+#: manual/api/core.md:17
+#: manual/index.md:25
 msgid "Checked"
 msgstr "検査付き"
 
-#: manual/api/core.md:19
-#: manual/index.md:25
+#: manual/api/core.md:18
+#: manual/index.md:26
 msgid "Contextual"
 msgstr "コンテキスト付き"
 
-#: manual/api/core.md:19
+#: manual/api/core.md:18
 msgid "`Err` for rejection, diagnostics for notable success"
 msgstr "拒否は `Err`、注目すべき成功は診断"
 
-#: manual/api/core.md:20
+#: manual/api/core.md:19
 #: manual/architecture.md:45
-#: manual/index.md:26
+#: manual/index.md:27
 msgid "Enclosure relation"
 msgstr "包含区間の関係"
 
-#: manual/api/core.md:20
+#: manual/api/core.md:19
 msgid "none: a relation, not an order"
 msgstr "なし：順序ではなく関係"
 
-#: manual/api/core.md:22
+#: manual/api/core.md:21
 msgid "The [core design](../design/core.md) explains why the tiers are separate and derives the mathematics behind them. The [core tutorial](../tutorial/core.md) uses them on worked tasks."
 msgstr "[core 設計ページ](../design/core.md) は層を分ける理由と、その背後にある数学を導出する。[core チュートリアル](../tutorial/core.md) は具体的な作業の中でそれらを使う。"
 
-#: manual/api/core.md:26
+#: manual/api/core.md:25
+msgid "Importing"
+msgstr "インポート"
+
+#: manual/api/core.md:27
+msgid "Add the package to your `moon.pkg`:"
+msgstr "パッケージを `moon.pkg` に追加する。"
+
+#: manual/api/core.md:35
+msgid "The examples on this page call every item through the alias, as `@lf_arith.Sqrt::sqrt(x)`. Call trait methods through the trait rather than with dot syntax: since MoonBit 0.10 an implementation no longer makes the trait's methods callable as `x.sqrt()`, and on `Double` that form reaches core's own method instead."
+msgstr "このページの例は、`@lf_arith.Sqrt::sqrt(x)` のようにすべての項目を別名経由で呼び出す。トレイトのメソッドはドット記法ではなくトレイト経由で呼ぶこと。MoonBit 0.10 以降、トレイトを実装してもそのメソッドは `x.sqrt()` の形では呼べなくなり、`Double` ではこの形は core 自身のメソッドを呼ぶ。"
+
+#: manual/api/core.md:41
 msgid "Shared vocabulary"
 msgstr "共有語彙"
 
-#: manual/api/core.md:30
+#: manual/api/core.md:45
 msgid "`FpClass` classifies a floating-point value into one of three disjoint classes."
 msgstr "`FpClass` は浮動小数点値を互いに素な三つのクラスのいずれかに分類する。"
 
-#: manual/api/core.md:41
+#: manual/api/core.md:56
 msgid "`Finite` covers zeros, subnormal and normal numbers; `Infinity` covers both signed infinities; `NaN` covers every not-a-number encoding. The classes form a partition, so exactly one applies to every value. Obtain the class of a value with `NumericFormatContextual::classify_contextual`."
 msgstr "`Finite` はゼロ、非正規化数、正規化数を含み、`Infinity` は符号付きの両無限大を、`NaN` はすべての非数エンコーディングを含む。これらのクラスは分割をなすので、すべての値にちょうど一つが当てはまる。値のクラスは `NumericFormatContextual::classify_contextual` で得る。"
 
-#: manual/api/core.md:66
+#: manual/api/core.md:81
 msgid "`RoundingMode` names the rounding direction a context requests."
 msgstr "`RoundingMode` はコンテキストが要求する丸めの方向を表す。"
 
-#: manual/api/core.md:78
+#: manual/api/core.md:93
 msgid "For a real $x$ between two adjacent representable values $a < x < b$:"
 msgstr "隣り合う二つの表現可能な値 $a < x < b$ の間にある実数 $x$ について："
 
-#: manual/api/core.md:80
+#: manual/api/core.md:95
 msgid "Mode"
 msgstr "モード"
 
-#: manual/api/core.md:80
-#: manual/api/core.md:835
+#: manual/api/core.md:95
+#: manual/api/core.md:869
 #: manual/architecture.md:40
 msgid "Result"
 msgstr "戻り値"
 
-#: manual/api/core.md:82
+#: manual/api/core.md:97
 msgid "the nearer of $a, b$; on a tie, the one with an even last digit"
 msgstr "$a, b$ のうち近い方。等距離なら最後の桁が偶数の方"
 
-#: manual/api/core.md:83
+#: manual/api/core.md:98
 msgid "the one with smaller magnitude (truncation)"
 msgstr "絶対値の小さい方（切り捨て）"
 
-#: manual/api/core.md:84
+#: manual/api/core.md:99
 msgid "$b$ (ceiling)"
 msgstr "$b$（天井）"
 
-#: manual/api/core.md:85
+#: manual/api/core.md:100
 msgid "$a$ (floor)"
 msgstr "$a$（床）"
 
-#: manual/api/core.md:86
+#: manual/api/core.md:101
 msgid "the one with larger magnitude"
 msgstr "絶対値の大きい方"
 
-#: manual/api/core.md:88
+#: manual/api/core.md:103
 msgid "`AwayFromZero` is directed rounding away from zero (`ROUND_UP` in the General Decimal Arithmetic specification), not round-to-nearest with ties away. The mode is a request: the package stores it in `ArithmeticContext`, and each backend decides whether it honours it. The built-in `Float` and `Double` instances ignore it."
 msgstr "`AwayFromZero` はゼロから遠ざかる方向への有向丸め（General Decimal Arithmetic 仕様の `ROUND_UP`）であり、等距離時にゼロから遠ざける最近接丸めではない。モードは要求にすぎない。パッケージはそれを `ArithmeticContext` に保存し、従うかどうかは各バックエンドが決める。組み込みの `Float` と `Double` のインスタンスはこれを無視する。"
 
-#: manual/api/core.md:94
+#: manual/api/core.md:109
 msgid "Arithmetic context"
 msgstr "算術コンテキスト"
 
-#: manual/api/core.md:98
+#: manual/api/core.md:113
 msgid "`ArithmeticContext` is an immutable record of the working precision, rounding mode and exponent range that a checked or contextual operation runs under."
 msgstr "`ArithmeticContext` は、検査付き演算やコンテキスト付き演算が実行されるときの作業精度、丸めモード、指数範囲を記録する不変のレコードである。"
 
-#: manual/api/core.md:111
+#: manual/api/core.md:126
 msgid "`precision` is the number of significand digits in the backend's radix (decimal digits for a decimal backend, bits for a binary one). It is always at least `1`."
 msgstr "`precision` はバックエンドの基数での仮数の桁数である（十進バックエンドなら十進桁、二進バックエンドならビット）。常に `1` 以上である。"
 
-#: manual/api/core.md:114
+#: manual/api/core.md:129
 msgid "`rounding` is the requested `RoundingMode`."
 msgstr "`rounding` は要求される `RoundingMode` である。"
 
-#: manual/api/core.md:115
+#: manual/api/core.md:130
 msgid "`e_min` and `e_max` bound the adjusted exponent of normal results; `None` means unbounded. When both are present, `e_min <= e_max`."
 msgstr "`e_min` と `e_max` は正規化された結果の調整済み指数を制限する。`None` は無制限を意味する。両方があるときは `e_min <= e_max` である。"
 
-#: manual/api/core.md:117
+#: manual/api/core.md:132
 msgid "`clamp` asks the backend to clamp exponents into the format, as the decimal interchange formats do."
 msgstr "`clamp` は、十進交換形式と同様に、指数を形式の範囲へクランプするようバックエンドに求める。"
 
-#: manual/api/core.md:120
+#: manual/api/core.md:135
 msgid "The fields are read-only outside the package; build values with `ArithmeticContext::new` or a preset. The context is passed as an ordinary argument: there is no global or thread-local context."
 msgstr "フィールドはパッケージ外からは読み取り専用である。値は `ArithmeticContext::new` かプリセットで作る。コンテキストは通常の引数として渡され、グローバルなコンテキストもスレッドローカルなコンテキストも存在しない。"
 
-#: manual/api/core.md:126
+#: manual/api/core.md:141
 msgid "`ArithmeticContext::new` builds a context from a precision and optional settings."
 msgstr "`ArithmeticContext::new` は精度と省略可能な設定からコンテキストを作る。"
 
-#: manual/api/core.md:133
+#: manual/api/core.md:148
 msgid "`rounding` defaults to `ToNearestEven`, `clamp` to `false`, and both exponent limits to `None`. A precision below `1` is raised to `1`. The function aborts with `ArithmeticContext::new: e_min must not exceed e_max` when both limits are given and `e_min > e_max`."
 msgstr "`rounding` の既定値は `ToNearestEven`、`clamp` は `false`、二つの指数制限はどちらも `None` である。`1` 未満の精度は `1` に引き上げられる。両方の制限が与えられ `e_min > e_max` のとき、この関数は `ArithmeticContext::new: e_min must not exceed e_max` で中断する。"
 
-#: manual/api/core.md:154
+#: manual/api/core.md:169
 msgid "These presets return the contexts of the IEEE 754 decimal interchange formats."
 msgstr "これらのプリセットは IEEE 754 十進交換形式のコンテキストを返す。"
 
-#: manual/api/core.md:162
+#: manual/api/core.md:177
 msgid "Preset"
 msgstr "プリセット"
 
-#: manual/api/core.md:168
+#: manual/api/core.md:183
 msgid "In every preset $e_{\\min} = 1 - e_{\\max}$, as IEEE 754 requires."
 msgstr "IEEE 754 が要求するとおり、どのプリセットでも $e_{\\min} = 1 - e_{\\max}$ である。"
 
-#: manual/api/core.md:179
+#: manual/api/core.md:194
 msgid "Errors"
 msgstr "エラー"
 
-#: manual/api/core.md:183
+#: manual/api/core.md:198
 msgid "`ArithmeticErrorKind` is the category of an `ArithmeticError`."
 msgstr "`ArithmeticErrorKind` は `ArithmeticError` の種別である。"
 
-#: manual/api/core.md:197
+#: manual/api/core.md:212
 msgid "Kind"
 msgstr "種別"
 
-#: manual/api/core.md:197
-#: manual/api/core.md:336
+#: manual/api/core.md:212
+#: manual/api/core.md:358
 #: manual/architecture.md:40
 msgid "Meaning"
 msgstr "意味"
 
-#: manual/api/core.md:199
+#: manual/api/core.md:214
 msgid "a non-zero or NaN value divided by zero, or a reciprocal of zero"
 msgstr "ゼロ以外の値または NaN をゼロで割った、あるいはゼロの逆数を取った"
 
-#: manual/api/core.md:200
+#: manual/api/core.md:215
 msgid "text that does not denote a value"
 msgstr "値を表さないテキスト"
 
-#: manual/api/core.md:201
+#: manual/api/core.md:216
 msgid "an argument outside the operation's mathematical domain, including indeterminate forms such as $0/0$"
 msgstr "演算の数学的な定義域外の引数。$0/0$ のような不定形を含む"
 
-#: manual/api/core.md:202
+#: manual/api/core.md:217
 msgid "a value that the target format cannot hold or render"
 msgstr "対象の形式が保持または表示できない値"
 
-#: manual/api/core.md:203
+#: manual/api/core.md:218
 msgid "an operation or context the backend does not implement"
 msgstr "バックエンドが実装していない演算またはコンテキスト"
 
-#: manual/api/core.md:204
+#: manual/api/core.md:219
 msgid "a comparison involving an unordered value such as NaN"
 msgstr "NaN のような順序付けられない値を含む比較"
 
-#: manual/api/core.md:205
+#: manual/api/core.md:220
 msgid "a proof-backed backend could not certify its result; carries the details"
 msgstr "証明付きバックエンドが結果を証明できなかった。詳細を保持する"
 
-#: manual/api/core.md:207
+#: manual/api/core.md:222
 msgid "The enum is `pub`, not `pub(all)`: you can match on it, but you build errors through the `ArithmeticError` constructors below."
 msgstr "この列挙型は `pub(all)` ではなく `pub` である。マッチはできるが、エラーは下記の `ArithmeticError` コンストラクタで作る。"
 
-#: manual/api/core.md:212
+#: manual/api/core.md:227
 msgid "`ArithmeticError` is the structured error that every checked and contextual trait returns."
 msgstr "`ArithmeticError` は、すべての検査付きトレイトとコンテキスト付きトレイトが返す構造化エラーである。"
 
-#: manual/api/core.md:222
+#: manual/api/core.md:237
 msgid "`kind` is the machine-readable category and `message` a human-readable explanation. Two errors are equal when both fields are equal."
 msgstr "`kind` は機械可読な種別、`message` は人間向けの説明である。二つのエラーは両方のフィールドが等しいときに等しい。"
 
-#: manual/api/core.md:225
+#: manual/api/core.md:240
+msgid "`ArithmeticError` derives only `Eq`: it implements neither `Show` nor `Debug`, so print `err.message` or match on `err.kind` instead of passing the error to `inspect` or `debug_inspect`. The same holds for `ArithmeticErrorKind`, `CertificationFailureDetail`, `CertificationStage`, `CertificationFailureReason`, `ArithmeticContext` and `RoundingMode`; only `FpClass`, `ArithmeticDiagnostics` and `ArithmeticOutcome` derive `Debug`."
+msgstr "`ArithmeticError` は `Eq` しか導出しない。`Show` も `Debug` も実装しないので、エラーを `inspect` や `debug_inspect` に渡すのではなく、`err.message` を表示するか `err.kind` でパターンマッチすること。`ArithmeticErrorKind`、`CertificationFailureDetail`、`CertificationStage`、`CertificationFailureReason`、`ArithmeticContext`、`RoundingMode` も同様であり、`Debug` を導出するのは `FpClass`、`ArithmeticDiagnostics`、`ArithmeticOutcome` だけである。"
+
+#: manual/api/core.md:247
 msgid "Error constructors"
 msgstr "エラーのコンストラクタ"
 
-#: manual/api/core.md:227
+#: manual/api/core.md:249
 msgid "`ArithmeticError::division_by_zero`, `ArithmeticError::parse_error`, `ArithmeticError::domain_error`, `ArithmeticError::format_error`, `ArithmeticError::unsupported` and `ArithmeticError::unordered_comparison` build an error of the matching kind with the given message."
 msgstr "`ArithmeticError::division_by_zero`、`ArithmeticError::parse_error`、`ArithmeticError::domain_error`、`ArithmeticError::format_error`、`ArithmeticError::unsupported`、`ArithmeticError::unordered_comparison` は、与えられたメッセージを持つ対応する種別のエラーを作る。"
 
-#: manual/api/core.md:241
+#: manual/api/core.md:263
 msgid "`unsupported` produces the kind `UnsupportedOperation`."
 msgstr "`unsupported` が作る種別は `UnsupportedOperation` である。"
 
-#: manual/api/core.md:243
+#: manual/api/core.md:265
 msgid "Error predicates"
 msgstr "エラーの述語"
 
-#: manual/api/core.md:245
+#: manual/api/core.md:267
 msgid "`ArithmeticError::is_division_by_zero`, `is_parse_error`, `is_domain_error`, `is_format_error`, `is_unsupported`, `is_unordered_comparison` and `is_certification_failure` test the kind of an error."
 msgstr "`ArithmeticError::is_division_by_zero`、`is_parse_error`、`is_domain_error`、`is_format_error`、`is_unsupported`、`is_unordered_comparison`、`is_certification_failure` はエラーの種別を判定する。"
 
-#: manual/api/core.md:259
+#: manual/api/core.md:281
 msgid "Exactly one predicate is true for every error."
 msgstr "どのエラーについても、ちょうど一つの述語が真になる。"
 
-#: manual/api/core.md:276
+#: manual/api/core.md:298
 msgid "`ArithmeticError::certification_failure` wraps a `CertificationFailureDetail` into an error of kind `CertificationFailure`."
 msgstr "`ArithmeticError::certification_failure` は `CertificationFailureDetail` を種別 `CertificationFailure` のエラーに包む。"
 
-#: manual/api/core.md:283
+#: manual/api/core.md:305
 msgid "The message is `certified evaluation failed for <operation>`, where `<operation>` comes from the detail."
 msgstr "メッセージは `certified evaluation failed for <operation>` であり、`<operation>` は詳細から取られる。"
 
-#: manual/api/core.md:288
+#: manual/api/core.md:310
 msgid "`ArithmeticError::certification_failure_detail` returns the detail of a certification failure and `None` for every other kind."
 msgstr "`ArithmeticError::certification_failure_detail` は証明失敗の詳細を返し、それ以外の種別では `None` を返す。"
 
-#: manual/api/core.md:295
+#: manual/api/core.md:317
 msgid "Certification failures"
 msgstr "証明の失敗"
 
-#: manual/api/core.md:297
+#: manual/api/core.md:319
 msgid "A proof-backed backend evaluates a function by a pipeline of stages and certifies that its result meets the target. When it cannot, it reports where the pipeline stopped and why. The [design page](../design/core.md#certification-stages) describes the pipeline."
 msgstr "証明付きバックエンドは段階からなるパイプラインで関数を評価し、結果が目標を満たすことを証明する。それができないときは、パイプラインがどこで止まり、なぜ止まったかを報告する。[設計ページ](../design/core.md#certification-stages) がこのパイプラインを説明する。"
 
-#: manual/api/core.md:304
+#: manual/api/core.md:326
 msgid "`CertificationStage` names the stage at which certified evaluation failed."
 msgstr "`CertificationStage` は証明付き評価が失敗した段階を表す。"
 
-#: manual/api/core.md:315
+#: manual/api/core.md:337
 msgid "Stage"
 msgstr "段階"
 
-#: manual/api/core.md:315
+#: manual/api/core.md:337
 msgid "Work done in the stage"
 msgstr "その段階で行う処理"
 
-#: manual/api/core.md:317
+#: manual/api/core.md:339
 msgid "reducing the argument to a small primary interval"
 msgstr "引数を小さな主区間へ還元する"
 
-#: manual/api/core.md:318
+#: manual/api/core.md:340
 msgid "evaluating a truncated series or approximation with a remainder bound"
 msgstr "打ち切り級数や近似を剰余の上界とともに評価する"
 
-#: manual/api/core.md:319
+#: manual/api/core.md:341
 msgid "carrying error enclosures through the remaining operations"
 msgstr "残りの演算を通して誤差の包含区間を伝播する"
 
-#: manual/api/core.md:320
+#: manual/api/core.md:342
 msgid "rounding the final enclosure to the target precision"
 msgstr "最終的な包含区間を目標精度へ丸める"
 
-#: manual/api/core.md:324
+#: manual/api/core.md:346
 msgid "`CertificationFailureReason` says why a stage could not be certified."
 msgstr "`CertificationFailureReason` は段階を証明できなかった理由を示す。"
 
-#: manual/api/core.md:336
+#: manual/api/core.md:358
 msgid "Reason"
 msgstr "理由"
 
-#: manual/api/core.md:338
+#: manual/api/core.md:360
 msgid "the reduced argument could not be shown to lie in the primary range"
 msgstr "還元後の引数が主範囲にあることを示せなかった"
 
-#: manual/api/core.md:339
+#: manual/api/core.md:361
 msgid "the remainder bound did not fall below the required tolerance"
 msgstr "剰余の上界が要求された許容誤差を下回らなかった"
 
-#: manual/api/core.md:340
+#: manual/api/core.md:362
 msgid "an intermediate enclosure was empty, unbounded or otherwise unusable"
 msgstr "途中の包含区間が空、非有界、またはその他の理由で使えなかった"
 
-#: manual/api/core.md:341
+#: manual/api/core.md:363
 msgid "a precision or size limit was reached"
 msgstr "精度またはサイズの上限に達した"
 
-#: manual/api/core.md:342
+#: manual/api/core.md:364
 msgid "repeated precision increases did not decide the rounding"
 msgstr "精度を繰り返し上げても丸めが決まらなかった"
 
-#: manual/api/core.md:346
+#: manual/api/core.md:368
 msgid "`CertificationFailureDetail` records the evidence of a certification failure."
 msgstr "`CertificationFailureDetail` は証明失敗の証拠を記録する。"
 
-#: manual/api/core.md:359
+#: manual/api/core.md:381
 msgid "`operation` names the operation (for example `\"exp\"`), `target_precision` is the precision the result was requested at, `work_precision` the last internal precision tried, and `refinements` the number of precision increases made."
 msgstr "`operation` は演算の名前（例えば `\"exp\"`）、`target_precision` は結果が要求された精度、`work_precision` は最後に試した内部精度、`refinements` は精度を上げた回数である。"
 
-#: manual/api/core.md:365
+#: manual/api/core.md:387
 msgid "`CertificationFailureDetail::new` builds a detail and normalises its counters."
 msgstr "`CertificationFailureDetail::new` は詳細を作り、カウンタを正規化する。"
 
-#: manual/api/core.md:371
+#: manual/api/core.md:393
 msgid "The arguments are, in order, the operation, stage, reason, target precision, working precision and refinement count. Both precisions are raised to at least `1` and the refinement count to at least `0`."
 msgstr "引数は順に、演算、段階、理由、目標精度、作業精度、精度向上の回数である。二つの精度は `1` 以上に、回数は `0` 以上に引き上げられる。"
 
-#: manual/api/core.md:375
+#: manual/api/core.md:397
 msgid "Detail accessors"
 msgstr "詳細のアクセサ"
 
-#: manual/api/core.md:377
+#: manual/api/core.md:399
 msgid "`CertificationFailureDetail::operation`, `stage`, `reason`, `target_precision`, `work_precision` and `refinements` return the field of the same name."
 msgstr "`CertificationFailureDetail::operation`、`stage`、`reason`、`target_precision`、`work_precision`、`refinements` は同名のフィールドを返す。"
 
-#: manual/api/core.md:410
+#: manual/api/core.md:432
 msgid "Diagnostics and outcomes"
 msgstr "診断と結果"
 
-#: manual/api/core.md:414
+#: manual/api/core.md:436
 msgid "`ArithmeticDiagnostics` is a set of six condition flags that a successful contextual operation may raise."
 msgstr "`ArithmeticDiagnostics` は、成功したコンテキスト付き演算が立てうる六つの条件フラグの集合である。"
 
-#: manual/api/core.md:428
+#: manual/api/core.md:450
 msgid "Flag"
 msgstr "フラグ"
 
-#: manual/api/core.md:428
+#: manual/api/core.md:450
 msgid "Raised when"
 msgstr "立つ条件"
 
-#: manual/api/core.md:430
+#: manual/api/core.md:452
 msgid "the returned value differs from the exact result"
 msgstr "返された値が正確な結果と異なる"
 
-#: manual/api/core.md:431
+#: manual/api/core.md:453
 msgid "the result was rounded to the context precision (possibly without loss)"
 msgstr "結果がコンテキストの精度へ丸められた（損失がない場合もある）"
 
-#: manual/api/core.md:432
+#: manual/api/core.md:454
 msgid "the exact result exceeded the largest finite magnitude"
 msgstr "正確な結果が最大の有限値の大きさを超えた"
 
-#: manual/api/core.md:433
+#: manual/api/core.md:455
 msgid "the result is tiny (below the normal range) and inexact"
 msgstr "結果が極めて小さく（正規範囲未満）、かつ不正確である"
 
-#: manual/api/core.md:434
+#: manual/api/core.md:456
 msgid "the result is below the normal range"
 msgstr "結果が正規範囲未満である"
 
-#: manual/api/core.md:435
+#: manual/api/core.md:457
 msgid "the exponent was altered to fit the format"
 msgstr "形式に収めるため指数が変更された"
 
-#: manual/api/core.md:437
+#: manual/api/core.md:459
 msgid "The meanings follow IEEE 754 and the General Decimal Arithmetic conditions; a backend raises only the flags it can detect."
 msgstr "意味は IEEE 754 と General Decimal Arithmetic の条件に従う。バックエンドは検出できるフラグだけを立てる。"
 
-#: manual/api/core.md:442
+#: manual/api/core.md:464
 msgid "`ArithmeticDiagnostics::empty` returns the value with every flag `false`."
 msgstr "`ArithmeticDiagnostics::empty` はすべてのフラグが `false` の値を返す。"
 
-#: manual/api/core.md:450
+#: manual/api/core.md:472
 msgid "`ArithmeticDiagnostics::new` builds diagnostics from labelled flags, each defaulting to `false`."
 msgstr "`ArithmeticDiagnostics::new` はラベル付きのフラグから診断を作る。各フラグの既定値は `false` である。"
 
-#: manual/api/core.md:459
+#: manual/api/core.md:481
 msgid "`ArithmeticDiagnostics::combine` merges two diagnostics with a logical OR on every flag."
 msgstr "`ArithmeticDiagnostics::combine` は二つの診断を、各フラグの論理和で併合する。"
 
-#: manual/api/core.md:466
+#: manual/api/core.md:488
 msgid "`combine` is associative, commutative and idempotent, and `empty()` is its identity, so folding the diagnostics of a computation gives the same result in any order."
 msgstr "`combine` は結合的、可換、冪等であり、`empty()` がその単位元である。したがって計算の診断をどの順序で畳み込んでも同じ結果になる。"
 
-#: manual/api/core.md:484
+#: manual/api/core.md:506
 msgid "`ArithmeticOutcome[T]` pairs the value of a successful contextual operation with its diagnostics."
 msgstr "`ArithmeticOutcome[T]` は、成功したコンテキスト付き演算の値とその診断を組にする。"
 
-#: manual/api/core.md:496
+#: manual/api/core.md:518
 msgid "`ArithmeticOutcome::exact` wraps a value with empty diagnostics."
 msgstr "`ArithmeticOutcome::exact` は値を空の診断で包む。"
 
-#: manual/api/core.md:504
+#: manual/api/core.md:526
 msgid "`ArithmeticOutcome::with_diagnostics` wraps a value with the given diagnostics."
 msgstr "`ArithmeticOutcome::with_diagnostics` は値を与えられた診断で包む。"
 
-#: manual/api/core.md:524
+#: manual/api/core.md:546
 msgid "Equality"
 msgstr "等価性"
 
-#: manual/api/core.md:526
+#: manual/api/core.md:548
 msgid "`FpClass::equal`, `RoundingMode::equal`, `ArithmeticContext::equal`, `ArithmeticDiagnostics::equal`, `ArithmeticOutcome::equal`, `ArithmeticError::equal`, `ArithmeticErrorKind::equal`, `CertificationStage::equal`, `CertificationFailureReason::equal` and `CertificationFailureDetail::equal` are the derived `Eq` instances, promoted to methods."
 msgstr "`FpClass::equal`、`RoundingMode::equal`、`ArithmeticContext::equal`、`ArithmeticDiagnostics::equal`、`ArithmeticOutcome::equal`、`ArithmeticError::equal`、`ArithmeticErrorKind::equal`、`CertificationStage::equal`、`CertificationFailureReason::equal`、`CertificationFailureDetail::equal` は導出された `Eq` インスタンスをメソッドとして昇格したものである。"
 
-#: manual/api/core.md:546
+#: manual/api/core.md:568
 msgid "Equality is structural, field by field. Prefer the operators `==` and `!=`; the method form exists for code that passes `equal` as a function. `ArithmeticOutcome::equal` compares values with `T`'s `Eq`, so for `Double` two NaN values make two outcomes unequal."
 msgstr "等価性は構造的で、フィールドごとに比較する。演算子 `==` と `!=` を優先すること。メソッド形式は `equal` を関数として渡すコードのためにある。`ArithmeticOutcome::equal` は値を `T` の `Eq` で比較するので、`Double` では NaN を含む二つの結果は等しくならない。"
 
-#: manual/api/core.md:551
+#: manual/api/core.md:573
 msgid "Unchecked capability traits"
 msgstr "非検査能力トレイト"
 
-#: manual/api/core.md:553
+#: manual/api/core.md:575
 msgid "Each unchecked trait is one capability with methods that return `Self`. The trait states no domain: what happens outside the domain (NaN, infinity, abort or wrap-around) is decided by the instance. All are `pub(open)`, so you can implement them for your own types."
 msgstr "各非検査トレイトは一つの能力であり、メソッドは `Self` を返す。トレイトは定義域を定めない。定義域の外で何が起きるか（NaN、無限大、中断、ラップアラウンド）はインスタンスが決める。すべて `pub(open)` なので、独自の型に実装できる。"
 
-#: manual/api/core.md:560
+#: manual/api/core.md:582
 msgid "`Sqrt` provides the square root."
 msgstr "`Sqrt` は平方根を提供する。"
 
-#: manual/api/core.md:568
+#: manual/api/core.md:590
 msgid "For `Float` and `Double`, `sqrt` follows IEEE 754: it returns NaN for negative input, and $\\sqrt{-0} = -0$."
 msgstr "`Float` と `Double` では `sqrt` は IEEE 754 に従い、負の入力には NaN を返し、$\\sqrt{-0} = -0$ である。"
 
-#: manual/api/core.md:584
+#: manual/api/core.md:606
 msgid "`Cbrt` provides the real cube root."
 msgstr "`Cbrt` は実数の立方根を提供する。"
 
-#: manual/api/core.md:592
+#: manual/api/core.md:614
 msgid "For `Float` and `Double` the cube root is real-valued on the whole line, so $\\sqrt[3]{-8} = -2$."
 msgstr "`Float` と `Double` では立方根は実数直線全体で実数値をとるので、$\\sqrt[3]{-8} = -2$ である。"
 
-#: manual/api/core.md:597
+#: manual/api/core.md:619
 msgid "`Radical` is the conjunction `Sqrt + Cbrt`; it has no methods of its own."
 msgstr "`Radical` は連言 `Sqrt + Cbrt` であり、独自のメソッドは持たない。"
 
-#: manual/api/core.md:619
+#: manual/api/core.md:641
 msgid "`Exponential` provides $e^x$ (`exp`) and $2^x$ (`exp2`)."
 msgstr "`Exponential` は $e^x$（`exp`）と $2^x$（`exp2`）を提供する。"
 
-#: manual/api/core.md:630
+#: manual/api/core.md:652
 msgid "`Logarithmic` provides the natural (`ln`), binary (`log2`) and decimal (`log10`) logarithms."
 msgstr "`Logarithmic` は自然対数（`ln`）、二進対数（`log2`）、常用対数（`log10`）を提供する。"
 
-#: manual/api/core.md:641
+#: manual/api/core.md:663
 msgid "For `Float` and `Double`, a negative argument gives NaN and zero gives $-\\infty$."
 msgstr "`Float` と `Double` では、負の引数は NaN を、ゼロは $-\\infty$ を与える。"
 
-#: manual/api/core.md:656
+#: manual/api/core.md:678
 msgid "`Power` raises a base to an exponent of the same type."
 msgstr "`Power` は底を同じ型の指数でべき乗する。"
 
-#: manual/api/core.md:664
+#: manual/api/core.md:686
 msgid "Instance"
 msgstr "インスタンス"
 
-#: manual/api/core.md:664
+#: manual/api/core.md:686
 msgid "Semantics"
 msgstr "意味"
 
-#: manual/api/core.md:666
+#: manual/api/core.md:688
 msgid "the C `pow` function: real power, NaN for a negative base with a non-integer exponent"
 msgstr "C の `pow` 関数：実数のべき乗。負の底と非整数の指数では NaN"
 
-#: manual/api/core.md:667
+#: manual/api/core.md:689
 msgid "exact power in $\\mathbb{Z}/2^k$ (wraps on overflow); **aborts** on a negative exponent"
 msgstr "$\\mathbb{Z}/2^k$ での正確なべき乗（オーバーフロー時はラップアラウンド）。負の指数では**中断**する"
 
-#: manual/api/core.md:668
+#: manual/api/core.md:690
 msgid "exact power in $\\mathbb{Z}/2^k$ (wraps on overflow)"
 msgstr "$\\mathbb{Z}/2^k$ での正確なべき乗（オーバーフロー時はラップアラウンド）"
 
-#: manual/api/core.md:669
+#: manual/api/core.md:691
 msgid "exact power; **aborts** on a negative exponent"
 msgstr "正確なべき乗。負の指数では**中断**する"
 
-#: manual/api/core.md:671
+#: manual/api/core.md:693
 msgid "The integer instances use binary exponentiation, $O(\\log n)$ multiplications. $x^0 = 1$ for every base, including $0^0$."
 msgstr "整数インスタンスは二進べき乗法を使い、乗算は $O(\\log n)$ 回である。どの底でも $x^0 = 1$ であり、$0^0$ も含む。"
 
-#: manual/api/core.md:686
+#: manual/api/core.md:696
+msgid "For the integer instances `pow` is the action of the exponent, read as a natural number, on the multiplicative monoid of `Self`: $x^{m+n} = x^m x^n$ and $x^{mn} = (x^m)^n$ hold whenever $m + n$ and $mn$ are computed without wrapping. The exponent is itself a value of `Self`, so a wrapped exponent sum breaks the first law: for `UInt`, `pow(2U, 0xFFFFFFFFU) * pow(2U, 1U)` is `0`, while the wrapped sum `0U` gives `pow(2U, 0U) == 1U`. The [design page](../design/core.md#laws-of-power) derives which laws hold."
+msgstr "整数インスタンスでは、`pow` は自然数とみなした指数による `Self` の乗法モノイドへの作用である。$m + n$ と $mn$ がラップアラウンドせずに計算される限り、$x^{m+n} = x^m x^n$ と $x^{mn} = (x^m)^n$ が成り立つ。指数自体も `Self` の値なので、ラップアラウンドした指数の和は第一の法則を破る。`UInt` では `pow(2U, 0xFFFFFFFFU) * pow(2U, 1U)` は `0` だが、ラップアラウンドした和 `0U` からは `pow(2U, 0U) == 1U` が得られる。どの法則が成り立つかは[設計ページ](../design/core.md#laws-of-power)で導出する。"
+
+#: manual/api/core.md:719
 msgid "`Trigonometric` provides `sin`, `cos` and `tan` of an angle in radians (for the shipped instances)."
 msgstr "`Trigonometric` は角度（提供されるインスタンスではラジアン）の `sin`、`cos`、`tan` を提供する。"
 
-#: manual/api/core.md:699
+#: manual/api/core.md:732
 msgid "`InverseTrigonometric` provides the principal branches `asin`, `acos`, `atan` and the two-argument `atan2(y, x)`."
 msgstr "`InverseTrigonometric` は主枝 `asin`、`acos`、`atan` と二引数の `atan2(y, x)` を提供する。"
 
-#: manual/api/core.md:711
+#: manual/api/core.md:744
 msgid "For `Float` and `Double` the ranges are $[-\\pi/2, \\pi/2]$ for `asin` and `atan`, $[0, \\pi]$ for `acos`, and $[-\\pi, \\pi]$ for `atan2`, which returns the angle of the point $(x, y)$; on the negative $x$ axis the sign of a zero $y$ selects $\\pi$ or $-\\pi$."
 msgstr "`Float` と `Double` での値域は、`asin` と `atan` が $[-\\pi/2, \\pi/2]$、`acos` が $[0, \\pi]$、`atan2` が $[-\\pi, \\pi]$ である。後者は点 $(x, y)$ の偏角を返し、負の $x$ 軸上ではゼロである $y$ の符号によって $\\pi$ と $-\\pi$ のどちらかが選ばれる。"
 
-#: manual/api/core.md:728
+#: manual/api/core.md:761
 msgid "`Hyperbolic` provides `sinh`, `cosh` and `tanh`."
 msgstr "`Hyperbolic` は `sinh`、`cosh`、`tanh` を提供する。"
 
-#: manual/api/core.md:740
+#: manual/api/core.md:773
 msgid "`InverseHyperbolic` provides `asinh`, `acosh` and `atanh`."
 msgstr "`InverseHyperbolic` は `asinh`、`acosh`、`atanh` を提供する。"
 
-#: manual/api/core.md:750
+#: manual/api/core.md:783
 msgid "For `Float` and `Double`, `acosh` is defined on $[1, \\infty)$ and `atanh` on $[-1, 1]$; outside them the result is NaN, and $\\operatorname{atanh}(\\pm 1) = \\pm\\infty$."
 msgstr "`Float` と `Double` では、`acosh` は $[1, \\infty)$ で、`atanh` は $[-1, 1]$ で定義される。その外では結果は NaN であり、$\\operatorname{atanh}(\\pm 1) = \\pm\\infty$ である。"
 
-#: manual/api/core.md:764
+#: manual/api/core.md:797
 msgid "`Constants` provides $\\pi$, $\\tau = 2\\pi$ and $e$ in `Self`."
 msgstr "`Constants` は `Self` における $\\pi$、$\\tau = 2\\pi$、$e$ を提供する。"
 
-#: manual/api/core.md:774
-msgid "The methods take no argument, so call them with the target type known. For `Double`, `pi` is `@math.PI`, `tau` is `2.0 * @math.PI` (exact, since doubling only changes the exponent) and `e` is `exp(1.0)`. For `Float`, the `Double` values are rounded to `Float`."
-msgstr "これらのメソッドは引数をとらないので、目的の型が分かる形で呼び出すこと。`Double` では `pi` は `@math.PI`、`tau` は `2.0 * @math.PI`（二倍は指数を変えるだけなので正確）、`e` は `exp(1.0)` である。`Float` では `Double` の値を `Float` へ丸めたものである。"
+#: manual/api/core.md:807
+msgid "The methods take no argument, so call them with the target type known. For `Double`, `pi` is `@math.PI`, `tau` is `2.0 * @math.PI` (exact, since doubling only changes the exponent) and `e` is `exp(1.0)`. For `Float`, `pi` and `tau` are the `Double` values rounded to `Float`, and `e` is the `Float` exponential of `1`; all three are the `Float` nearest to the constant."
+msgstr "これらのメソッドは引数をとらないので、目的の型が分かる形で呼び出すこと。`Double` では `pi` は `@math.PI`、`tau` は `2.0 * @math.PI`（二倍は指数を変えるだけなので正確）、`e` は `exp(1.0)` である。`Float` では `pi` と `tau` は `Double` の値を `Float` へ丸めたもの、`e` は `1` の `Float` 指数関数値であり、三つとも定数に最も近い `Float` である。"
 
-#: manual/api/core.md:790
+#: manual/api/core.md:824
 msgid "Checked capability traits"
 msgstr "検査付き能力トレイト"
 
-#: manual/api/core.md:792
+#: manual/api/core.md:826
 msgid "A checked trait returns `Result[_, ArithmeticError]`, so a rejected operation is a value the caller must handle. Methods that may depend on precision take an `ArithmeticContext`; the built-in `Float` and `Double` instances accept it but do not read it."
 msgstr "検査付きトレイトは `Result[_, ArithmeticError]` を返すので、拒否された演算は呼び出し側が処理しなければならない値になる。精度に依存しうるメソッドは `ArithmeticContext` を受け取る。組み込みの `Float` と `Double` のインスタンスはそれを受け取るが、読みはしない。"
 
-#: manual/api/core.md:799
+#: manual/api/core.md:833
 msgid "`SqrtChecked` computes a square root or reports a domain error."
 msgstr "`SqrtChecked` は平方根を計算するか、定義域エラーを報告する。"
 
-#: manual/api/core.md:807
+#: manual/api/core.md:841
 msgid "The domain is defined by each instance; the trait does not assume an order. For `Float` and `Double`, an argument $x < 0$ (including $-\\infty$) gives `DomainError`; $-0$, $+\\infty$ and NaN pass through to `Sqrt::sqrt`."
 msgstr "定義域は各インスタンスが定め、トレイトは順序を仮定しない。`Float` と `Double` では、引数 $x < 0$（$-\\infty$ を含む）は `DomainError` になり、$-0$、$+\\infty$、NaN はそのまま `Sqrt::sqrt` に渡される。"
 
-#: manual/api/core.md:825
+#: manual/api/core.md:859
 msgid "`DivChecked` divides or reports why the quotient is undefined."
 msgstr "`DivChecked` は除算を行うか、商が定義されない理由を報告する。"
 
-#: manual/api/core.md:833
+#: manual/api/core.md:867
 msgid "For `Float` and `Double` the checks run in this order:"
 msgstr "`Float` と `Double` では、検査は次の順に行われる："
 
-#: manual/api/core.md:835
+#: manual/api/core.md:869
 msgid "Case"
 msgstr "場合"
 
-#: manual/api/core.md:839
+#: manual/api/core.md:873
 msgid "any other $x / \\pm 0$, including NaN $/\\, 0$"
 msgstr "それ以外の $x / \\pm 0$（NaN $/\\, 0$ を含む）"
 
-#: manual/api/core.md:840
+#: manual/api/core.md:874
 msgid "otherwise"
 msgstr "それ以外"
 
-#: manual/api/core.md:840
+#: manual/api/core.md:874
 msgid "`Ok(x / y)`, with IEEE NaN propagation"
 msgstr "`Ok(x / y)`。NaN は IEEE どおり伝播する"
 
-#: manual/api/core.md:855
+#: manual/api/core.md:889
 msgid "`CompareChecked` compares two values or reports that they are unordered."
 msgstr "`CompareChecked` は二つの値を比較するか、順序付けられないことを報告する。"
 
-#: manual/api/core.md:863
+#: manual/api/core.md:897
 msgid "On ordered inputs the result is `-1`, `0` or `1`. For `Float` and `Double`, a NaN operand gives `UnorderedComparison`, and $-0$ and $+0$ compare equal."
 msgstr "順序付けられる入力では結果は `-1`、`0`、`1` のいずれかである。`Float` と `Double` では、NaN のオペランドは `UnorderedComparison` になり、$-0$ と $+0$ は等しいと比較される。"
 
-#: manual/api/core.md:878
+#: manual/api/core.md:912
 msgid "`PowNatChecked` raises a value to a non-negative integer power."
 msgstr "`PowNatChecked` は値を非負整数乗する。"
 
-#: manual/api/core.md:886
+#: manual/api/core.md:920
 msgid "$x^0$ is the multiplicative identity, including $0^0$. The `Float` and `Double` instances never fail: they use binary exponentiation with at most $2\\lfloor\\log_2 n\\rfloor$ rounded multiplications, and overflow to $\\pm\\infty$ or underflow to zero like any IEEE product. The [design page](../design/core.md#error-bound-of-binary-powering) bounds the rounding error."
 msgstr "$x^0$ は乗法単位元であり、$0^0$ も含む。`Float` と `Double` のインスタンスは失敗しない。丸めを伴う乗算が高々 $2\\lfloor\\log_2 n\\rfloor$ 回の二進べき乗法を使い、通常の IEEE の積と同様に $\\pm\\infty$ へオーバーフローし、ゼロへアンダーフローする。丸め誤差の上界は[設計ページ](../design/core.md#error-bound-of-binary-powering)で示す。"
 
-#: manual/api/core.md:894
+#: manual/api/core.md:928
 msgid "`PowIntChecked` raises a value to a signed integer power."
 msgstr "`PowIntChecked` は値を符号付き整数乗する。"
 
-#: manual/api/core.md:902
+#: manual/api/core.md:936
 msgid "A negative exponent means a reciprocal. A zero base with a negative exponent must be reported as an error (or, for an enclosure type, as a documented enclosure), never as a silent invalid value. For `Float` and `Double`:"
 msgstr "負の指数は逆数を意味する。ゼロの底と負の指数は、エラーとして（包含区間型なら文書化された包含区間として）報告しなければならず、黙って不正な値を返してはならない。`Float` と `Double` では："
 
-#: manual/api/core.md:907
+#: manual/api/core.md:941
 msgid "$x^n$ for $n > 0$ is `pow_nat_checked(x, n)`;"
 msgstr "$n > 0$ の $x^n$ は `pow_nat_checked(x, n)` である。"
 
-#: manual/api/core.md:908
+#: manual/api/core.md:942
 msgid "$x^{-n}$ is `DivisionByZero` when $x = \\pm 0$, and otherwise `div_checked(1, x^n)`. The most negative `Int` exponent is handled without negation overflow."
 msgstr "$x^{-n}$ は $x = \\pm 0$ のとき `DivisionByZero` であり、それ以外は `div_checked(1, x^n)` である。最も小さい負の `Int` の指数も、符号反転のオーバーフローなしに扱われる。"
 
-#: manual/api/core.md:912
+#: manual/api/core.md:946
 msgid "[!NOTE] Because the reciprocal is taken after the power, a tiny base whose power underflows to zero, such as `pow_int_checked(1.0e-200, -2, ctx)`, returns a `DivisionByZero` error even though the exact result $10^{400}$ only overflows."
 msgstr "[!NOTE] 逆数はべき乗の後で取られるため、`pow_int_checked(1.0e-200, -2, ctx)` のように、べき乗がゼロへアンダーフローする非常に小さな底は、正確な結果 $10^{400}$ が単にオーバーフローするだけであるにもかかわらず `DivisionByZero` エラーを返す。"
 
-#: manual/api/core.md:931
+#: manual/api/core.md:965
 msgid "`ParseChecked` parses text into `Self` under a context."
 msgstr "`ParseChecked` はコンテキストのもとでテキストを `Self` へ解析する。"
 
-#: manual/api/core.md:939
+#: manual/api/core.md:973
 msgid "The context lets a decimal backend round the parsed value to its precision. Failures use `ParseError`, or `FormatError` when the text is well formed but the format cannot hold it. This package ships no instance; parsing belongs to backends with a textual format, such as decimal types."
 msgstr "コンテキストにより、十進バックエンドは解析した値を自身の精度へ丸められる。失敗には `ParseError` を使い、テキストは正しい形式だが形式がそれを保持できない場合は `FormatError` を使う。このパッケージはインスタンスを提供しない。解析は、十進型のようにテキスト形式を持つバックエンドの役割である。"
 
-#: manual/api/core.md:944
+#: manual/api/core.md:978
 msgid "Contextual capability traits"
 msgstr "コンテキスト付き能力トレイト"
 
-#: manual/api/core.md:946
+#: manual/api/core.md:980
 msgid "A contextual trait returns `Result[ArithmeticOutcome[Self], ArithmeticError]`. `Err` means the operation was rejected; `Ok` carries the value and the diagnostics a backend detected while producing it."
 msgstr "コンテキスト付きトレイトは `Result[ArithmeticOutcome[Self], ArithmeticError]` を返す。`Err` は演算が拒否されたことを意味し、`Ok` は値と、それを生成する間にバックエンドが検出した診断を運ぶ。"
 
-#: manual/api/core.md:950
+#: manual/api/core.md:984
 msgid "[!IMPORTANT] The built-in `Float` and `Double` instances ignore the context and do not detect rounding, overflow or underflow. Except for `Float`'s `IntegralContextual`, they return `ArithmeticOutcome::exact`, so their empty diagnostics mean \"nothing detected\", not \"the result is exact\": `0.1 + 0.2` returns `0.30000000000000004` with empty diagnostics."
 msgstr "[!IMPORTANT] 組み込みの `Float` と `Double` のインスタンスはコンテキストを無視し、丸め、オーバーフロー、アンダーフローを検出しない。`Float` の `IntegralContextual` を除き、これらは `ArithmeticOutcome::exact` を返すので、空の診断は「結果が正確である」ではなく「何も検出していない」を意味する。`0.1 + 0.2` は空の診断とともに `0.30000000000000004` を返す。"
 
-#: manual/api/core.md:959
+#: manual/api/core.md:993
 msgid "These four traits are the contextual forms of `+`, `-`, `*` and `/`."
 msgstr "これら四つのトレイトは `+`、`-`、`*`、`/` のコンテキスト付き版である。"
 
-#: manual/api/core.md:976
+#: manual/api/core.md:1010
 msgid "A context-faithful backend returns $\\operatorname{fl}(x \\circ y)$, the exact result rounded under the context, and sets the diagnostics that the rounding caused. For `Float` and `Double`, add, sub and mul never fail; `div_contextual` fails exactly when `DivChecked::div_checked` does."
 msgstr "コンテキストに忠実なバックエンドは、正確な結果をコンテキストのもとで丸めた $\\operatorname{fl}(x \\circ y)$ を返し、その丸めが引き起こした診断を設定する。`Float` と `Double` では加算、減算、乗算は失敗せず、`div_contextual` は `DivChecked::div_checked` が失敗するときにちょうど失敗する。"
 
-#: manual/api/core.md:995
+#: manual/api/core.md:1029
 msgid "`AbsContextual` is the contextual absolute value."
 msgstr "`AbsContextual` はコンテキスト付きの絶対値である。"
 
-#: manual/api/core.md:1003
+#: manual/api/core.md:1037
 msgid "A backend may round when the context precision is below the operand's. For `Float` and `Double` it is the exact IEEE `abs`."
 msgstr "コンテキストの精度がオペランドより低いとき、バックエンドは丸めてよい。`Float` と `Double` では正確な IEEE の `abs` である。"
 
-#: manual/api/core.md:1008
+#: manual/api/core.md:1042
 msgid "`SqrtContextual` is the contextual square root."
 msgstr "`SqrtContextual` はコンテキスト付きの平方根である。"
 
-#: manual/api/core.md:1016
+#: manual/api/core.md:1050
 msgid "For `Float` and `Double` it fails exactly when `SqrtChecked::sqrt_checked` does."
 msgstr "`Float` と `Double` では、`SqrtChecked::sqrt_checked` が失敗するときにちょうど失敗する。"
 
-#: manual/api/core.md:1021
+#: manual/api/core.md:1055
 msgid "`ExpContextual` is the contextual natural exponential."
 msgstr "`ExpContextual` はコンテキスト付きの自然指数関数である。"
 
-#: manual/api/core.md:1029
+#: manual/api/core.md:1063
 msgid "For `Float` and `Double` it is `Exponential::exp` wrapped in an exact outcome."
 msgstr "`Float` と `Double` では、`Exponential::exp` を正確な結果として包んだものである。"
 
-#: manual/api/core.md:1043
+#: manual/api/core.md:1077
 msgid "`IntegralContextual` embeds a MoonBit `Int` into `Self` under a context."
 msgstr "`IntegralContextual` はコンテキストのもとで MoonBit の `Int` を `Self` へ埋め込む。"
 
-#: manual/api/core.md:1051
+#: manual/api/core.md:1085
 msgid "The source is always `Int`; wider or arbitrary-precision sources need separate capabilities. A backend may reject a context it does not support. For `Double` every `Int` is exact. For `Float`, an integer with $|n| > 2^{24}$ that is not a multiple of the spacing at its magnitude is rounded, and the outcome then has `inexact` and `rounded` set."
 msgstr "入力は常に `Int` であり、より広い整数や任意精度の入力には別の能力が必要である。バックエンドはサポートしないコンテキストを拒否してよい。`Double` ではすべての `Int` が正確に表される。`Float` では、$|n| > 2^{24}$ でその大きさにおける間隔の倍数でない整数は丸められ、そのとき結果には `inexact` と `rounded` が設定される。"
 
-#: manual/api/core.md:1074
+#: manual/api/core.md:1108
 msgid "`AdjacentContextual` steps to the neighbouring representable value."
 msgstr "`AdjacentContextual` は隣接する表現可能な値へ進む。"
 
-#: manual/api/core.md:1084
+#: manual/api/core.md:1118
 msgid "`next_plus_contextual(x)` is the least representable value greater than $x$ and `next_minus_contextual(x)` the greatest one less than $x$. `next_toward_contextual(x, t)` steps from $x$ toward $t$; when $x = t$ it returns $t$, so `next_toward(0.0, -0.0)` is $-0$. A backend whose representable set depends on the context reports range conditions in the diagnostics."
 msgstr "`next_plus_contextual(x)` は $x$ より大きい最小の表現可能な値、`next_minus_contextual(x)` は $x$ より小さい最大の表現可能な値である。`next_toward_contextual(x, t)` は $x$ から $t$ の方向へ一歩進む。$x = t$ のときは $t$ を返すので、`next_toward(0.0, -0.0)` は $-0$ である。表現可能な集合がコンテキストに依存するバックエンドは、範囲に関する条件を診断で報告する。"
 
-#: manual/api/core.md:1091
+#: manual/api/core.md:1125
 msgid "For `Float` and `Double` the representable set is the fixed IEEE binary format and the result is always exact:"
 msgstr "`Float` と `Double` では、表現可能な集合は固定された IEEE 二進形式であり、結果は常に正確である："
 
-#: manual/api/core.md:1094
+#: manual/api/core.md:1128
 msgid "Input"
 msgstr "入力"
 
-#: manual/api/core.md:1096
+#: manual/api/core.md:1130
 msgid "smallest positive subnormal"
 msgstr "最小の正の非正規化数"
 
-#: manual/api/core.md:1096
+#: manual/api/core.md:1130
 msgid "smallest negative subnormal"
 msgstr "最小の負の非正規化数（絶対値が最小）"
 
-#: manual/api/core.md:1097
-#: manual/api/core.md:1098
+#: manual/api/core.md:1131
+#: manual/api/core.md:1132
 msgid "largest finite"
 msgstr "最大の有限値"
 
-#: manual/api/core.md:1097
+#: manual/api/core.md:1131
 msgid "predecessor"
 msgstr "直前の値"
 
-#: manual/api/core.md:1100
+#: manual/api/core.md:1134
 msgid "NaN"
 msgstr "NaN"
 
-#: manual/api/core.md:1102
+#: manual/api/core.md:1136
 msgid "`next_toward` returns NaN if either operand is NaN."
 msgstr "どちらかのオペランドが NaN なら、`next_toward` は NaN を返す。"
 
-#: manual/api/core.md:1118
+#: manual/api/core.md:1152
 msgid "`ConstantsContextual` produces $\\pi$, $\\tau$ and $e$ under a context."
 msgstr "`ConstantsContextual` はコンテキストのもとで $\\pi$、$\\tau$、$e$ を生成する。"
 
-#: manual/api/core.md:1128
+#: manual/api/core.md:1162
 msgid "Implement it only when the constants honour the context and the diagnostics are meaningful. A proof-backed backend returns a `CertificationFailure` error when it cannot certify the target rounding. `Float` and `Double` do not implement it; see the [design page](../design/core.md#native-scalars-implement-only-what-they-can-honour)."
 msgstr "定数がコンテキストに従い、診断が意味を持つ場合にだけ実装すること。証明付きバックエンドは、目標の丸めを証明できないとき `CertificationFailure` エラーを返す。`Float` と `Double` はこれを実装しない。[設計ページ](../design/core.md#native-scalars-implement-only-what-they-can-honour)を参照。"
 
-#: manual/api/core.md:1135
+#: manual/api/core.md:1169
 msgid "`HyperbolicContextual` provides `sinh`, `cosh` and `tanh` under a context."
 msgstr "`HyperbolicContextual` はコンテキストのもとで `sinh`、`cosh`、`tanh` を提供する。"
 
-#: manual/api/core.md:1145
+#: manual/api/core.md:1179
 msgid "The same rule as for `ConstantsContextual` applies, and `Float` and `Double` do not implement it either."
 msgstr "`ConstantsContextual` と同じ規則が適用され、`Float` と `Double` はこれも実装しない。"
 
-#: manual/api/core.md:1150
+#: manual/api/core.md:1184
 msgid "`NumericFormatContextual` describes the numeric format of `Self` under a context: its distinguished values and the class of a value."
 msgstr "`NumericFormatContextual` は、コンテキストのもとでの `Self` の数値形式、すなわち特別な値と値のクラスを記述する。"
 
-#: manual/api/core.md:1164
+#: manual/api/core.md:1198
 msgid "`epsilon_contextual` is the machine epsilon $\\varepsilon = \\beta^{1-p}$, the distance from $1$ to the next larger representable value; the unit roundoff of round-to-nearest is $u = \\varepsilon / 2$. These methods do not fail. For the fixed formats the context is ignored:"
 msgstr "`epsilon_contextual` はマシンイプシロン $\\varepsilon = \\beta^{1-p}$、つまり $1$ からその次に大きい表現可能な値までの距離である。最近接丸めの単位丸め誤差は $u = \\varepsilon / 2$ である。これらのメソッドは失敗しない。固定形式ではコンテキストは無視される："
 
-#: manual/api/core.md:1169
+#: manual/api/core.md:1203
 msgid "Method"
 msgstr "メソッド"
 
-#: manual/api/core.md:1169
+#: manual/api/core.md:1203
 msgid "`Float` (binary32)"
 msgstr "`Float`（binary32）"
 
-#: manual/api/core.md:1169
+#: manual/api/core.md:1203
 msgid "`Double` (binary64)"
 msgstr "`Double`（binary64）"
 
-#: manual/api/core.md:1186
+#: manual/api/core.md:1220
 msgid "Enclosure relations"
 msgstr "包含区間の関係"
 
-#: manual/api/core.md:1188
+#: manual/api/core.md:1222
 msgid "An enclosure is a value that stands for an unknown real number known to lie in a set, such as an interval or a ball. These five traits relate two enclosures $X$ and $Y$. They are relations, not an order: for overlapping enclosures both `definitely_lt(X, Y)` and `definitely_lt(Y, X)` are false. Read them as statements about every pair of points $x \\in X$, $y \\in Y$. This package ships no instance; interval and ball backends implement them. The [design page](../design/core.md#enclosures-and-three-valued-comparison) derives the interval formulas below."
 msgstr "包含区間（enclosure）とは、ある集合（区間やボールなど）に属すると分かっている未知の実数を表す値である。これら五つのトレイトは二つの包含区間 $X$ と $Y$ を関係付ける。これらは順序ではなく関係である。重なり合う包含区間では `definitely_lt(X, Y)` と `definitely_lt(Y, X)` の両方が偽になる。これらは点の組 $x \\in X$、$y \\in Y$ のすべてについての主張として読むこと。このパッケージはインスタンスを提供せず、区間やボールのバックエンドが実装する。下記の区間についての式は[設計ページ](../design/core.md#enclosures-and-three-valued-comparison)で導出する。"
 
-#: manual/api/core.md:1197
-#: manual/api/core.md:1289
+#: manual/api/core.md:1231
+#: manual/api/core.md:1323
 msgid "Trait"
 msgstr "トレイト"
 
-#: manual/api/core.md:1197
+#: manual/api/core.md:1231
 msgid "Holds when"
 msgstr "成り立つ条件"
 
-#: manual/api/core.md:1197
+#: manual/api/core.md:1231
 msgid "For intervals $X = [a, b]$, $Y = [c, d]$"
 msgstr "区間 $X = [a, b]$、$Y = [c, d]$ の場合"
 
-#: manual/api/core.md:1199
+#: manual/api/core.md:1233
 msgid "$a \\le c$ and $d \\le b$"
 msgstr "$a \\le c$ かつ $d \\le b$"
 
-#: manual/api/core.md:1200
-#: manual/api/core.md:1203
+#: manual/api/core.md:1234
+#: manual/api/core.md:1237
 msgid "$a \\le d$ and $c \\le b$"
 msgstr "$a \\le d$ かつ $c \\le b$"
 
-#: manual/api/core.md:1201
+#: manual/api/core.md:1235
 msgid "$x < y$ for all $x \\in X$, $y \\in Y$"
 msgstr "すべての $x \\in X$、$y \\in Y$ について $x < y$"
 
-#: manual/api/core.md:1202
+#: manual/api/core.md:1236
 msgid "$x \\le y$ for all $x \\in X$, $y \\in Y$"
 msgstr "すべての $x \\in X$、$y \\in Y$ について $x \\le y$"
 
-#: manual/api/core.md:1203
+#: manual/api/core.md:1237
 msgid "$x = y$ for some $x \\in X$, $y \\in Y$"
 msgstr "ある $x \\in X$、$y \\in Y$ について $x = y$"
 
-#: manual/api/core.md:1207
+#: manual/api/core.md:1241
 msgid "`Contains` tests whether the first enclosure contains the second."
 msgstr "`Contains` は一つ目の包含区間が二つ目を含むかどうかを判定する。"
 
-#: manual/api/core.md:1217
+#: manual/api/core.md:1251
 msgid "`Overlaps` tests whether two enclosures share a point."
 msgstr "`Overlaps` は二つの包含区間が共通の点を持つかどうかを判定する。"
 
-#: manual/api/core.md:1227
+#: manual/api/core.md:1261
 msgid "`DefinitelyLt` tests whether every point of the first enclosure is less than every point of the second."
 msgstr "`DefinitelyLt` は一つ目の包含区間のすべての点が二つ目のすべての点より小さいかどうかを判定する。"
 
-#: manual/api/core.md:1238
+#: manual/api/core.md:1272
 msgid "`DefinitelyLe` tests whether every point of the first enclosure is at most every point of the second."
 msgstr "`DefinitelyLe` は一つ目の包含区間のすべての点が二つ目のすべての点以下かどうかを判定する。"
 
-#: manual/api/core.md:1249
+#: manual/api/core.md:1283
 msgid "`MaybeEq` tests whether the two enclosures may denote the same number."
 msgstr "`MaybeEq` は二つの包含区間が同じ数を表しうるかどうかを判定する。"
 
-#: manual/api/core.md:1257
+#: manual/api/core.md:1291
 msgid "For real enclosures `maybe_eq` coincides with `overlaps`; the trait exists so that generic code can ask the question it means."
 msgstr "実数の包含区間では `maybe_eq` は `overlaps` と一致する。このトレイトは、汎用コードが意図した問いをそのまま書けるようにするために存在する。"
 
-#: manual/api/core.md:1287
+#: manual/api/core.md:1321
 #: manual/architecture.md:68
+#: manual/index.md:95
 msgid "Shipped instances"
 msgstr "提供されるインスタンス"
 
-#: manual/api/core.md:1289
+#: manual/api/core.md:1323
 msgid "integers and `BigInt`"
 msgstr "整数と `BigInt`"
 
-#: manual/api/core.md:1291
-#: manual/api/core.md:1292
-#: manual/api/core.md:1293
-#: manual/api/core.md:1295
+#: manual/api/core.md:1325
+#: manual/api/core.md:1326
+#: manual/api/core.md:1327
+#: manual/api/core.md:1329
 msgid "yes"
 msgstr "あり"
 
-#: manual/api/core.md:1291
-#: manual/api/core.md:1293
-#: manual/api/core.md:1294
-#: manual/api/core.md:1295
-#: manual/api/core.md:1296
-#: manual/api/core.md:1297
+#: manual/api/core.md:1325
+#: manual/api/core.md:1327
+#: manual/api/core.md:1328
+#: manual/api/core.md:1329
+#: manual/api/core.md:1330
+#: manual/api/core.md:1331
 msgid "no"
 msgstr "なし"
 
-#: manual/api/core.md:1299
+#: manual/api/core.md:1333
 msgid "The `Float` and `Double` elementary functions come from [`Kaida-Amethyst/math`](https://mooncakes.io/docs/Kaida-Amethyst/math), which does not promise correct rounding."
 msgstr "`Float` と `Double` の初等関数は [`Kaida-Amethyst/math`](https://mooncakes.io/docs/Kaida-Amethyst/math) から来ており、正しい丸めは保証されない。"
 
-#: manual/api/core.md:1303
+#: manual/api/core.md:1337
 msgid "Deprecated"
 msgstr "非推奨"
 
-#: manual/api/core.md:1305
+#: manual/api/core.md:1339
 msgid "Before MoonBit 0.10, implementing a trait for a type silently made its methods callable with dot syntax. These implicit method forms are still callable on the package's public types, but are deprecated and hidden from the interface file:"
 msgstr "MoonBit 0.10 より前は、型にトレイトを実装すると、そのメソッドが暗黙にドット記法で呼べるようになっていた。これらの暗黙のメソッド形式はパッケージの公開型で今も呼べるが、非推奨であり、インターフェースファイルからは隠されている："
 
-#: manual/api/core.md:1309
+#: manual/api/core.md:1343
 msgid "Deprecated form"
 msgstr "非推奨の形式"
 
-#: manual/api/core.md:1309
+#: manual/api/core.md:1343
 msgid "Types"
 msgstr "型"
 
-#: manual/api/core.md:1309
+#: manual/api/core.md:1343
 msgid "Replacement"
 msgstr "代替"
 
-#: manual/api/core.md:1311
+#: manual/api/core.md:1345
 msgid "every type listed under [Equality](#equality)"
 msgstr "[等価性](#equality)に挙げたすべての型"
 
-#: manual/api/core.md:1312
+#: manual/api/core.md:1346
 msgid "`Repr(x)` or `@debug.to_string(x)`"
 msgstr "`Repr(x)` または `@debug.to_string(x)`"
 
@@ -906,7 +931,7 @@ msgid "File"
 msgstr "ファイル"
 
 #: manual/architecture.md:11
-#: manual/index.md:32
+#: manual/index.md:60
 msgid "Contents"
 msgstr "内容"
 
@@ -1063,7 +1088,7 @@ msgid "The manual describes the code on the current branch: release `0.5.0` plus
 msgstr "マニュアルは現在のブランチのコード、すなわちリリース `0.5.0` と [CHANGELOG.md](../../CHANGELOG.md) の `Unreleased` に挙げた変更を記述する。リリースの履歴は [CHANGELOG.md](../../CHANGELOG.md) が担うので、[概要](index.md)とリポジトリの README は現在の基準だけを記述する。"
 
 #: manual/conventions.md:14
-#: manual/index.md:32
+#: manual/index.md:50
 msgid "Pages"
 msgstr "ページ"
 
@@ -1128,611 +1153,716 @@ msgid "The package ships the vocabulary (traits, the context, diagnostics and er
 msgstr "パッケージは語彙（トレイト、コンテキスト、診断、エラー）と、ネイティブな `Float`、`Double`、整数型のための基本的なインスタンスを提供する。正しく丸められ、コンテキストに忠実で、証明付きの算術は数値バックエンドにあり、それらがこれらのトレイトを実装する。"
 
 #: manual/design/core.md:19
+msgid "Constraints"
+msgstr "制約"
+
+#: manual/design/core.md:21
+msgid "One vocabulary must serve native IEEE binary scalars, decimal types with a configurable precision, and interval or ball types whose values are sets."
+msgstr "一つの語彙で、ネイティブの IEEE 二進スカラー、精度を設定できる十進型、値が集合である区間型や球型のすべてを扱わなければならない。"
+
+#: manual/design/core.md:23
+msgid "Every MoonBit target must behave the same, so no design may rely on thread-local or global state."
+msgstr "MoonBit のすべてのターゲットで同じ動作をしなければならないので、スレッドローカルな状態やグローバルな状態に頼る設計はとれない。"
+
+#: manual/design/core.md:25
+msgid "The package sits below every numeric backend in the dependency graph, so it depends on no backend and evaluates nothing it cannot do exactly with the native types."
+msgstr "このパッケージは依存関係グラフ上ですべての数値バックエンドより下にあるので、どのバックエンドにも依存せず、ネイティブ型で正確に行えない計算は何もしない。"
+
+#: manual/design/core.md:28
+msgid "A trait must not promise more than its weakest reasonable instance can honour, and a shipped instance must not claim more than it does."
+msgstr "トレイトは、その最も弱い妥当なインスタンスが守れる以上のことを約束してはならず、提供されるインスタンスは実際の動作以上のことを主張してはならない。"
+
+#: manual/design/core.md:31
+msgid "Main design decisions"
+msgstr "主な設計判断"
+
+#: manual/design/core.md:33
+msgid "Three independent tiers, unchecked, checked and contextual, each with its own traits and no supertrait links between them."
+msgstr "非検査・検査付き・コンテキスト付きの三つの独立した層。それぞれが固有のトレイトを持ち、層のあいだにスーパートレイトの関係はない。"
+
+#: manual/design/core.md:35
+msgid "The context is an explicit, immutable argument, and diagnostics are part of the return value."
+msgstr "コンテキストは明示的で不変の引数であり、診断は戻り値の一部である。"
+
+#: manual/design/core.md:37
+msgid "Errors (no value), diagnostics (a value with notable conditions) and certification failures (a valid input whose result could not be proved) are separate channels."
+msgstr "エラー（値がない）、診断（注目すべき状況を伴う値）、証明の失敗（入力は正しいが結果を証明できなかった）は別々の経路である。"
+
+#: manual/design/core.md:40
+msgid "Enclosures get five Boolean relation traits, not an order."
+msgstr "包含区間には順序ではなく、五つのブール関係トレイトを与える。"
+
+#: manual/design/core.md:41
+msgid "One capability per trait, with `Radical` as the only conjunction, and no `Real` super-trait."
+msgstr "一つのトレイトは一つの能力を表し、組み合わせは `Radical` だけで、`Real` スーパートレイトは設けない。"
+
+#: manual/design/core.md:43
+msgid "`Float` and `Double` implement a trait only when its promise is meaningful for a fixed format."
+msgstr "`Float` と `Double` は、トレイトの約束が固定形式にとって意味を持つ場合にだけそれを実装する。"
+
+#: manual/design/core.md:46
+msgid "The sections after the mathematics give the reasoning for each decision."
+msgstr "数学の節に続く各節で、それぞれの判断の理由を述べる。"
+
+#: manual/design/core.md:48
 msgid "Mathematical background"
 msgstr "数学的背景"
 
-#: manual/design/core.md:21
+#: manual/design/core.md:50
 msgid "Floating-point formats"
 msgstr "浮動小数点形式"
 
-#: manual/design/core.md:23
+#: manual/design/core.md:52
 msgid "A floating-point format with radix $\\beta$, precision $p$ and exponent range $[e_{\\min}, e_{\\max}]$ is the finite set"
 msgstr "基数 $\\beta$、精度 $p$、指数範囲 $[e_{\\min}, e_{\\max}]$ の浮動小数点形式は、次の有限集合である"
 
-#: manual/design/core.md:31
+#: manual/design/core.md:60
 msgid "The second set holds the normal numbers, whose leading digit sits at $\\beta^{e}$ ($e$ is the *adjusted exponent*); the third holds the subnormal numbers below $\\beta^{e_{\\min}}$. IEEE 754 extends $\\mathbb{F}$ to $\\overline{\\mathbb{F}} = \\mathbb{F} \\cup \\{-\\infty, +\\infty, \\mathrm{NaN}\\}$, with signed zeros. `FpClass` is the map"
 msgstr "二つ目の集合は正規化数で、先頭の桁は $\\beta^{e}$ の位にある（$e$ は*調整済み指数*）。三つ目は $\\beta^{e_{\\min}}$ 未満の非正規化数である。IEEE 754 は $\\mathbb{F}$ を符号付きゼロとともに $\\overline{\\mathbb{F}} = \\mathbb{F} \\cup \\{-\\infty, +\\infty, \\mathrm{NaN}\\}$ へ拡張する。`FpClass` は次の写像である"
 
-#: manual/design/core.md:48
-#: manual/design/core.md:117
+#: manual/design/core.md:77
+#: manual/design/core.md:146
 msgid "Format"
 msgstr "形式"
 
-#: manual/design/core.md:48
+#: manual/design/core.md:77
 msgid "Source"
 msgstr "出所"
 
-#: manual/design/core.md:50
-#: manual/design/core.md:119
+#: manual/design/core.md:79
+#: manual/design/core.md:148
 msgid "binary32"
 msgstr "binary32"
 
-#: manual/design/core.md:51
-#: manual/design/core.md:120
+#: manual/design/core.md:80
+#: manual/design/core.md:149
 msgid "binary64"
 msgstr "binary64"
 
-#: manual/design/core.md:52
-#: manual/design/core.md:121
+#: manual/design/core.md:81
+#: manual/design/core.md:150
 msgid "decimal32"
 msgstr "decimal32"
 
-#: manual/design/core.md:53
-#: manual/design/core.md:122
+#: manual/design/core.md:82
+#: manual/design/core.md:151
 msgid "decimal64"
 msgstr "decimal64"
 
-#: manual/design/core.md:54
-#: manual/design/core.md:123
+#: manual/design/core.md:83
+#: manual/design/core.md:152
 msgid "decimal128"
 msgstr "decimal128"
 
-#: manual/design/core.md:56
+#: manual/design/core.md:85
 msgid "`ArithmeticContext` stores $p$ as `precision` and the adjusted-exponent bounds as `e_min` and `e_max`; the radix is a property of the backend type, not of the context. All three decimal presets satisfy $e_{\\min} = 1 - e_{\\max}$, the IEEE 754 relation that keeps the reciprocal of the smallest normal number, $\\beta^{-e_{\\min}} = \\beta^{e_{\\max}-1}$, inside the finite range."
 msgstr "`ArithmeticContext` は $p$ を `precision` として、調整済み指数の上下限を `e_min` と `e_max` として保存する。基数はコンテキストではなくバックエンドの型の性質である。三つの十進プリセットはいずれも $e_{\\min} = 1 - e_{\\max}$ を満たす。これは、最小の正規化数の逆数 $\\beta^{-e_{\\min}} = \\beta^{e_{\\max}-1}$ が有限範囲に収まるようにする IEEE 754 の関係である。"
 
-#: manual/design/core.md:62
+#: manual/design/core.md:91
 msgid "**Machine epsilon.** The successor of $1$ in $\\mathbb{F}$ is $1 + \\beta^{1-p}$: writing $1 = \\beta^{p-1} \\cdot \\beta^{\\,0-p+1}$ gives $m = \\beta^{p-1}$ and $e = 0$, and the next significand $m + 1$ gives"
 msgstr "**マシンイプシロン。** $\\mathbb{F}$ における $1$ の次の値は $1 + \\beta^{1-p}$ である。$1 = \\beta^{p-1} \\cdot \\beta^{\\,0-p+1}$ と書くと $m = \\beta^{p-1}$、$e = 0$ であり、次の仮数 $m + 1$ から次が得られる"
 
-#: manual/design/core.md:70
+#: manual/design/core.md:99
 msgid "More generally, in the binade $[\\beta^{e}, \\beta^{e+1})$ consecutive numbers are $\\beta^{e-p+1} = \\varepsilon\\,\\beta^{e}$ apart. `epsilon_contextual` returns $\\varepsilon$: $2^{-23}$ for `Float` and $2^{-52}$ for `Double`."
 msgstr "より一般に、二進桁区間（binade）$[\\beta^{e}, \\beta^{e+1})$ では連続する数は $\\beta^{e-p+1} = \\varepsilon\\,\\beta^{e}$ だけ離れている。`epsilon_contextual` は $\\varepsilon$ を返す。`Float` では $2^{-23}$、`Double` では $2^{-52}$ である。"
 
-#: manual/design/core.md:74
+#: manual/design/core.md:103
 msgid "Rounding"
 msgstr "丸め"
 
-#: manual/design/core.md:76
+#: manual/design/core.md:105
 msgid ""
 "A rounding function $\\circ : \\mathbb{R} \\to \\overline{\\mathbb{F}}$ maps a real number to a representable one. If $a < x < b$ are the neighbours of $x \\n"
 "otin \\mathbb{F}$:"
-msgstr "丸め関数 $\\circ : \\mathbb{R} \\to \\overline{\\mathbb{F}}$ は実数を表現可能な数へ写す。$a < x < b$ が $x \\notin \\mathbb{F}$ の隣接値であるとき："
+msgstr ""
+"丸め関数 $\\circ : \\mathbb{R} \\to \\overline{\\mathbb{F}}$ は実数を表現可能な数へ写す。$a < x < b$ が $x \\n"
+"otin \\mathbb{F}$ の隣接値であるとき："
 
-#: manual/design/core.md:90
+#: manual/design/core.md:119
 msgid "and every mode returns $x$ itself when $x \\in \\mathbb{F}$. Every mode is *monotone*, $x \\le y \\Rightarrow \\circ(x) \\le \\circ(y)$, and *idempotent* on $\\mathbb{F}$; the certification argument below uses only these two properties."
 msgstr "そしてどのモードも $x \\in \\mathbb{F}$ なら $x$ 自身を返す。どのモードも*単調*、すなわち $x \\le y \\Rightarrow \\circ(x) \\le \\circ(y)$ であり、$\\mathbb{F}$ 上で*冪等*である。後の証明の議論はこの二つの性質だけを使う。"
 
-#: manual/design/core.md:95
+#: manual/design/core.md:124
 msgid "**Relative error.** Let $x$ lie in the normal range, $\\beta^{e} \\le |x| < \\beta^{e+1}$ with $e_{\\min} \\le e \\le e_{\\max}$. The neighbours of $x$ are $\\varepsilon\\beta^{e}$ apart, so a directed mode moves $x$ by less than one spacing and round-to-nearest by at most half of one:"
 msgstr "**相対誤差。** $x$ が正規範囲にあり、$e_{\\min} \\le e \\le e_{\\max}$ で $\\beta^{e} \\le |x| < \\beta^{e+1}$ とする。$x$ の隣接値は $\\varepsilon\\beta^{e}$ 離れているので、有向モードは $x$ を間隔一つ未満だけ動かし、最近接丸めは高々その半分だけ動かす："
 
-#: manual/design/core.md:107
+#: manual/design/core.md:136
 msgid "Hence $\\circ(x) = x(1 + \\delta)$ with $|\\delta| \\le u$, where the *unit roundoff* is"
 msgstr "したがって $|\\delta| \\le u$ として $\\circ(x) = x(1 + \\delta)$ であり、ここで*単位丸め誤差*は"
 
-#: manual/design/core.md:117
+#: manual/design/core.md:146
 msgid "$u$ for `ToNearestEven`"
 msgstr "`ToNearestEven` での $u$"
 
-#: manual/design/core.md:125
+#: manual/design/core.md:154
 msgid "Below $\\beta^{e_{\\min}}$ the spacing stops shrinking, and the relative bound becomes an absolute one: $|\\operatorname{RN}(x) - x| \\le \\tfrac12\\,\\beta^{e_{\\min}-p+1}$. Above the largest finite number, $\\circ(x)$ is $\\pm\\infty$ or the largest finite number, depending on the mode. These are the `subnormal`, `underflow` and `overflow` conditions of `ArithmeticDiagnostics`."
 msgstr "$\\beta^{e_{\\min}}$ 未満では間隔はもう縮まらず、相対誤差の上界は絶対誤差の上界 $|\\operatorname{RN}(x) - x| \\le \\tfrac12\\,\\beta^{e_{\\min}-p+1}$ になる。最大の有限値を超えると、$\\circ(x)$ はモードに応じて $\\pm\\infty$ か最大の有限値になる。これらが `ArithmeticDiagnostics` の `subnormal`、`underflow`、`overflow` の条件である。"
 
-#: manual/design/core.md:131
+#: manual/design/core.md:160
 msgid "The standard model of rounding error"
 msgstr "丸め誤差の標準モデル"
 
-#: manual/design/core.md:133
+#: manual/design/core.md:162
 msgid "IEEE 754 requires $+, -, \\times, /$ and $\\sqrt{\\ }$ to be *correctly rounded*: the computed result is the rounding of the exact one. With the bound above, for operands in $\\mathbb{F}$ and a result in the normal range,"
 msgstr "IEEE 754 は $+, -, \\times, /$ と $\\sqrt{\\ }$ が*正しく丸められる*こと、すなわち計算結果が正確な結果を丸めたものであることを要求する。上の上界から、オペランドが $\\mathbb{F}$ にあり結果が正規範囲にあるとき、"
 
-#: manual/design/core.md:141
+#: manual/design/core.md:170
 msgid ""
 "This is the contract of the contextual arithmetic traits: a context-faithful `AddContextual` returns $\\operatorname{fl}(x + y)$ for the context's $p$ and rounding mode, and raises `inexact` exactly when $\\delta \\n"
 "e 0$. It is also the reason the context matters: for decimal64 and `ToNearestEven`, an algorithm can rely on $|\\delta| \\le 5 \\times 10^{-16}$ per operation, whatever the backend type."
-msgstr "これはコンテキスト付き算術トレイトの契約である。コンテキストに忠実な `AddContextual` はコンテキストの $p$ と丸めモードについての $\\operatorname{fl}(x + y)$ を返し、$\\delta \\ne 0$ のときにちょうど `inexact` を立てる。これがコンテキストが重要な理由でもある。decimal64 と `ToNearestEven` のもとでは、アルゴリズムはバックエンドの型によらず演算ごとに $|\\delta| \\le 5 \\times 10^{-16}$ を前提にできる。"
+msgstr ""
+"これはコンテキスト付き算術トレイトの契約である。コンテキストに忠実な `AddContextual` はコンテキストの $p$ と丸めモードについての $\\operatorname{fl}(x + y)$ を返し、$\\delta \\n"
+"e 0$ のときにちょうど `inexact` を立てる。これがコンテキストが重要な理由でもある。decimal64 と `ToNearestEven` のもとでは、アルゴリズムはバックエンドの型によらず演算ごとに $|\\delta| \\le 5 \\times 10^{-16}$ を前提にできる。"
 
-#: manual/design/core.md:148
+#: manual/design/core.md:177
 msgid ""
 "The built-in `Float` and `Double` instances satisfy the model for their own fixed format under round-to-nearest, because the hardware operations are correctly rounded, but they ignore the context's precision and mode and do not detect $\\delta \\n"
 "e 0$. Their elementary functions come from `Kaida-Amethyst/math` and are not guaranteed to be correctly rounded, so the model holds for them only with an unspecified small multiple of $u$."
-msgstr "組み込みの `Float` と `Double` のインスタンスは、ハードウェアの演算が正しく丸められるので、最近接丸めのもとで自身の固定形式についてこのモデルを満たす。しかしコンテキストの精度とモードを無視し、$\\delta \\ne 0$ を検出しない。初等関数は `Kaida-Amethyst/math` から来ており正しい丸めは保証されないので、それらについてはモデルは $u$ の未規定の小さな倍数でしか成り立たない。"
+msgstr ""
+"組み込みの `Float` と `Double` のインスタンスは、ハードウェアの演算が正しく丸められるので、最近接丸めのもとで自身の固定形式についてこのモデルを満たす。しかしコンテキストの精度とモードを無視し、$\\delta \\n"
+"e 0$ を検出しない。初等関数は `Kaida-Amethyst/math` から来ており正しい丸めは保証されないので、それらについてはモデルは $u$ の未規定の小さな倍数でしか成り立たない。"
 
-#: manual/design/core.md:155
+#: manual/design/core.md:184
 msgid "Adjacent values and the IEEE encoding"
 msgstr "隣接値と IEEE エンコーディング"
 
-#: manual/design/core.md:157
+#: manual/design/core.md:186
 msgid "`AdjacentContextual` computes"
 msgstr "`AdjacentContextual` は次を計算する"
 
-#: manual/design/core.md:165
+#: manual/design/core.md:194
 msgid "The `Float` and `Double` instances compute them on the bit pattern. An IEEE binary value with sign $s$, biased exponent field $E$ and fraction field $F$ is stored as the unsigned integer $\\operatorname{bits}(x) = s \\cdot 2^{k-1} + E \\cdot 2^{p-1} + F$ for a $k$-bit format. On the non-negative values this map is order-preserving:"
 msgstr "`Float` と `Double` のインスタンスはこれらをビットパターン上で計算する。符号 $s$、バイアス付き指数フィールド $E$、仮数フィールド $F$ を持つ IEEE 二進値は、$k$ ビット形式で符号なし整数 $\\operatorname{bits}(x) = s \\cdot 2^{k-1} + E \\cdot 2^{p-1} + F$ として格納される。非負の値の上でこの写像は順序を保つ："
 
-#: manual/design/core.md:170
+#: manual/design/core.md:199
 msgid "for a fixed $E$, the value $2^{E - \\text{bias}}(1 + F\\,2^{1-p})$ (or $2^{1-\\text{bias}}\\,F\\,2^{1-p}$ when $E = 0$) increases strictly with $F$;"
 msgstr "$E$ を固定すると、値 $2^{E - \\text{bias}}(1 + F\\,2^{1-p})$（$E = 0$ のときは $2^{1-\\text{bias}}\\,F\\,2^{1-p}$）は $F$ について狭義単調増加である。"
 
-#: manual/design/core.md:172
+#: manual/design/core.md:201
 msgid "the largest value with field $E$ is $2^{E-\\text{bias}}(2 - 2^{1-p}) < 2^{E+1-\\text{bias}}$, the smallest value with field $E + 1$; the subnormals ($E = 0$) all lie below the smallest normal $2^{1-\\text{bias}}$;"
 msgstr "フィールド $E$ を持つ最大の値は $2^{E-\\text{bias}}(2 - 2^{1-p}) < 2^{E+1-\\text{bias}}$ で、右辺はフィールド $E + 1$ を持つ最小の値である。非正規化数（$E = 0$）はすべて最小の正規化数 $2^{1-\\text{bias}}$ より小さい。"
 
-#: manual/design/core.md:176
+#: manual/design/core.md:205
 msgid "$+\\infty$ is $E = 2^{k-p} - 1$, $F = 0$, above every finite pattern."
 msgstr "$+\\infty$ は $E = 2^{k-p} - 1$、$F = 0$ であり、すべての有限値のパターンより上にある。"
 
-#: manual/design/core.md:178
+#: manual/design/core.md:207
 msgid "Because the encoding is lexicographic in $(E, F)$ and lexicographic order on $(E, F)$ is integer order on $E \\cdot 2^{p-1} + F$, it follows that for $0 \\le x < y$, $\\operatorname{bits}(x) < \\operatorname{bits}(y)$, and no pattern lies strictly between consecutive values. Therefore"
 msgstr "エンコーディングは $(E, F)$ について辞書式であり、$(E, F)$ の辞書式順序は $E \\cdot 2^{p-1} + F$ の整数順序と一致するので、$0 \\le x < y$ なら $\\operatorname{bits}(x) < \\operatorname{bits}(y)$ であり、連続する値の間に入るパターンは存在しない。したがって"
 
-#: manual/design/core.md:192
+#: manual/design/core.md:221
 msgid "and symmetrically for $\\operatorname{pred}$. The zero case is separate because $+0$ and $-0$ are equal values with different patterns. The formula reproduces the boundary cases listed in the [API](../api/core.md#adjacentcontextual): the largest finite pattern plus one is the pattern of $+\\infty$, and $\\operatorname{succ}(1) - 1 = \\varepsilon$. Since $\\operatorname{succ}(x)$ is in $\\overline{\\mathbb{F}}$ by definition, no rounding happens and the empty diagnostics of these instances are exact, not merely undetected."
 msgstr "$\\operatorname{pred}$ も対称的である。ゼロの場合を分けるのは、$+0$ と $-0$ が等しい値で異なるパターンを持つからである。この式は [API](../api/core.md#adjacentcontextual) に挙げた境界の場合を再現する。最大の有限値のパターンに 1 を足すと $+\\infty$ のパターンになり、$\\operatorname{succ}(1) - 1 = \\varepsilon$ である。$\\operatorname{succ}(x)$ は定義により $\\overline{\\mathbb{F}}$ に属するので丸めは起きず、これらのインスタンスの空の診断は単に未検出なのではなく正確である。"
 
-#: manual/design/core.md:200
+#: manual/design/core.md:229
 msgid "Enclosures and three-valued comparison"
 msgstr "包含区間と三値比較"
 
-#: manual/design/core.md:202
+#: manual/design/core.md:231
 msgid "An *enclosure* $X \\subseteq \\mathbb{R}$ stands for an unknown real $x$ known to satisfy $x \\in X$: an interval $[a, b]$, or a ball $B(m, r) = [m - r, m + r]$. The enclosure relation traits answer questions about the unknown values from the enclosures alone, by quantifying over every admissible pair:"
 msgstr "*包含区間* $X \\subseteq \\mathbb{R}$ は、$x \\in X$ を満たすと分かっている未知の実数 $x$ を表す。区間 $[a, b]$ やボール $B(m, r) = [m - r, m + r]$ がその例である。包含区間の関係トレイトは、許容されるすべての組について量化することで、包含区間だけから未知の値についての問いに答える："
 
-#: manual/design/core.md:218
+#: manual/design/core.md:247
 msgid "**Interval formulas.** Let $X = [a, b]$ and $Y = [c, d]$ be non-empty."
 msgstr "**区間の式。** $X = [a, b]$ と $Y = [c, d]$ を空でない区間とする。"
 
-#: manual/design/core.md:224
+#: manual/design/core.md:253
 msgid "($\\Rightarrow$) take $x = b \\in X$ and $y = c \\in Y$. ($\\Leftarrow$) for any $x \\in X$, $y \\in Y$: $x \\le b < c \\le y$. The same argument with $\\le$ gives $\\texttt{definitely\\_le}(X, Y) \\iff b \\le c$. The *possible* relation is the existential one:"
 msgstr "($\\Rightarrow$) $x = b \\in X$、$y = c \\in Y$ を取る。($\\Leftarrow$) 任意の $x \\in X$、$y \\in Y$ について $x \\le b < c \\le y$。$\\le$ で同じ議論をすると $\\texttt{definitely\\_le}(X, Y) \\iff b \\le c$ を得る。*可能的な*関係は存在量化によるものである："
 
-#: manual/design/core.md:233
+#: manual/design/core.md:262
 msgid "($\\Rightarrow$) $a \\le x < y \\le d$. ($\\Leftarrow$) take $x = a$, $y = d$. It needs no trait of its own, because it is the negation of a definite relation with the arguments swapped:"
 msgstr "($\\Rightarrow$) $a \\le x < y \\le d$。($\\Leftarrow$) $x = a$、$y = d$ を取る。これは引数を入れ替えた確定的関係の否定なので、専用のトレイトは要らない："
 
-#: manual/design/core.md:244
+#: manual/design/core.md:273
 msgid ""
 "Finally $X \\cap Y \\n"
 "e \\emptyset \\iff a \\le d \\wedge c \\le b$: if both hold, $\\max(a, c) \\le \\min(b, d)$ is a common point; conversely a common point $z$ gives $a \\le z \\le d$ and $c \\le z \\le b$. For balls, substituting the endpoints gives $\\texttt{definitely\\_lt}(B(m_1, r_1), B(m_2, r_2)) \\iff m_1 + r_1 < m_2 - r_2$."
-msgstr "最後に $X \\cap Y \\ne \\emptyset \\iff a \\le d \\wedge c \\le b$ である。両方が成り立てば $\\max(a, c) \\le \\min(b, d)$ が共通点であり、逆に共通点 $z$ があれば $a \\le z \\le d$ かつ $c \\le z \\le b$ である。ボールについては端点を代入すると $\\texttt{definitely\\_lt}(B(m_1, r_1), B(m_2, r_2)) \\iff m_1 + r_1 < m_2 - r_2$ を得る。"
+msgstr ""
+"最後に $X \\cap Y \\n"
+"e \\emptyset \\iff a \\le d \\wedge c \\le b$ である。両方が成り立てば $\\max(a, c) \\le \\min(b, d)$ が共通点であり、逆に共通点 $z$ があれば $a \\le z \\le d$ かつ $c \\le z \\le b$ である。ボールについては端点を代入すると $\\texttt{definitely\\_lt}(B(m_1, r_1), B(m_2, r_2)) \\iff m_1 + r_1 < m_2 - r_2$ を得る。"
 
-#: manual/design/core.md:250
+#: manual/design/core.md:279
 msgid "**Three-valued truth.** From enclosures alone, \"$x < y$\" has one of three truth values:"
 msgstr "**三値の真理値。** 包含区間だけからは、「$x < y$」は三つの真理値のいずれかをとる："
 
-#: manual/design/core.md:262
+#: manual/design/core.md:291
 msgid ""
 "The value is well defined: $\\mathsf{T}$ and $\\mathsf{F}$ together would need $b < c$ and $d \\le a$, hence $a \\le b < c \\le d \\le a$, a contradiction. In the same way $[\\![\\, x = y \\,]\\!]$ is $\\mathsf{F}$ when $\\n"
 "eg\\,\\texttt{maybe\\_eq}(X, Y)$ and $\\mathsf{U}$ otherwise, unless both enclosures are the same single point. Compound conditions combine with Kleene's strong three-valued logic:"
-msgstr "この値は well-defined である。$\\mathsf{T}$ と $\\mathsf{F}$ が同時に成り立つには $b < c$ かつ $d \\le a$ が必要で、$a \\le b < c \\le d \\le a$ となり矛盾する。同様に $[\\![\\, x = y \\,]\\!]$ は $\\neg\\,\\texttt{maybe\\_eq}(X, Y)$ のとき $\\mathsf{F}$、それ以外は $\\mathsf{U}$ である（両方の包含区間が同じ一点である場合を除く）。複合条件は Kleene の強三値論理で組み合わせる："
+msgstr ""
+"この値は well-defined である。$\\mathsf{T}$ と $\\mathsf{F}$ が同時に成り立つには $b < c$ かつ $d \\le a$ が必要で、$a \\le b < c \\le d \\le a$ となり矛盾する。同様に $[\\![\\, x = y \\,]\\!]$ は $\\n"
+"eg\\,\\texttt{maybe\\_eq}(X, Y)$ のとき $\\mathsf{F}$、それ以外は $\\mathsf{U}$ である（両方の包含区間が同じ一点である場合を除く）。複合条件は Kleene の強三値論理で組み合わせる："
 
-#: manual/design/core.md:280
+#: manual/design/core.md:309
 msgid "Reading $\\mathsf{U}$ as \"true for some admissible values and false for others\", each entry is the strongest statement that holds for all of them; for example $\\mathsf{F} \\wedge \\mathsf{U} = \\mathsf{F}$ because a conjunction with a false conjunct is false whatever the other one is.[^kleene]"
 msgstr "$\\mathsf{U}$ を「許容される値のうちあるものでは真、あるものでは偽」と読むと、各欄はそれらすべてについて成り立つ最も強い主張である。例えば $\\mathsf{F} \\wedge \\mathsf{U} = \\mathsf{F}$ となるのは、偽の連言肢を含む連言はもう一方が何であれ偽だからである。[^kleene]"
 
-#: manual/design/core.md:285
+#: manual/design/core.md:314
 msgid "S. C. Kleene, *Introduction to Metamathematics*, 1952, §64. Interval comparison with three outcomes goes back to R. E. Moore, *Interval Analysis*, 1966."
 msgstr "S. C. Kleene, *Introduction to Metamathematics*, 1952, §64。三通りの結果を持つ区間比較は R. E. Moore, *Interval Analysis*, 1966 にさかのぼる。"
 
-#: manual/design/core.md:289
+#: manual/design/core.md:318
+msgid ""
+"The table is exact only when the unknowns behind $p$ and $q$ vary independently. When both conditions mention the same unknown, Kleene's logic is sound but may be too weak: with $X = [0, 2]$, the condition $x < 1 \\vee \\n"
+"eg(x < 1)$ is true for every $x$, yet the table gives $\\mathsf{U} \\vee \\n"
+"eg\\mathsf{U} = \\mathsf{U}$. A $\\mathsf{T}$ or $\\mathsf{F}$ from the table is always correct; a $\\mathsf{U}$ may hide a decided answer. This is the dependency problem of interval arithmetic, and the remedy is the same: rewrite the condition so that each unknown appears once, or split the enclosure."
+msgstr ""
+"この表が正確なのは、$p$ と $q$ の背後にある未知数が互いに独立に動く場合だけである。二つの条件が同じ未知数に言及するとき、Kleene の論理は健全だが弱すぎることがある。$X = [0, 2]$ では条件 $x < 1 \\vee \\n"
+"eg(x < 1)$ はすべての $x$ で真だが、表からは $\\mathsf{U} \\vee \\n"
+"eg\\mathsf{U} = \\mathsf{U}$ が得られる。表が与える $\\mathsf{T}$ や $\\mathsf{F}$ は常に正しいが、$\\mathsf{U}$ は決まっている答えを隠していることがある。これは区間演算の依存性問題であり、対処も同じで、各未知数が一度だけ現れるように条件を書き換えるか、包含区間を分割する。"
+
+#: manual/design/core.md:328
 msgid "Certification stages"
 msgstr "証明の段階"
 
-#: manual/design/core.md:291
+#: manual/design/core.md:330
 msgid "A proof-backed backend computes $\\circ_{p_t}(f(x))$, the correct rounding of a transcendental $f$ at target precision $p_t$, by a pipeline whose stages are the values of `CertificationStage`. For $f = \\exp$ as an illustration:"
 msgstr "証明付きバックエンドは、超越関数 $f$ を目標精度 $p_t$ で正しく丸めた $\\circ_{p_t}(f(x))$ を、`CertificationStage` の値を段階とするパイプラインで計算する。例として $f = \\exp$ の場合："
 
-#: manual/design/core.md:295
+#: manual/design/core.md:334
 msgid "`RangeReduction`: write $x = k \\ln 2 + r$ with $k \\in \\mathbb{Z}$ and $|r| \\le \\tfrac12 \\ln 2$, so that $\\exp(x) = 2^{k}\\exp(r)$. The reduced argument $r$ must itself be enclosed, which costs about $\\log_2 |x|$ extra bits of $\\ln 2$."
 msgstr "`RangeReduction`：$k \\in \\mathbb{Z}$、$|r| \\le \\tfrac12 \\ln 2$ として $x = k \\ln 2 + r$ と書き、$\\exp(x) = 2^{k}\\exp(r)$ とする。還元後の引数 $r$ 自体も包含区間で囲む必要があり、そのために $\\ln 2$ がおよそ $\\log_2 |x|$ ビット余分に必要になる。"
 
-#: manual/design/core.md:299
+#: manual/design/core.md:338
 msgid "`SeriesEvaluation`: sum $\\sum_{j<N} r^{j}/j!$ and bound the tail. For $|r| < N + 1$,"
 msgstr "`SeriesEvaluation`：$\\sum_{j<N} r^{j}/j!$ を計算し、残りの項を上から抑える。$|r| < N + 1$ のとき、"
 
-#: manual/design/core.md:308
+#: manual/design/core.md:347
 msgid "using $\\frac{N!}{(N+i)!} \\le (N+1)^{-i}$."
 msgstr "ここで $\\frac{N!}{(N+i)!} \\le (N+1)^{-i}$ を用いた。"
 
-#: manual/design/core.md:309
+#: manual/design/core.md:348
 msgid ""
 "`EnclosurePropagation`: carry the truncation bound and every rounding error of the working precision $p_w > p_t$ through the remaining operations, obtaining an enclosure $[\\ell, h] \\n"
 "i f(x)$."
-msgstr "`EnclosurePropagation`：打ち切り誤差の上界と、作業精度 $p_w > p_t$ でのすべての丸め誤差を残りの演算を通して伝播し、包含区間 $[\\ell, h] \\ni f(x)$ を得る。"
+msgstr ""
+"`EnclosurePropagation`：打ち切り誤差の上界と、作業精度 $p_w > p_t$ でのすべての丸め誤差を残りの演算を通して伝播し、包含区間 $[\\ell, h] \\n"
+"i f(x)$ を得る。"
 
-#: manual/design/core.md:312
+#: manual/design/core.md:351
 msgid "`TargetRounding`: if $\\circ_{p_t}(\\ell) = \\circ_{p_t}(h)$, that value is the answer, because by monotonicity"
 msgstr "`TargetRounding`：$\\circ_{p_t}(\\ell) = \\circ_{p_t}(h)$ ならその値が答えである。単調性により"
 
-#: manual/design/core.md:321
+#: manual/design/core.md:360
 msgid "Otherwise $[\\ell, h]$ straddles a rounding boundary: the backend raises $p_w$ and repeats, which is Ziv's strategy.[^ziv]"
 msgstr "そうでなければ $[\\ell, h]$ は丸めの境界をまたいでいる。バックエンドは $p_w$ を上げて繰り返す。これが Ziv の戦略である。[^ziv]"
 
-#: manual/design/core.md:324
+#: manual/design/core.md:363
 msgid "A. Ziv, \"Fast evaluation of elementary mathematical functions with correctly rounded last bit\", *ACM TOMS* 17(3), 1991. How close $f(x)$ can come to a boundary is the *table maker's dilemma*; for most functions no useful a-priori bound on $p_w$ is known, which is why the loop needs a budget."
 msgstr "A. Ziv, \"Fast evaluation of elementary mathematical functions with correctly rounded last bit\", *ACM TOMS* 17(3), 1991。$f(x)$ が境界にどれだけ近づきうるかは*表作成者のジレンマ*（table maker's dilemma）と呼ばれる。ほとんどの関数では $p_w$ についての有用な事前の上界が知られておらず、そのためループには予算が必要である。"
 
-#: manual/design/core.md:330
+#: manual/design/core.md:369
 msgid "When the loop gives up, the backend returns `ArithmeticError::certification_failure` with the stage, the reason, $p_t$ (`target_precision`), the last $p_w$ (`work_precision`) and the number of increases (`refinements`). `RefinementBudgetExhausted` is the expected reason at `TargetRounding`; the other reasons belong to the earlier stages. This package defines the vocabulary only; it evaluates nothing."
 msgstr "ループが諦めると、バックエンドは段階、理由、$p_t$（`target_precision`）、最後の $p_w$（`work_precision`）、精度を上げた回数（`refinements`）を持つ `ArithmeticError::certification_failure` を返す。`TargetRounding` で想定される理由は `RefinementBudgetExhausted` であり、その他の理由はより前の段階に属する。このパッケージは語彙だけを定義し、何も評価しない。"
 
-#: manual/design/core.md:337
-msgid "Design decisions"
-msgstr "設計判断"
+#: manual/design/core.md:376
+msgid "Decisions in detail"
+msgstr "判断の詳細"
 
-#: manual/design/core.md:339
+#: manual/design/core.md:378
 msgid "Three tiers instead of one signature"
 msgstr "一つのシグネチャではなく三つの層"
 
-#: manual/design/core.md:341
+#: manual/design/core.md:380
 msgid "**Problem.** A square root on `Double` in a tight loop wants `fn sqrt(Double) -> Double` and accepts NaN for a negative argument. A decimal backend needs the precision and rounding mode and must report whether the result was rounded. One signature cannot serve both without either forcing a `Result` and a context on every native call or dropping information that the decimal caller needs."
 msgstr "**問題。** 内側のループで `Double` の平方根を使うなら `fn sqrt(Double) -> Double` が望ましく、負の引数に NaN を返すことも許容できる。十進バックエンドには精度と丸めモードが必要で、結果が丸められたかどうかを報告しなければならない。一つのシグネチャで両方に応えようとすると、ネイティブの呼び出しすべてに `Result` とコンテキストを強いるか、十進の呼び出し側が必要とする情報を捨てるかのどちらかになる。"
 
-#: manual/design/core.md:348
+#: manual/design/core.md:387
 msgid "**Options.** (a) unchecked traits only; (b) contextual traits only; (c) three independent tiers."
 msgstr "**選択肢。** (a) 非検査トレイトのみ。(b) コンテキスト付きトレイトのみ。(c) 独立した三つの層。"
 
-#: manual/design/core.md:351
+#: manual/design/core.md:390
 msgid "**Choice.** (c). The tiers carry increasing information, and each result type embeds into the next one:"
 msgstr "**選択。** (c)。層は情報を段階的に多く運び、各結果型は次の結果型へ埋め込まれる："
 
-#: manual/design/core.md:362
+#: manual/design/core.md:401
 msgid "where $D$ is the diagnostics set and $\\mathbf{0}$ its empty value. The built-in contextual adapters, except the `Float` integer embedding, are exactly these embeddings applied to the checked or unchecked result. A bound states what the algorithm handles: `T : Sqrt` accepts the backend's own behaviour, `T : SqrtChecked` handles rejection, `T : SqrtContextual` needs context and diagnostics. The tiers have no supertrait links, so a type implements exactly the tiers it honours: an interval type can implement `DivChecked` and the enclosure relations without pretending to have a context-free `Sqrt`."
 msgstr "ここで $D$ は診断の集合、$\\mathbf{0}$ はその空の値である。組み込みのコンテキスト付きアダプタは、`Float` の整数埋め込みを除き、まさに検査付きまたは非検査の結果にこれらの埋め込みを適用したものである。境界（bound）はアルゴリズムが何を扱うかを述べる。`T : Sqrt` はバックエンド自身の振る舞いを受け入れ、`T : SqrtChecked` は拒否を処理し、`T : SqrtContextual` はコンテキストと診断を必要とする。層は上位トレイトでつながっていないので、型は守れる層だけを実装できる。区間型は、コンテキストなしの `Sqrt` を持つふりをせずに `DivChecked` と包含区間の関係を実装できる。"
 
-#: manual/design/core.md:371
+#: manual/design/core.md:410
 msgid "Context and diagnostics are explicit values"
 msgstr "コンテキストと診断は明示的な値である"
 
-#: manual/design/core.md:373
+#: manual/design/core.md:412
 msgid "**Problem.** IEEE 754 describes the rounding direction and the status flags as attributes of the execution environment; C exposes them through `<fenv.h>`, and Python's `decimal` keeps a thread-local current context. Both are hidden state: the result of `a + b` depends on something that is not an argument, and a flag raised in one computation is still set in the next."
 msgstr "**問題。** IEEE 754 は丸め方向とステータスフラグを実行環境の属性として記述する。C はそれらを `<fenv.h>` で公開し、Python の `decimal` はスレッドローカルな現在のコンテキストを持つ。どちらも隠れた状態である。`a + b` の結果が引数でないものに依存し、ある計算で立ったフラグが次の計算でも立ったままになる。"
 
-#: manual/design/core.md:379
+#: manual/design/core.md:418
 msgid "**Options.** (a) a global mutable context; (b) a thread- or task-local one; (c) the context as an argument and the flags in the return value."
 msgstr "**選択肢。** (a) グローバルな可変コンテキスト。(b) スレッドまたはタスクにローカルなコンテキスト。(c) コンテキストを引数にし、フラグを戻り値に入れる。"
 
-#: manual/design/core.md:382
+#: manual/design/core.md:421
 msgid "**Choice.** (c). Every contextual operation is a function"
 msgstr "**選択。** (c)。すべてのコンテキスト付き演算は次の関数である"
 
-#: manual/design/core.md:388
+#: manual/design/core.md:427
 msgid "so equal inputs give equal outputs, and the diagnostics of a computation are exactly those of the operations it combined. This works the same on every MoonBit target (none of them needs thread-local storage), makes concurrent use safe, and lets a test state the full input of an operation. The cost is verbosity, which a backend can reduce with its own helpers."
 msgstr "したがって等しい入力は等しい出力を与え、計算の診断はそれが組み合わせた演算の診断そのものである。これはどの MoonBit ターゲットでも同じように動き（どれもスレッドローカル記憶域を必要としない）、並行利用を安全にし、テストが演算の入力全体を記述できるようにする。代償は冗長さであり、バックエンドは独自のヘルパーでそれを減らせる。"
 
-#: manual/design/core.md:394
+#: manual/design/core.md:433
 msgid "Errors, diagnostics and certification failures are separate"
 msgstr "エラー、診断、証明の失敗は別物である"
 
-#: manual/design/core.md:396
+#: manual/design/core.md:435
 msgid "**Problem.** IEEE 754 has five exceptions: invalid operation, division by zero, overflow, underflow and inexact. Some describe results that do not exist, others describe results that exist but were rounded."
 msgstr "**問題。** IEEE 754 には五つの例外がある。無効演算、ゼロ除算、オーバーフロー、アンダーフロー、不正確である。存在しない結果を表すものもあれば、存在するが丸められた結果を表すものもある。"
 
-#: manual/design/core.md:400
+#: manual/design/core.md:439
 msgid "**Choice.** The package splits them by whether a value is returned:"
 msgstr "**選択。** パッケージは値が返されるかどうかでそれらを分ける："
 
-#: manual/design/core.md:402
+#: manual/design/core.md:441
 msgid "Situation"
 msgstr "状況"
 
-#: manual/design/core.md:402
+#: manual/design/core.md:441
 msgid "Channel"
 msgstr "経路"
 
-#: manual/design/core.md:402
+#: manual/design/core.md:441
 msgid "IEEE 754 counterpart"
 msgstr "IEEE 754 での対応"
 
-#: manual/design/core.md:404
+#: manual/design/core.md:443
 msgid "no meaningful value (domain, indeterminate form)"
 msgstr "意味のある値がない（定義域外、不定形）"
 
-#: manual/design/core.md:404
+#: manual/design/core.md:443
 msgid "invalid operation"
 msgstr "無効演算"
 
-#: manual/design/core.md:405
+#: manual/design/core.md:444
 msgid "a pole: finite non-zero over zero"
 msgstr "極：ゼロでない有限値をゼロで割る"
 
-#: manual/design/core.md:405
+#: manual/design/core.md:444
 msgid "division by zero"
 msgstr "ゼロ除算"
 
-#: manual/design/core.md:406
+#: manual/design/core.md:445
 msgid "a value in $\\overline{\\mathbb{F}}$ that differs from the exact one"
 msgstr "正確な値と異なる $\\overline{\\mathbb{F}}$ の値"
 
-#: manual/design/core.md:406
+#: manual/design/core.md:445
 msgid "`Ok` with `inexact`, `rounded`"
 msgstr "`inexact`、`rounded` 付きの `Ok`"
 
-#: manual/design/core.md:406
+#: manual/design/core.md:445
 msgid "inexact"
 msgstr "不正確"
 
-#: manual/design/core.md:407
+#: manual/design/core.md:446
 msgid "a value beyond the finite range or below the normal range"
 msgstr "有限範囲を超える、または正規範囲を下回る値"
 
-#: manual/design/core.md:407
+#: manual/design/core.md:446
 msgid "`Ok` with `overflow`, `underflow`, `subnormal`"
 msgstr "`overflow`、`underflow`、`subnormal` 付きの `Ok`"
 
-#: manual/design/core.md:407
+#: manual/design/core.md:446
 msgid "overflow, underflow"
 msgstr "オーバーフロー、アンダーフロー"
 
-#: manual/design/core.md:408
+#: manual/design/core.md:447
 msgid "a valid input whose result could not be certified"
 msgstr "結果を証明できなかった有効な入力"
 
-#: manual/design/core.md:408
+#: manual/design/core.md:447
 msgid "none"
 msgstr "なし"
 
-#: manual/design/core.md:410
+#: manual/design/core.md:449
 msgid "A flag must not hide an error, and an error must not be invented to carry a flag: $\\operatorname{fl}(10^{300} \\times 10^{300}) = +\\infty$ is a correct IEEE answer, so it is a value with `overflow`, not a failure. A certification failure is an error but not a domain error: the input is valid and a larger budget may succeed, so it carries the data a caller needs to decide whether to retry. The package imposes no retry policy."
 msgstr "フラグがエラーを隠してはならず、フラグを運ぶためにエラーをでっち上げてもならない。$\\operatorname{fl}(10^{300} \\times 10^{300}) = +\\infty$ は IEEE として正しい答えなので、失敗ではなく `overflow` 付きの値である。証明の失敗はエラーだが定義域エラーではない。入力は有効で、予算を増やせば成功するかもしれないので、再試行するかどうかを決めるのに必要なデータを運ぶ。パッケージは再試行の方針を課さない。"
 
-#: manual/design/core.md:417
+#: manual/design/core.md:456
 msgid "Enclosure relations are not an order"
 msgstr "包含区間の関係は順序ではない"
 
-#: manual/design/core.md:419
+#: manual/design/core.md:458
 msgid "**Problem.** Intervals look ordered, and implementing `Compare` for them would let generic sorting code accept them."
 msgstr "**問題。** 区間は順序付けられているように見え、`Compare` を実装すれば汎用のソートコードに渡せるようになる。"
 
-#: manual/design/core.md:422
+#: manual/design/core.md:461
 msgid "**Choice.** Five separate relation traits. `Compare` promises a total order, but `definitely_lt` on non-empty intervals is only a strict partial order. It is irreflexive ($b < a$ fails for $[a, b]$) and transitive:"
 msgstr "**選択。** 五つの別々の関係トレイト。`Compare` は全順序を約束するが、空でない区間上の `definitely_lt` は狭義半順序にすぎない。非反射的（$[a, b]$ について $b < a$ は成り立たない）かつ推移的である："
 
-#: manual/design/core.md:434
+#: manual/design/core.md:473
 msgid "but not total: for overlapping $X, Y$ neither $\\texttt{definitely\\_lt}(X, Y)$ nor $\\texttt{definitely\\_lt}(Y, X)$ holds, and neither are they equal. A `Compare` instance would have to answer one of $<, =, >$ there and so would assert something false about the unknown values."
 msgstr "しかし全順序ではない。重なり合う $X, Y$ では $\\texttt{definitely\\_lt}(X, Y)$ も $\\texttt{definitely\\_lt}(Y, X)$ も成り立たず、両者が等しいわけでもない。`Compare` のインスタンスはそこで $<, =, >$ のどれかを答えなければならず、未知の値について偽の主張をすることになる。"
 
-#: manual/design/core.md:439
+#: manual/design/core.md:478
 msgid "Native scalars implement only what they can honour"
 msgstr "ネイティブスカラーは守れるものだけを実装する"
 
-#: manual/design/core.md:441
+#: manual/design/core.md:480
 msgid "**Problem.** `Float` and `Double` could implement every trait by ignoring the context."
 msgstr "**問題。** `Float` と `Double` は、コンテキストを無視すればすべてのトレイトを実装できてしまう。"
 
-#: manual/design/core.md:444
+#: manual/design/core.md:483
 msgid "**Choice.** They implement a capability only when the result is meaningful:"
 msgstr "**選択。** 結果が意味を持つ場合にだけ能力を実装する："
 
-#: manual/design/core.md:446
+#: manual/design/core.md:485
 msgid "all unchecked traits and `Power`, which promise nothing beyond the backend;"
 msgstr "すべての非検査トレイトと `Power`。これらはバックエンド以上のことを約束しない。"
 
-#: manual/design/core.md:447
+#: manual/design/core.md:486
 msgid "the checked traits, whose only extra promise is to reject invalid arguments;"
 msgstr "検査付きトレイト。追加の約束は不正な引数を拒否することだけである。"
 
-#: manual/design/core.md:448
+#: manual/design/core.md:487
 msgid "the contextual arithmetic, absolute value, square root and exponential, integer embedding, adjacent values and format queries, as adapters so that generic contextual code also runs on native scalars;"
 msgstr "コンテキスト付きの四則演算、絶対値、平方根、指数関数、整数埋め込み、隣接値、形式の問い合わせ。汎用のコンテキスト付きコードがネイティブスカラーでも動くようにするためのアダプタである。"
 
-#: manual/design/core.md:451
+#: manual/design/core.md:490
 msgid "not `ConstantsContextual` and `HyperbolicContextual`, whose purpose is a result that honours an arbitrary precision with meaningful diagnostics; a fixed-precision library function cannot provide that."
 msgstr "`ConstantsContextual` と `HyperbolicContextual` は実装しない。これらの目的は任意の精度に従い意味のある診断を伴う結果であり、固定精度のライブラリ関数にはそれを提供できない。"
 
-#: manual/design/core.md:455
+#: manual/design/core.md:494
 msgid "The adapters are honest where the fixed format makes them exact (adjacent values, `Double` integer embedding) and detect loss where it is cheap (`Float` integer embedding, below). The arithmetic adapters do not detect rounding: their empty diagnostics mean \"not detected\". The [API page](../api/core.md#contextual-capability-traits) states this at the point of use."
 msgstr "アダプタは、固定形式によって正確になる場所（隣接値、`Double` の整数埋め込み）では誠実であり、損失の検出が安価な場所（後述の `Float` の整数埋め込み）では損失を検出する。算術のアダプタは丸めを検出しない。その空の診断は「検出していない」を意味する。[API ページ](../api/core.md#contextual-capability-traits) は使用箇所でこのことを述べている。"
 
-#: manual/design/core.md:461
+#: manual/design/core.md:500
 msgid "One capability per trait, no `Real`"
 msgstr "トレイトごとに一つの能力、`Real` はない"
 
-#: manual/design/core.md:463
+#: manual/design/core.md:502
 msgid "A trait such as `Real : Field + Sqrt + Exponential + Trigonometric + Compare` would be convenient, but it would hide differences that matter: an interval type has no total order, a decimal type has no cheap `sin`, and an integer type has `Power` but no `Sqrt`. Every trait in this package is one capability, and an algorithm composes the bounds it uses, such as `T : Add + Mul + Sqrt` for a hypotenuse. `Radical` is the only conjunction, because square and cube roots are routinely needed together."
 msgstr "`Real : Field + Sqrt + Exponential + Trigonometric + Compare` のようなトレイトは便利だが、重要な違いを隠してしまう。区間型には全順序がなく、十進型には安価な `sin` がなく、整数型には `Power` はあっても `Sqrt` はない。このパッケージのトレイトはどれも一つの能力であり、アルゴリズムは斜辺の計算なら `T : Add + Mul + Sqrt` のように、使う境界を組み合わせる。`Radical` は唯一の連言であり、平方根と立方根はよく一緒に必要になるからである。"
 
-#: manual/design/core.md:471
+#: manual/design/core.md:510
 msgid "Three floating-point classes"
 msgstr "三つの浮動小数点クラス"
 
-#: manual/design/core.md:473
+#: manual/design/core.md:512
 msgid "IEEE 754 `class` distinguishes ten classes (signalling and quiet NaN, negative and positive infinity, normal, subnormal and zero). `FpClass` keeps three, because these are the cases generic code branches on: a finite value can enter further arithmetic, an infinity is a valid limit, and NaN is invalid. Sign, zero and subnormality are tested with the format's own API."
 msgstr "IEEE 754 の `class` は十のクラス（シグナリング NaN と静かな NaN、負と正の無限大、正規化数、非正規化数、ゼロ）を区別する。`FpClass` が三つにとどめるのは、それが汎用コードの分岐する場合だからである。有限値はさらに演算に入れられ、無限大は有効な極限であり、NaN は無効である。符号、ゼロ、非正規化かどうかは形式自身の API で調べる。"
 
-#: manual/design/core.md:479
+#: manual/design/core.md:518
 msgid "`IntegralContextual` embeds `Int` only"
 msgstr "`IntegralContextual` は `Int` だけを埋め込む"
 
-#: manual/design/core.md:481
+#: manual/design/core.md:520
 msgid "Every backend can receive a MoonBit `Int`, and loop counters and indices are `Int`. An embedding of `BigInt` would require arbitrary-precision rounding in every backend; it is left to a separate capability so that implementing the common case stays cheap."
 msgstr "どのバックエンドも MoonBit の `Int` を受け取れ、ループカウンタや添字は `Int` である。`BigInt` の埋め込みにはすべてのバックエンドで任意精度の丸めが必要になる。共通の場合の実装を安価に保つため、それは別の能力に任せる。"
 
-#: manual/design/core.md:486
+#: manual/design/core.md:525
 msgid "`Power` keeps one signature"
 msgstr "`Power` は一つのシグネチャを保つ"
 
-#: manual/design/core.md:488
+#: manual/design/core.md:527
 msgid ""
 "`Power::pow(Self, Self)` is the same for floating and integer types, so a generic power does not depend on the family. The price is that the exponent type is the base type: the signed and `BigInt` instances must abort on a negative exponent, since $x^{-n} \\n"
 "otin \\mathbb{Z}$ in general. Code that needs a defined failure uses `PowNatChecked` (exponent `UInt`) or `PowIntChecked` (exponent `Int`)."
-msgstr "`Power::pow(Self, Self)` は浮動小数点型でも整数型でも同じなので、汎用のべき乗は型の族に依存しない。代償は指数の型が底の型になることで、符号付き整数と `BigInt` のインスタンスは負の指数で中断しなければならない。一般に $x^{-n} \\notin \\mathbb{Z}$ だからである。定義された失敗が必要なコードは `PowNatChecked`（指数は `UInt`）か `PowIntChecked`（指数は `Int`）を使う。"
+msgstr ""
+"`Power::pow(Self, Self)` は浮動小数点型でも整数型でも同じなので、汎用のべき乗は型の族に依存しない。代償は指数の型が底の型になることで、符号付き整数と `BigInt` のインスタンスは負の指数で中断しなければならない。一般に $x^{-n} \\n"
+"otin \\mathbb{Z}$ だからである。定義された失敗が必要なコードは `PowNatChecked`（指数は `UInt`）か `PowIntChecked`（指数は `Int`）を使う。"
 
-#: manual/design/core.md:495
+#: manual/design/core.md:534
 msgid "Correctness and invariants"
 msgstr "正しさと不変条件"
 
-#: manual/design/core.md:497
+#: manual/design/core.md:536
 msgid "Context invariants"
 msgstr "コンテキストの不変条件"
 
-#: manual/design/core.md:499
+#: manual/design/core.md:538
 msgid "`ArithmeticContext::new` establishes $p \\ge 1$ by clamping and $e_{\\min} \\le e_{\\max}$ (when both are present) by aborting, and the fields are read-only outside the package. Every context value therefore satisfies both, and a backend need not re-check them."
 msgstr "`ArithmeticContext::new` は $p \\ge 1$ をクランプで、$e_{\\min} \\le e_{\\max}$（両方あるとき）を中断で保証し、フィールドはパッケージ外から読み取り専用である。したがってすべてのコンテキスト値は両方を満たし、バックエンドは再検査する必要がない。"
 
-#: manual/design/core.md:504
+#: manual/design/core.md:543
 msgid "Laws of `combine`"
 msgstr "`combine` の法則"
 
-#: manual/design/core.md:506
+#: manual/design/core.md:545
 msgid "`ArithmeticDiagnostics` is the Boolean lattice $D = \\{0, 1\\}^{6}$, and `combine` is the componentwise $\\vee$. Because each component satisfies the Boolean laws, for all $d_1, d_2, d_3 \\in D$:"
 msgstr "`ArithmeticDiagnostics` はブール束 $D = \\{0, 1\\}^{6}$ であり、`combine` は成分ごとの $\\vee$ である。各成分がブール代数の法則を満たすので、すべての $d_1, d_2, d_3 \\in D$ について："
 
-#: manual/design/core.md:519
+#: manual/design/core.md:558
 msgid "So $(D, \\vee, \\mathbf{0})$ is a commutative idempotent monoid, that is a join semilattice with a least element. The diagnostics of a computation are the join of the diagnostics of its steps, independent of evaluation order and grouping, and a flag once raised cannot be cleared by combining."
 msgstr "したがって $(D, \\vee, \\mathbf{0})$ は可換かつ冪等なモノイド、すなわち最小元を持つ結び半束である。計算の診断は各ステップの診断の結びであり、評価の順序やまとめ方に依存せず、一度立ったフラグは合成によって消えることがない。"
 
-#: manual/design/core.md:524
+#: manual/design/core.md:563
 msgid "Sequencing contextual operations"
 msgstr "コンテキスト付き演算の連結"
 
-#: manual/design/core.md:526
+#: manual/design/core.md:565
 msgid "Composing two contextual operations $f : A \\to \\mathrm{Result}[(B, D), E]$ and $g : B \\to \\mathrm{Result}[(C, D), E]$ gives"
 msgstr "二つのコンテキスト付き演算 $f : A \\to \\mathrm{Result}[(B, D), E]$ と $g : B \\to \\mathrm{Result}[(C, D), E]$ を合成すると次を得る"
 
-#: manual/design/core.md:538
+#: manual/design/core.md:577
 msgid "This is the writer monad over $(D, \\vee, \\mathbf{0})$ stacked on the error monad, and the monoid laws above are exactly what makes $\\bar\\circ$ associative with `ArithmeticOutcome::exact` as its identity.[^writer] The package ships the pieces (`exact`, `with_diagnostics`, `combine`) rather than a combinator; the [tutorial](../tutorial/core.md) shows a short helper."
 msgstr "これはエラーモナドの上に積んだ $(D, \\vee, \\mathbf{0})$ 上の writer モナドであり、上のモノイド法則こそが $\\bar\\circ$ を結合的にし、`ArithmeticOutcome::exact` をその単位元にする。[^writer] パッケージは合成子ではなく部品（`exact`、`with_diagnostics`、`combine`）を提供する。[チュートリアル](../tutorial/core.md)に短いヘルパーを示す。"
 
-#: manual/design/core.md:545
+#: manual/design/core.md:584
 msgid "Associativity of $\\bar\\circ$ reduces to associativity of $\\vee$ on the diagnostics and of function composition on the values; the identity law reduces to $d \\vee \\mathbf{0} = d$. See E. Moggi, \"Notions of computation and monads\", 1991."
 msgstr "$\\bar\\circ$ の結合性は、診断上の $\\vee$ の結合性と値上の関数合成の結合性に帰着し、単位法則は $d \\vee \\mathbf{0} = d$ に帰着する。E. Moggi, \"Notions of computation and monads\", 1991 を参照。"
 
-#: manual/design/core.md:550
+#: manual/design/core.md:589
 msgid "Integer embedding into `Float`"
 msgstr "`Float` への整数埋め込み"
 
-#: manual/design/core.md:552
+#: manual/design/core.md:591
 msgid "binary32 has $p = 24$. An integer $n$ with $|n| \\le 2^{24}$ has at most 24 significant bits (or is $2^{24}$ itself, a power of two), so it is representable; $2^{24} + 1$ needs 25 significant bits and is not, and round-to-nearest-even sends it to $2^{24}$. The `Float` instance detects the loss without a wide-integer comparison: binary64 has $p = 53 > 31$, so `Double::from_int` is exact on every `Int`, and every binary32 value is a binary64 value, so widening is exact. Hence"
 msgstr "binary32 は $p = 24$ である。$|n| \\le 2^{24}$ の整数 $n$ は有効ビットが高々 24 ビット（あるいは 2 のべき $2^{24}$ そのもの）なので表現可能である。$2^{24} + 1$ は有効ビットが 25 ビット必要なので表現できず、偶数への最近接丸めで $2^{24}$ になる。`Float` のインスタンスは幅の広い整数の比較なしに損失を検出する。binary64 は $p = 53 > 31$ なので `Double::from_int` はすべての `Int` で正確であり、binary32 の値はすべて binary64 の値なので拡張も正確である。したがって"
 
-#: manual/design/core.md:565
+#: manual/design/core.md:604
 msgid "and the instance sets `inexact` and `rounded` exactly when the conversion lost information. Overflow cannot occur, since $|n| \\le 2^{31} < 2^{128}$."
 msgstr "であり、インスタンスは変換で情報が失われたときにちょうど `inexact` と `rounded` を設定する。$|n| \\le 2^{31} < 2^{128}$ なのでオーバーフローは起こらない。"
 
-#: manual/design/core.md:568
+#: manual/design/core.md:607
 msgid "Error bound of binary powering"
 msgstr "二進べき乗法の誤差の上界"
 
-#: manual/design/core.md:570
+#: manual/design/core.md:609
 msgid "`PowNatChecked` for `Float` and `Double` computes $x^{n}$ with the loop"
 msgstr "`Float` と `Double` の `PowNatChecked` は次のループで $x^{n}$ を計算する"
 
-#: manual/design/core.md:577
+#: manual/design/core.md:616
 msgid "**Correctness.** In exact arithmetic $\\textit{acc}\\cdot \\textit{f}^{\\,k} = x^{n}$ holds at the start of every iteration. It holds initially, and if $k = 2j + 1$ then $\\textit{acc}\\,\\textit{f}\\cdot(\\textit{f}^{2})^{j} = \\textit{acc}\\,\\textit{f}^{\\,k}$, while if $k = 2j$ then $\\textit{acc}\\,(\\textit{f}^{2})^{j} = \\textit{acc}\\,\\textit{f}^{\\,k}$. At $k = 0$ the invariant gives $\\textit{acc} = x^{n}$. The loop runs $\\lfloor \\log_2 n \\rfloor + 1$ times and performs $\\lfloor\\log_2 n\\rfloor$ squarings and $\\operatorname{popcount}(n)$ products, the first of which ($1 \\cdot \\textit{f}$) is exact. The integer `Power` instances use the same invariant in $\\mathbb{Z}/2^{k}$, where every step is exact."
 msgstr "**正しさ。** 正確な算術では、各反復の開始時に $\\textit{acc}\\cdot \\textit{f}^{\\,k} = x^{n}$ が成り立つ。初期状態で成り立ち、$k = 2j + 1$ なら $\\textit{acc}\\,\\textit{f}\\cdot(\\textit{f}^{2})^{j} = \\textit{acc}\\,\\textit{f}^{\\,k}$、$k = 2j$ なら $\\textit{acc}\\,(\\textit{f}^{2})^{j} = \\textit{acc}\\,\\textit{f}^{\\,k}$ である。$k = 0$ で不変条件から $\\textit{acc} = x^{n}$ を得る。ループは $\\lfloor \\log_2 n \\rfloor + 1$ 回まわり、$\\lfloor\\log_2 n\\rfloor$ 回の二乗と $\\operatorname{popcount}(n)$ 回の積を行うが、その最初の積（$1 \\cdot \\textit{f}$）は正確である。整数の `Power` インスタンスも $\\mathbb{Z}/2^{k}$ で同じ不変条件を使い、そこではすべてのステップが正確である。"
 
-#: manual/design/core.md:587
-msgid "**Rounding error.** Give each computed quantity $q$ that approximates $x^{m}$ an error count $c(q)$ such that $q = x^{m}\\prod_i (1 + \\delta_i)^{k_i}$ with $|\\delta_i| \\le u$ and $\\sum_i k_i \\le c(q)$. Then $c(x) = 0$, and one rounded product of $q_1 \\approx x^{m_1}$ and $q_2 \\approx x^{m_2}$ gives $c \\le c(q_1) + c(q_2) + 1$. By induction $c(q) \\le m - 1$:"
-msgstr "**丸め誤差。** $x^{m}$ を近似する各計算値 $q$ に、$|\\delta_i| \\le u$ かつ $\\sum_i k_i \\le c(q)$ として $q = x^{m}\\prod_i (1 + \\delta_i)^{k_i}$ となるような誤差の個数 $c(q)$ を割り当てる。すると $c(x) = 0$ であり、$q_1 \\approx x^{m_1}$ と $q_2 \\approx x^{m_2}$ の丸めを伴う積一回で $c \\le c(q_1) + c(q_2) + 1$ となる。帰納法により $c(q) \\le m - 1$："
+#: manual/design/core.md:626
+msgid "**Rounding error.** Give each computed quantity $q$ that approximates $x^{m}$ an error count $c(q)$ such that $q = x^{m}\\prod_i (1 + \\delta_i)^{k_i}$ with $|\\delta_i| \\le u$ and $\\sum_i k_i \\le c(q)$. Then $c(x) = 0$, and one rounded product of $q_1 \\approx x^{m_1}$ and $q_2 \\approx x^{m_2}$ gives $c \\le c(q_1) + c(q_2) + 1$. The initial $\\textit{acc} = 1$ approximates $x^0$ exactly, and its first product $1 \\cdot \\textit{f}$ is exact, so after it $\\textit{acc}$ carries the count of $\\textit{f}$. Every other quantity the loop computes has $m \\ge 1$, and by induction $c(q) \\le m - 1$:"
+msgstr "**丸め誤差。** $x^{m}$ を近似する各計算値 $q$ に、$|\\delta_i| \\le u$ かつ $\\sum_i k_i \\le c(q)$ として $q = x^{m}\\prod_i (1 + \\delta_i)^{k_i}$ となるような誤差の個数 $c(q)$ を割り当てる。すると $c(x) = 0$ であり、$q_1 \\approx x^{m_1}$ と $q_2 \\approx x^{m_2}$ の丸めを伴う積一回で $c \\le c(q_1) + c(q_2) + 1$ となる。初期値 $\\textit{acc} = 1$ は $x^0$ を正確に表し、その最初の積 $1 \\cdot \\textit{f}$ も正確なので、その後の $\\textit{acc}$ は $\\textit{f}$ の個数を引き継ぐ。ループが計算する他の値はすべて $m \\ge 1$ を満たし、帰納法により $c(q) \\le m - 1$："
 
-#: manual/design/core.md:597
+#: manual/design/core.md:639
 msgid "and a squaring is the case $q_1 = q_2$, where the shared error is counted twice. Therefore, in the absence of overflow and underflow,"
 msgstr "であり、二乗は $q_1 = q_2$ の場合で、共有された誤差が二度数えられる。したがってオーバーフローとアンダーフローがなければ、"
 
-#: manual/design/core.md:606
+#: manual/design/core.md:648
 msgid "The last step is the standard lemma $|\\prod_{i=1}^{k}(1+\\delta_i)^{\\pm 1} - 1| \\le \\gamma_k$ for $ku < 1$.[^higham] `PowIntChecked` with a negative exponent divides once more, and $(1 + \\delta)/(1 + \\theta_{n-1})$ gives $|\\theta| \\le \\gamma_{n}$. Binary powering does not improve on the worst-case bound of $n - 1$ successive multiplications; it reduces the work from $n - 1$ to $O(\\log n)$ multiplications."
 msgstr "最後の段階は、$ku < 1$ のときの標準的な補題 $|\\prod_{i=1}^{k}(1+\\delta_i)^{\\pm 1} - 1| \\le \\gamma_k$ である。[^higham] 負の指数の `PowIntChecked` はもう一度除算を行い、$(1 + \\delta)/(1 + \\theta_{n-1})$ から $|\\theta| \\le \\gamma_{n}$ を得る。二進べき乗法は $n - 1$ 回の逐次乗算の最悪時の上界を改善しない。乗算の回数を $n - 1$ から $O(\\log n)$ に減らすだけである。"
 
-#: manual/design/core.md:614
+#: manual/design/core.md:656
 msgid "N. J. Higham, *Accuracy and Stability of Numerical Algorithms*, 2nd ed., SIAM, 2002, Lemma 3.1 and §3.1."
 msgstr "N. J. Higham, *Accuracy and Stability of Numerical Algorithms*, 2nd ed., SIAM, 2002, Lemma 3.1 および §3.1。"
 
-#: manual/design/core.md:617
+#: manual/design/core.md:659
+msgid "Laws of `Power`"
+msgstr "`Power` の法則"
+
+#: manual/design/core.md:661
+msgid "For the integer instances, `pow(x, n)` is the action of $\\mathbb{N}$ on the multiplicative monoid $(\\mathbb{Z}/2^{k}, \\cdot, 1)$ (or $(\\mathbb{Z}, \\cdot, 1)$ for `BigInt`), defined by $x^{0} = 1$ and $x^{n+1} = x^{n} x$. The correctness invariant above shows that binary powering computes this map, because every step is exact in $\\mathbb{Z}/2^{k}$ and the reduction modulo $2^{k}$ is a ring homomorphism $\\mathbb{Z} \\to \\mathbb{Z}/2^{k}$. Induction on $n$ gives the action laws for natural exponents:"
+msgstr "整数インスタンスでは、`pow(x, n)` は乗法モノイド $(\\mathbb{Z}/2^{k}, \\cdot, 1)$（`BigInt` では $(\\mathbb{Z}, \\cdot, 1)$）への $\\mathbb{N}$ の作用であり、$x^{0} = 1$ と $x^{n+1} = x^{n} x$ で定義される。上の正しさの不変条件から、二進べき乗法はこの写像を計算することが分かる。$\\mathbb{Z}/2^{k}$ ではどのステップも正確であり、$2^{k}$ を法とする簡約は環準同型 $\\mathbb{Z} \\to \\mathbb{Z}/2^{k}$ だからである。$n$ についての帰納法により、自然数の指数に対する作用の法則が得られる。"
+
+#: manual/design/core.md:677
+msgid "The first follows from $x^{m+(n+1)} = x^{m+n}x = x^{m}x^{n}x = x^{m}x^{n+1}$ (associativity); the second from $x^{m(n+1)} = x^{mn+m} = (x^{m})^{n}x^{m}$ by the first; the third from commutativity of $\\cdot$."
+msgstr "第一の法則は $x^{m+(n+1)} = x^{m+n}x = x^{m}x^{n}x = x^{m}x^{n+1}$（結合法則）から、第二の法則は第一の法則を使って $x^{m(n+1)} = x^{mn+m} = (x^{m})^{n}x^{m}$ から、第三の法則は $\\cdot$ の可換性から従う。"
+
+#: manual/design/core.md:681
+msgid "These are laws of $\\mathbb{N}$ acting on `Self`, but the exponent argument is a value of `Self`. For the unsigned instances an exponent sum computed in `Self` wraps modulo $2^{k}$. The wrapped law $x^{(m+n) \\bmod 2^{k}} = x^{m} x^{n}$ needs $x^{2^{k}} = 1$, and it fails for every even $x$, for example:"
+msgstr "これらは `Self` に作用する $\\mathbb{N}$ の法則だが、指数の引数は `Self` の値である。符号なしインスタンスでは、`Self` で計算した指数の和は $2^{k}$ を法としてラップアラウンドする。ラップアラウンド後の法則 $x^{(m+n) \\bmod 2^{k}} = x^{m} x^{n}$ には $x^{2^{k}} = 1$ が必要で、偶数の $x$ ではすべて成り立たない。例えば次のとおりである。"
+
+#: manual/design/core.md:691
+msgid "For odd $x$ the group $(\\mathbb{Z}/2^{k})^{\\times}$ has exponent $2^{k-2}$ (for $k \\ge 3$), so $x^{2^{k}} = 1$ and the wrapped law holds. For the signed instances a wrapped sum is often negative and `pow` aborts. Code that combines exponents therefore adds them in a wider type, or in `BigInt`."
+msgstr "奇数の $x$ では群 $(\\mathbb{Z}/2^{k})^{\\times}$ の指数は $2^{k-2}$（$k \\ge 3$ のとき）なので、$x^{2^{k}} = 1$ となりラップアラウンド後の法則も成り立つ。符号付きインスタンスでは、ラップアラウンドした和はしばしば負になり、`pow` は中断する。したがって、指数を組み合わせるコードはより広い型か `BigInt` で足し合わせる。"
+
+#: manual/design/core.md:696
+msgid "The `Float` and `Double` instances are the C `pow` function. The laws above hold for them only approximately, with the rounding error of each side, and not at all for a negative base with a non-integer exponent, where the result is NaN."
+msgstr "`Float` と `Double` のインスタンスは C の `pow` 関数である。上の法則はこれらでは両辺の丸め誤差の範囲で近似的にしか成り立たず、負の底と整数でない指数ではまったく成り立たない。その場合の結果は NaN である。"
+
+#: manual/design/core.md:701
 msgid "Checked division"
 msgstr "検査付き除算"
 
-#: manual/design/core.md:619
+#: manual/design/core.md:703
 msgid ""
 "The `Float` and `Double` `DivChecked` instances reject every zero divisor and use the kind to say why. $0/0$ and $\\infty/\\infty$ are indeterminate: the limits $\\lim (\\lambda t)/t = \\lambda$ take every value as $t \\to 0$ or $t \\to \\infty$, so no quotient is meaningful and the kind is `DomainError`. For $x \\n"
 "e 0$, $x/t$ diverges as $t \\to 0$, a pole, and the kind is `DivisionByZero`. This matches IEEE 754's invalid operation and division by zero exceptions, but is stricter: IEEE returns $\\pm\\infty$ for $\\infty/0$ and NaN for NaN$/0$ silently, where the checked instance returns `DivisionByZero`. A NaN dividend with a non-zero divisor still propagates as `Ok(NaN)`, and `SqrtChecked` lets NaN pass in the same way: a checked operation rejects invalid arguments, it does not re-report an earlier invalid result."
-msgstr "`Float` と `Double` の `DivChecked` インスタンスはすべてのゼロ除数を拒否し、その理由を種別で示す。$0/0$ と $\\infty/\\infty$ は不定形である。$t \\to 0$ や $t \\to \\infty$ のとき極限 $\\lim (\\lambda t)/t = \\lambda$ はあらゆる値をとるので意味のある商はなく、種別は `DomainError` である。$x \\ne 0$ なら $t \\to 0$ で $x/t$ は発散する（極）ので、種別は `DivisionByZero` である。これは IEEE 754 の無効演算とゼロ除算の例外に対応するが、より厳格である。IEEE は $\\infty/0$ には $\\pm\\infty$ を、NaN$/0$ には NaN を黙って返すが、検査付きインスタンスは `DivisionByZero` を返す。NaN の被除数とゼロでない除数は `Ok(NaN)` として伝播し、`SqrtChecked` も同様に NaN を通す。検査付き演算は不正な引数を拒否するのであって、以前の不正な結果を報告し直すわけではない。"
+msgstr ""
+"`Float` と `Double` の `DivChecked` インスタンスはすべてのゼロ除数を拒否し、その理由を種別で示す。$0/0$ と $\\infty/\\infty$ は不定形である。$t \\to 0$ や $t \\to \\infty$ のとき極限 $\\lim (\\lambda t)/t = \\lambda$ はあらゆる値をとるので意味のある商はなく、種別は `DomainError` である。$x \\n"
+"e 0$ なら $t \\to 0$ で $x/t$ は発散する（極）ので、種別は `DivisionByZero` である。これは IEEE 754 の無効演算とゼロ除算の例外に対応するが、より厳格である。IEEE は $\\infty/0$ には $\\pm\\infty$ を、NaN$/0$ には NaN を黙って返すが、検査付きインスタンスは `DivisionByZero` を返す。NaN の被除数とゼロでない除数は `Ok(NaN)` として伝播し、`SqrtChecked` も同様に NaN を通す。検査付き演算は不正な引数を拒否するのであって、以前の不正な結果を報告し直すわけではない。"
 
-#: manual/design/core.md:632
+#: manual/design/core.md:716
 msgid "Soundness and monotonicity of enclosure relations"
 msgstr "包含区間の関係の健全性と単調性"
 
-#: manual/design/core.md:634
+#: manual/design/core.md:718
 msgid ""
 "*Soundness.* If $x \\in X$, $y \\in Y$ and $\\texttt{definitely\\_lt}(X, Y)$, then $x < y$: the relation is a universal statement over $X \\times Y$, which contains $(x, y)$. Dually, if $\\n"
 "eg\\,\\texttt{maybe\\_eq}(X, Y)$, then $x \\n"
 "e y$."
-msgstr "*健全性。* $x \\in X$、$y \\in Y$ かつ $\\texttt{definitely\\_lt}(X, Y)$ なら $x < y$ である。この関係は $(x, y)$ を含む $X \\times Y$ 全体についての全称命題だからである。双対的に、$\\neg\\,\\texttt{maybe\\_eq}(X, Y)$ なら $x \\ne y$ である。"
+msgstr ""
+"*健全性。* $x \\in X$、$y \\in Y$ かつ $\\texttt{definitely\\_lt}(X, Y)$ なら $x < y$ である。この関係は $(x, y)$ を含む $X \\times Y$ 全体についての全称命題だからである。双対的に、$\\n"
+"eg\\,\\texttt{maybe\\_eq}(X, Y)$ なら $x \\n"
+"e y$ である。"
 
-#: manual/design/core.md:639
+#: manual/design/core.md:723
 msgid "*Monotonicity under refinement.* If $X' \\subseteq X$ and $Y' \\subseteq Y$, then"
 msgstr "*精緻化に対する単調性。* $X' \\subseteq X$ かつ $Y' \\subseteq Y$ なら"
 
-#: manual/design/core.md:648
+#: manual/design/core.md:732
 msgid "because a universal statement survives shrinking its domain and an existential one survives growing it. In three-valued terms, refining the enclosures can turn $\\mathsf{U}$ into $\\mathsf{T}$ or $\\mathsf{F}$ but never turns $\\mathsf{T}$ into $\\mathsf{F}$. This is what makes \"refine until decided\" loops, such as the target-rounding stage above, correct: a decision once made stays valid. `Contains` is how such a loop checks that a refined enclosure $X'$ is inside the old one, $\\texttt{contains}(X, X')$."
 msgstr "である。全称命題は定義域を縮めても成り立ち、存在命題は定義域を広げても成り立つからである。三値で言えば、包含区間を精緻化すると $\\mathsf{U}$ が $\\mathsf{T}$ や $\\mathsf{F}$ に変わることはあるが、$\\mathsf{T}$ が $\\mathsf{F}$ に変わることはない。これが、上の目標丸め段階のような「決まるまで精緻化する」ループを正しくする。一度下した判断は有効なままである。そのようなループは `Contains`、すなわち $\\texttt{contains}(X, X')$ で、精緻化した包含区間 $X'$ が古いものの内側にあることを確かめる。"
 
-#: manual/design/core.md:656
+#: manual/design/core.md:740
 msgid "The traits do not fix the convention for empty enclosures; each backend documents its own. Under the quantifier reading the definite relations would hold vacuously for an empty argument, so a backend that wants $\\mathsf{T}$ never to come from an absence of information returns `false` for them instead."
 msgstr "トレイトは空の包含区間の規約を定めず、各バックエンドが自身の規約を文書化する。量化の読み方では確定的関係は空の引数について空虚に成り立つので、$\\mathsf{T}$ が情報の欠如から生じないようにしたいバックエンドは、代わりにそれらに `false` を返す。"
 
-#: manual/design/core.md:661
+#: manual/design/core.md:745
 msgid "Alternatives rejected"
 msgstr "退けた代替案"
 
-#: manual/design/core.md:663
+#: manual/design/core.md:747
 msgid "**A global or thread-local context with sticky flags**, as in C `<fenv.h>` and Python `decimal`. Rejected for the reasons under [explicit values](#context-and-diagnostics-are-explicit-values): it makes results depend on hidden state and leaks flags between computations."
 msgstr "**スティッキーなフラグを持つグローバルまたはスレッドローカルなコンテキスト**（C の `<fenv.h>` や Python の `decimal` のようなもの）。[明示的な値](#context-and-diagnostics-are-explicit-values)の節で述べた理由で退けた。結果が隠れた状態に依存し、計算の間でフラグが漏れる。"
 
-#: manual/design/core.md:667
+#: manual/design/core.md:751
 msgid "**A `Real` or `Number` super-trait.** Rejected because it hides the differences between exact, approximate and enclosure-valued types."
 msgstr "**`Real` や `Number` のような上位トレイト。** 正確な型、近似的な型、包含区間値の型の違いを隠すので退けた。"
 
-#: manual/design/core.md:669
+#: manual/design/core.md:753
 msgid "**`Compare` for enclosures.** Rejected because the definite order is not total."
 msgstr "**包含区間に対する `Compare`。** 確定的な順序は全順序ではないので退けた。"
 
-#: manual/design/core.md:671
+#: manual/design/core.md:755
 msgid "**A three-valued result type** (`True | False | Unknown`) for comparisons. The two Boolean projections `definitely_*` and `maybe_eq` are enough to reconstruct it, as shown above, and they compose with ordinary `if`; a separate type would force every caller to handle $\\mathsf{U}$ even when it only asks one direction."
 msgstr "**比較のための三値の結果型**（`True | False | Unknown`）。上で示したとおり、二つのブール値の射影 `definitely_*` と `maybe_eq` から再構成でき、通常の `if` と組み合わせられる。別の型にすると、一方向だけを問う場合でもすべての呼び出し側に $\\mathsf{U}$ の処理を強いることになる。"
 
-#: manual/design/core.md:676
+#: manual/design/core.md:760
 msgid "**A `definitely_eq` relation.** For non-degenerate enclosures it is always false, so it would only be a test for equal single points."
 msgstr "**`definitely_eq` 関係。** 退化していない包含区間では常に偽なので、等しい一点どうしの判定にしかならない。"
 
-#: manual/design/core.md:678
+#: manual/design/core.md:762
 msgid "**Diagnostics reported as errors.** Rejected because an inexact or overflowing IEEE result is a correct answer, and turning it into `Err` would make every rounded operation fail."
 msgstr "**エラーとして報告される診断。** 不正確な、あるいはオーバーフローした IEEE の結果は正しい答えであり、それを `Err` にすると丸めを伴うすべての演算が失敗することになるので退けた。"
 
-#: manual/design/core.md:681
+#: manual/design/core.md:765
 msgid "**`Option` or `raise` for checked results.** `Option` loses the reason; MoonBit's `raise` would put the failure outside the return type. Luna-Flow uses `Result` with a structured error across repositories."
 msgstr "**検査付き結果のための `Option` や `raise`。** `Option` は理由を失う。MoonBit の `raise` は失敗を戻り値の型の外に置く。Luna-Flow はリポジトリ全体で構造化エラーを伴う `Result` を使う。"
 
-#: manual/design/core.md:684
+#: manual/design/core.md:768
 msgid "**Implementing `ConstantsContextual` and `HyperbolicContextual` for native scalars by ignoring the context.** Rejected because those traits exist to promise context-faithful results."
 msgstr "**コンテキストを無視してネイティブスカラーに `ConstantsContextual` と `HyperbolicContextual` を実装すること。** これらのトレイトはコンテキストに忠実な結果を約束するためにあるので退けた。"
 
-#: manual/design/core.md:688
+#: manual/design/core.md:772
 msgid "Boundaries"
 msgstr "範囲外のこと"
 
-#: manual/design/core.md:690
+#: manual/design/core.md:774
 msgid "The package does not implement arbitrary-precision, decimal, interval or ball arithmetic, and it does not evaluate certified functions; it defines the traits those backends implement."
 msgstr "このパッケージは任意精度、十進、区間、ボールの算術を実装せず、証明付きの関数評価も行わない。それらのバックエンドが実装するトレイトを定義する。"
 
-#: manual/design/core.md:693
+#: manual/design/core.md:777
 msgid "The built-in `Float` and `Double` instances do not honour the context's precision, rounding mode or exponent range, and their arithmetic adapters do not detect rounding, overflow or underflow."
 msgstr "組み込みの `Float` と `Double` のインスタンスは、コンテキストの精度、丸めモード、指数範囲に従わず、その算術アダプタは丸め、オーバーフロー、アンダーフローを検出しない。"
 
-#: manual/design/core.md:696
+#: manual/design/core.md:780
 msgid "It does not promise correctly rounded elementary functions for `Float` and `Double`; they come from `Kaida-Amethyst/math`."
 msgstr "`Float` と `Double` について正しく丸められた初等関数は約束しない。それらは `Kaida-Amethyst/math` から来ている。"
 
-#: manual/design/core.md:698
+#: manual/design/core.md:782
 msgid "It does not define algebraic structure (`Ring`, `Field`, ...), which belongs to `luna-generic`, nor vectors, matrices, complex numbers or polynomials."
 msgstr "代数構造（`Ring`、`Field` など）は定義しない。それは `luna-generic` の役割である。ベクトル、行列、複素数、多項式も定義しない。"
 
-#: manual/design/core.md:700
+#: manual/design/core.md:784
 msgid "It does not choose branch cuts or special-value conventions for the unchecked traits beyond what each shipped instance inherits."
 msgstr "提供される各インスタンスが受け継ぐもの以上に、非検査トレイトの分岐切断や特殊値の規約を選ぶことはしない。"
 
-#: manual/design/core.md:702
+#: manual/design/core.md:786
 msgid "It does not prescribe a retry or precision-escalation policy for certification failures."
 msgstr "証明の失敗に対する再試行や精度引き上げの方針は定めない。"
 
@@ -1817,128 +1947,224 @@ msgid "arithmetic"
 msgstr "arithmetic"
 
 #: manual/index.md:3
+msgid "This manual documents release `0.5.0` of `Luna-Flow/arithmetic` together with the unreleased MoonBit 0.10 migration listed in [CHANGELOG.md](../../CHANGELOG.md)."
+msgstr "このマニュアルは `Luna-Flow/arithmetic` のリリース `0.5.0` と、[CHANGELOG.md](../../CHANGELOG.md) に記載した未リリースの MoonBit 0.10 移行を記述する。"
+
+#: manual/index.md:7
+msgid "Overview"
+msgstr "概要"
+
+#: manual/index.md:9
 msgid "`Luna-Flow/arithmetic` defines the analytic capabilities of Luna Flow numeric types: elementary functions, checked operations that return structured errors, contextual operations that report how a result was rounded under an explicit precision and rounding mode, and relations between enclosures such as intervals. It ships default instances for `Float`, `Double` and the integer types, and leaves context-faithful and certified arithmetic to backends that implement the same traits."
 msgstr "`Luna-Flow/arithmetic` は Luna Flow の数値型の解析的能力を定義する。初等関数、構造化エラーを返す検査付き演算、明示的な精度と丸めモードのもとで結果がどう丸められたかを報告するコンテキスト付き演算、そして区間のような包含区間どうしの関係である。`Float`、`Double`、整数型の既定のインスタンスを提供し、コンテキストに忠実な算術と証明付き算術は、同じトレイトを実装するバックエンドに任せる。"
 
-#: manual/index.md:11
-msgid "This manual describes version `0.5.0` together with the unreleased MoonBit 0.10 migration listed in [CHANGELOG.md](../../CHANGELOG.md)."
-msgstr "このマニュアルはバージョン `0.5.0` と、[CHANGELOG.md](../../CHANGELOG.md) に記載した未リリースの MoonBit 0.10 移行を記述する。"
-
-#: manual/index.md:14
-msgid "Where it sits"
-msgstr "位置付け"
-
-#: manual/index.md:16
+#: manual/index.md:17
 msgid "[`luna-generic`](https://lunaflow.cn/en/luna-generic/) says what a type is (`Ring`, `Field`, ...). `arithmetic` says which analytic operations it supports and how they fail. Numeric backends implement the traits, and algorithms depend on the traits instead of on concrete number types."
 msgstr "[`luna-generic`](https://lunaflow.cn/en/luna-generic/) は型が何であるか（`Ring`、`Field` など）を述べる。`arithmetic` はその型がどの解析的演算をサポートし、それがどう失敗するかを述べる。数値バックエンドがこれらのトレイトを実装し、アルゴリズムは具体的な数値型ではなくトレイトに依存する。"
 
-#: manual/index.md:21
+#: manual/index.md:22
 msgid "Example"
 msgstr "例"
 
-#: manual/index.md:21
+#: manual/index.md:22
 msgid "Returns"
 msgstr "戻り値"
 
-#: manual/index.md:21
+#: manual/index.md:22
 msgid "Use it when"
 msgstr "使う場面"
 
-#: manual/index.md:23
+#: manual/index.md:24
 msgid "the type's own special-value behaviour is acceptable"
 msgstr "型自身の特殊値の振る舞いで構わない"
 
-#: manual/index.md:24
+#: manual/index.md:25
 msgid "invalid input must become a handled error"
 msgstr "不正な入力を処理されるエラーにしなければならない"
 
-#: manual/index.md:25
+#: manual/index.md:26
 msgid "precision and rounding are explicit and diagnostics matter"
 msgstr "精度と丸めを明示し、診断が重要である"
 
-#: manual/index.md:26
+#: manual/index.md:27
 msgid "values are intervals or balls, not points"
 msgstr "値が点ではなく区間やボールである"
 
-#: manual/index.md:28
-msgid "Packages"
-msgstr "パッケージ"
-
-#: manual/index.md:30
-msgid "The module has one package, at the source root `src/`, documented as `core`."
-msgstr "モジュールにはソースルート `src/` に一つのパッケージがあり、`core` として文書化される。"
-
-#: manual/index.md:32
-msgid "Package"
-msgstr "パッケージ"
-
-#: manual/index.md:32
-msgid "Import path"
-msgstr "インポートパス"
-
-#: manual/index.md:34
-msgid "capability traits, `ArithmeticContext`, diagnostics, errors and certification details, `Float`/`Double`/integer instances"
-msgstr "能力トレイト、`ArithmeticContext`、診断、エラーと証明の詳細、`Float`/`Double`/整数のインスタンス"
-
-#: manual/index.md:34
-msgid "[API](api/core.md), [tutorial](tutorial/core.md), [design](design/core.md)"
-msgstr "[API](api/core.md)、[チュートリアル](tutorial/core.md)、[設計](design/core.md)"
-
-#: manual/index.md:36
-msgid "The blackbox tests (`src/*_test.mbt`) and the whitebox test (`src/certification_error_wbtest.mbt`) belong to the same package; the [verification guide](verification.md) lists what they establish."
-msgstr "ブラックボックステスト（`src/*_test.mbt`）とホワイトボックステスト（`src/certification_error_wbtest.mbt`）は同じパッケージに属する。それらが何を確かめるかは[検証ガイド](verification.md)に挙げる。"
-
-#: manual/index.md:40
-msgid "Reading paths"
-msgstr "読み進め方"
-
-#: manual/index.md:42
-msgid "**New to the package:** read [getting started](getting_started.md), then the [core tutorial](tutorial/core.md)."
-msgstr "**パッケージが初めての場合：** [はじめに](getting_started.md)を読み、続いて [core チュートリアル](tutorial/core.md) を読む。"
-
-#: manual/index.md:44
-msgid "**Using it in a library:** keep the [core API](api/core.md) at hand; its tables say what each shipped instance actually does at the edges (NaN, zero, infinities, overflow)."
-msgstr "**ライブラリで使う場合：** [core API](api/core.md) を手元に置くこと。その表は、提供される各インスタンスが境界（NaN、ゼロ、無限大、オーバーフロー）で実際に何をするかを示す。"
-
-#: manual/index.md:47
-msgid "**Implementing a backend or contributing:** read the [core design](design/core.md) for the contracts and their mathematics, [architecture](architecture.md) for the layout, and [verification](verification.md) and [conventions](conventions.md) before opening a pull request."
-msgstr "**バックエンドを実装する、または貢献する場合：** 契約とその数学については [core 設計](design/core.md) を、構成については[アーキテクチャ](architecture.md)を読み、プルリクエストを出す前に[検証](verification.md)と[規約](conventions.md)を読む。"
-
-#: manual/index.md:53
+#: manual/index.md:29
 msgid "Install"
 msgstr "インストール"
 
-#: manual/index.md:65
-msgid "The package depends on `Kaida-Amethyst/math` for the `Float` and `Double` elementary functions. Its tests also use `Luna-Flow/luna-generic`."
-msgstr "このパッケージは `Float` と `Double` の初等関数のために `Kaida-Amethyst/math` に依存する。テストでは `Luna-Flow/luna-generic` も使う。"
+#: manual/index.md:35
+msgid "Then import `\"Luna-Flow/arithmetic\"` in your `moon.pkg`. Luna Flow code uses the alias `@lf_arith`:"
+msgstr "続いて `moon.pkg` で `\"Luna-Flow/arithmetic\"` をインポートする。Luna Flow のコードは別名 `@lf_arith` を使う。"
 
-#: manual/index.md:68
-msgid "Toolchain"
-msgstr "ツールチェーン"
+#: manual/index.md:44
+msgid "The package needs the MoonBit toolchain 0.10 or later (`moonc` ≥ 0.10) with the `moon.mod` and `moon.pkg` manifests, and is checked on the `wasm-gc`, `wasm`, `js` and `native` backends. It depends on `Kaida-Amethyst/math` for the `Float` and `Double` elementary functions; its tests also use `Luna-Flow/luna-generic`."
+msgstr "このパッケージには `moon.mod` と `moon.pkg` マニフェストを使う MoonBit ツールチェーン 0.10 以降（`moonc` ≥ 0.10）が必要で、`wasm-gc`、`wasm`、`js`、`native` の各バックエンドで検査される。`Float` と `Double` の初等関数は `Kaida-Amethyst/math` に依存し、テストでは `Luna-Flow/luna-generic` も使う。"
 
-#: manual/index.md:70
-msgid "The code targets MoonBit `moonc` 0.10 or later with the `moon.mod` and `moon.pkg` manifests, and is checked on the `wasm-gc`, `wasm`, `js` and `native` backends."
-msgstr "コードは `moon.mod` と `moon.pkg` マニフェストを使う MoonBit `moonc` 0.10 以降を対象とし、`wasm-gc`、`wasm`、`js`、`native` の各バックエンドで検査される。"
+#: manual/index.md:52
+msgid "The module has one package, at the source root `src/`, documented as `core`."
+msgstr "モジュールにはソースルート `src/` に一つのパッケージがあり、`core` として文書化される。"
 
-#: manual/index.md:74
-msgid "Guides"
+#: manual/index.md:54
+msgid "Part"
+msgstr "部"
+
+#: manual/index.md:54
+msgid "Tutorial"
+msgstr "チュートリアル"
+
+#: manual/index.md:54
+msgid "API"
+msgstr "API"
+
+#: manual/index.md:54
+msgid "Design"
+msgstr "設計"
+
+#: manual/index.md:56
+msgid "`core`: capability traits, context, diagnostics, errors, instances"
+msgstr "`core`：能力トレイト、コンテキスト、診断、エラー、インスタンス"
+
+#: manual/index.md:56
+msgid "[tutorial](tutorial/core.md)"
+msgstr "[チュートリアル](tutorial/core.md)"
+
+#: manual/index.md:56
+msgid "[API](api/core.md)"
+msgstr "[API](api/core.md)"
+
+#: manual/index.md:56
+msgid "[design](design/core.md)"
+msgstr "[設計](design/core.md)"
+
+#: manual/index.md:58
+msgid "Guides that span the package:"
+msgstr "パッケージ全体にわたるガイド："
+
+#: manual/index.md:60
+msgid "Guide"
 msgstr "ガイド"
 
+#: manual/index.md:62
+msgid "[Getting started](getting_started.md)"
+msgstr "[はじめに](getting_started.md)"
+
+#: manual/index.md:62
+msgid "install, first generic function, first checked and contextual calls"
+msgstr "インストール、最初の汎用関数、最初の検査付き・コンテキスト付きの呼び出し"
+
+#: manual/index.md:63
+msgid "[Architecture](architecture.md)"
+msgstr "[アーキテクチャ](architecture.md)"
+
+#: manual/index.md:63
+msgid "source layout, tiers, errors and state"
+msgstr "ソースの構成、層、エラーと状態"
+
+#: manual/index.md:64
+msgid "[Verification](verification.md)"
+msgstr "[検証](verification.md)"
+
+#: manual/index.md:64
+msgid "the local gate, CI and what the tests establish"
+msgstr "ローカルでの確認手順、CI、テストが確かめること"
+
+#: manual/index.md:65
+msgid "[Repository conventions](conventions.md)"
+msgstr "[リポジトリの規約](conventions.md)"
+
+#: manual/index.md:65
+msgid "rules for this manual on top of the Luna Flow standard"
+msgstr "Luna Flow の標準に加えてこのマニュアルに課す規則"
+
+#: manual/index.md:67
+msgid "The blackbox tests (`src/*_test.mbt`) and the whitebox test (`src/certification_error_wbtest.mbt`) belong to the same package; the [verification guide](verification.md) lists what they establish."
+msgstr "ブラックボックステスト（`src/*_test.mbt`）とホワイトボックステスト（`src/certification_error_wbtest.mbt`）は同じパッケージに属する。それらが何を確かめるかは[検証ガイド](verification.md)に挙げる。"
+
+#: manual/index.md:71
+msgid "Exported traits"
+msgstr "公開トレイト"
+
+#: manual/index.md:73
+msgid "Unchecked: `Sqrt`, `Cbrt`, `Radical`, `Exponential`, `Logarithmic`, `Power`, `Trigonometric`, `InverseTrigonometric`, `Hyperbolic`, `InverseHyperbolic`, `Constants`"
+msgstr "非検査：`Sqrt`、`Cbrt`、`Radical`、`Exponential`、`Logarithmic`、`Power`、`Trigonometric`、`InverseTrigonometric`、`Hyperbolic`、`InverseHyperbolic`、`Constants`"
+
 #: manual/index.md:76
-msgid "[Getting started](getting_started.md): install, first generic function, first checked and contextual calls."
-msgstr "[はじめに](getting_started.md)：インストール、最初の汎用関数、最初の検査付き・コンテキスト付きの呼び出し。"
+msgid "Checked: `SqrtChecked`, `DivChecked`, `CompareChecked`, `PowNatChecked`, `PowIntChecked`, `ParseChecked`"
+msgstr "検査付き：`SqrtChecked`、`DivChecked`、`CompareChecked`、`PowNatChecked`、`PowIntChecked`、`ParseChecked`"
 
 #: manual/index.md:78
-msgid "[Architecture](architecture.md): source layout, tiers, errors and state."
-msgstr "[アーキテクチャ](architecture.md)：ソースの構成、層、エラーと状態。"
+msgid "Contextual: `AddContextual`, `SubContextual`, `MulContextual`, `DivContextual`, `AbsContextual`, `SqrtContextual`, `ExpContextual`, `IntegralContextual`, `AdjacentContextual`, `ConstantsContextual`, `HyperbolicContextual`, `NumericFormatContextual`"
+msgstr "コンテキスト付き：`AddContextual`、`SubContextual`、`MulContextual`、`DivContextual`、`AbsContextual`、`SqrtContextual`、`ExpContextual`、`IntegralContextual`、`AdjacentContextual`、`ConstantsContextual`、`HyperbolicContextual`、`NumericFormatContextual`"
 
-#: manual/index.md:79
-msgid "[Verification](verification.md): the local gate, CI and what the tests establish."
-msgstr "[検証](verification.md)：ローカルでの確認手順、CI、テストが確かめること。"
+#: manual/index.md:82
+msgid "Enclosure relations: `Contains`, `Overlaps`, `DefinitelyLt`, `DefinitelyLe`, `MaybeEq`"
+msgstr "包含区間の関係：`Contains`、`Overlaps`、`DefinitelyLt`、`DefinitelyLe`、`MaybeEq`"
 
-#: manual/index.md:81
-msgid "[Repository conventions](conventions.md): rules for this manual on top of the Luna Flow standard."
-msgstr "[リポジトリの規約](conventions.md)：Luna Flow の標準に加えてこのマニュアルに課す規則。"
+#: manual/index.md:85
+msgid "Exported types"
+msgstr "公開型"
+
+#: manual/index.md:87
+msgid "Context: `ArithmeticContext` with the presets `decimal32`, `decimal64` and `decimal128`, and `RoundingMode`"
+msgstr "コンテキスト：プリセット `decimal32`、`decimal64`、`decimal128` を持つ `ArithmeticContext` と `RoundingMode`"
+
+#: manual/index.md:89
+msgid "Results: `ArithmeticOutcome[T]` and `ArithmeticDiagnostics`"
+msgstr "結果：`ArithmeticOutcome[T]` と `ArithmeticDiagnostics`"
+
+#: manual/index.md:90
+msgid "Errors: `ArithmeticError`, `ArithmeticErrorKind`, and the certification evidence `CertificationFailureDetail`, `CertificationStage` and `CertificationFailureReason`"
+msgstr "エラー：`ArithmeticError`、`ArithmeticErrorKind`、および証明の証拠 `CertificationFailureDetail`、`CertificationStage`、`CertificationFailureReason`"
+
+#: manual/index.md:93
+msgid "Classification: `FpClass`"
+msgstr "分類：`FpClass`"
+
+#: manual/index.md:97
+msgid "`Float` and `Double`: every unchecked trait, every checked trait except `ParseChecked`, and the contextual arithmetic, absolute value, square root, exponential, integer embedding, adjacent values and format queries"
+msgstr "`Float` と `Double`：すべての非検査トレイト、`ParseChecked` を除くすべての検査付きトレイト、およびコンテキスト付きの算術、絶対値、平方根、指数関数、整数の埋め込み、隣接値、形式の問い合わせ"
+
+#: manual/index.md:100
+msgid "`Int`, `Int16`, `Int64`, `UInt`, `UInt16`, `UInt64` and `BigInt`: `Power` only"
+msgstr "`Int`、`Int16`、`Int64`、`UInt`、`UInt16`、`UInt64`、`BigInt`：`Power` のみ"
+
+#: manual/index.md:102
+msgid "No instance of `ParseChecked`, `ConstantsContextual`, `HyperbolicContextual` or the enclosure relations; backends provide them"
+msgstr "`ParseChecked`、`ConstantsContextual`、`HyperbolicContextual`、包含区間の関係にはインスタンスがなく、バックエンドが提供する"
+
+#: manual/index.md:105
+msgid "Where to read next"
+msgstr "次に読むもの"
+
+#: manual/index.md:107
+msgid "The [core tutorial](tutorial/core.md) works through tasks with every tier. The [core API](api/core.md) lists every public item with what each shipped instance does at the edges, and the [core design](design/core.md) derives the rounding, enclosure and error-bound mathematics behind the contracts."
+msgstr "[core チュートリアル](tutorial/core.md)はすべての層を使って課題を解く。[core API](api/core.md) はすべての公開項目と、提供される各インスタンスが境界で何をするかを挙げ、[core 設計](design/core.md)は契約の背後にある丸め、包含区間、誤差限界の数学を導出する。"
+
+#: manual/index.md:112
+msgid "New to the package: read [getting started](getting_started.md), then the [core tutorial](tutorial/core.md)."
+msgstr "パッケージが初めての場合：[はじめに](getting_started.md)を読み、続いて [core チュートリアル](tutorial/core.md) を読む。"
+
+#: manual/index.md:114
+msgid "Using it in a library: keep the [core API](api/core.md) at hand; its tables say what each shipped instance actually does at the edges (NaN, zero, infinities, overflow)."
+msgstr "ライブラリで使う場合：[core API](api/core.md) を手元に置くこと。その表は、提供される各インスタンスが境界（NaN、ゼロ、無限大、オーバーフロー）で実際に何をするかを示す。"
+
+#: manual/index.md:117
+msgid "Implementing a backend or contributing: read the [core design](design/core.md) for the contracts and their mathematics, [architecture](architecture.md) for the layout, and [verification](verification.md) and [conventions](conventions.md) before opening a pull request."
+msgstr "バックエンドを実装する、または貢献する場合：契約とその数学については [core 設計](design/core.md) を、構成については[アーキテクチャ](architecture.md)を読み、プルリクエストを出す前に[検証](verification.md)と[規約](conventions.md)を読む。"
+
+#: manual/index.md:123
+msgid "Validation"
+msgstr "検証"
+
+#: manual/index.md:125
+msgid "Recommended release checks:"
+msgstr "推奨するリリース前の確認："
+
+#: manual/index.md:134
+msgid "The [verification guide](verification.md) has the full gate, including the documentation checks."
+msgstr "ドキュメントの確認を含む完全な手順は[検証ガイド](verification.md)にある。"
 
 #: manual/tutorial/core.md:1
 msgid "core tutorial"
@@ -1949,190 +2175,238 @@ msgid "This tutorial gets you from installing `arithmetic` to writing numeric co
 msgstr "このチュートリアルでは、`arithmetic` のインストールから、必要なものを正確に述べる数値コードを書くところまで進む。解析的能力に対する汎用関数、不正な入力を処理できる値に変える検査付き演算、結果がどう丸められたかを報告するコンテキスト付き演算、そして同じトレイトに組み込む独自の型を扱う。どの例も `_test.mbt` ファイルに貼り付けて `moon test` で実行できるテストであり、期待される出力は `inspect` の呼び出しに書かれている。"
 
 #: manual/tutorial/core.md:11
+msgid "I want to"
+msgstr "したいこと"
+
+#: manual/tutorial/core.md:11
+msgid "Use"
+msgstr "使うもの"
+
+#: manual/tutorial/core.md:13
+msgid "call `sqrt`, `exp`, `sin`, ... on any number type"
+msgstr "任意の数値型で `sqrt`、`exp`、`sin` などを呼ぶ"
+
+#: manual/tutorial/core.md:13
+msgid "an unchecked bound such as `T : @lf_arith.Sqrt`"
+msgstr "`T : @lf_arith.Sqrt` のような非検査の境界"
+
+#: manual/tutorial/core.md:14
+msgid "get an error value instead of NaN for invalid input"
+msgstr "不正な入力に対して NaN ではなくエラー値を得る"
+
+#: manual/tutorial/core.md:15
+msgid "know whether a result was rounded, overflowed or underflowed"
+msgstr "結果が丸められたか、オーバーフローやアンダーフローしたかを知る"
+
+#: manual/tutorial/core.md:15
+msgid "the contextual traits and `ArithmeticOutcome::diagnostics`"
+msgstr "コンテキスト付きトレイトと `ArithmeticOutcome::diagnostics`"
+
+#: manual/tutorial/core.md:16
+msgid "chain several contextual steps and keep every flag"
+msgstr "複数のコンテキスト付きステップをつなぎ、すべてのフラグを保つ"
+
+#: manual/tutorial/core.md:17
+msgid "step to the next representable number"
+msgstr "次の表現可能な数へ進む"
+
+#: manual/tutorial/core.md:18
+msgid "compare intervals or balls safely"
+msgstr "区間や球を安全に比較する"
+
+#: manual/tutorial/core.md:19
+msgid "plug my own number type in"
+msgstr "自分の数値型を組み込む"
+
+#: manual/tutorial/core.md:19
+msgid "implement only the traits it can honour"
+msgstr "守れるトレイトだけを実装する"
+
+#: manual/tutorial/core.md:21
 msgid "Quick start"
 msgstr "クイックスタート"
 
-#: manual/tutorial/core.md:13
+#: manual/tutorial/core.md:23
 msgid "Add the package to your module:"
 msgstr "パッケージをモジュールに追加する："
 
-#: manual/tutorial/core.md:19
+#: manual/tutorial/core.md:29
 msgid "Import it in the `moon.pkg` of the package that uses it. Luna Flow code uses the alias `@lf_arith`:"
 msgstr "それを使うパッケージの `moon.pkg` でインポートする。Luna Flow のコードは別名 `@lf_arith` を使う："
 
-#: manual/tutorial/core.md:28
+#: manual/tutorial/core.md:38
 msgid "The smallest useful program asks for one capability and uses it on two number types:"
 msgstr "最小の実用的なプログラムは、一つの能力を求め、それを二つの数値型で使う："
 
-#: manual/tutorial/core.md:42
+#: manual/tutorial/core.md:52
 msgid "`hypot` works for any type with `+`, `*` and a square root, and for nothing else. That is the idea of the whole package: an algorithm names the smallest set of capabilities it uses."
 msgstr "`hypot` は `+`、`*`、平方根を持つ任意の型で動き、それ以外では動かない。これがパッケージ全体の考え方である。アルゴリズムは自分が使う最小の能力の集合を名指しする。"
 
-#: manual/tutorial/core.md:46
+#: manual/tutorial/core.md:56
 msgid "Everyday tasks"
 msgstr "日常的な作業"
 
-#: manual/tutorial/core.md:48
+#: manual/tutorial/core.md:58
 msgid "Call an elementary function generically"
 msgstr "初等関数を汎用的に呼ぶ"
 
-#: manual/tutorial/core.md:50
+#: manual/tutorial/core.md:60
 msgid "The unchecked traits (`Sqrt`, `Exponential`, `Logarithmic`, `Trigonometric`, ...) return `Self` and leave special cases to the type. Call them through the trait, `@lf_arith.Trigonometric::sin(x)`, so the code stays generic:"
 msgstr "非検査トレイト（`Sqrt`、`Exponential`、`Logarithmic`、`Trigonometric` など）は `Self` を返し、特殊な場合は型に任せる。コードを汎用に保つため、`@lf_arith.Trigonometric::sin(x)` のようにトレイト経由で呼ぶ："
 
-#: manual/tutorial/core.md:69
+#: manual/tutorial/core.md:79
 msgid "Constants have no argument, so annotate the type you want, as with `pi` above."
 msgstr "定数は引数をとらないので、上の `pi` のように欲しい型を注釈する。"
 
-#: manual/tutorial/core.md:72
+#: manual/tutorial/core.md:82
 msgid "Turn invalid input into an error value"
 msgstr "不正な入力をエラー値に変える"
 
-#: manual/tutorial/core.md:74
+#: manual/tutorial/core.md:84
 msgid "A checked trait returns `Result[_, ArithmeticError]`. Use it when a negative square root or a zero divisor is a case your caller must handle rather than a NaN to discover later. This quadratic solver uses the cancellation-free form $q = -\\tfrac12\\bigl(b + \\operatorname{sign}(b)\\sqrt{b^2 - 4ac}\\bigr)$, $x_1 = q/a$, $x_2 = c/q$:"
 msgstr "検査付きトレイトは `Result[_, ArithmeticError]` を返す。負の数の平方根やゼロ除数が、後で NaN として見つかるものではなく呼び出し側が処理すべき場合であるときに使う。この二次方程式の解法は桁落ちのない形 $q = -\\tfrac12\\bigl(b + \\operatorname{sign}(b)\\sqrt{b^2 - 4ac}\\bigr)$、$x_1 = q/a$、$x_2 = c/q$ を使う："
 
-#: manual/tutorial/core.md:110
+#: manual/tutorial/core.md:120
 msgid "The error kind tells the caller what went wrong: no real roots is a `DomainError`, a degenerate equation with $a = 0$ is a `DivisionByZero`."
 msgstr "エラーの種別が何が悪かったかを呼び出し側に伝える。実数解がない場合は `DomainError`、$a = 0$ の退化した方程式は `DivisionByZero` である。"
 
-#: manual/tutorial/core.md:113
+#: manual/tutorial/core.md:123
 msgid "Compare values that may be NaN"
 msgstr "NaN かもしれない値を比較する"
 
-#: manual/tutorial/core.md:115
+#: manual/tutorial/core.md:125
 msgid "`<` on `Double` returns `false` whenever NaN is involved, so a sort or a maximum silently goes wrong. `CompareChecked` makes the unordered case an error:"
 msgstr "`Double` の `<` は NaN が関わると常に `false` を返すので、ソートや最大値の計算が黙って誤る。`CompareChecked` は順序付けられない場合をエラーにする："
 
-#: manual/tutorial/core.md:139
+#: manual/tutorial/core.md:149
 msgid "Collect diagnostics across several steps"
 msgstr "複数のステップにわたって診断を集める"
 
-#: manual/tutorial/core.md:141
+#: manual/tutorial/core.md:151
 msgid "A contextual operation returns an `ArithmeticOutcome`: the value plus the diagnostics raised while computing it. To chain steps, pass the value on and `combine` the diagnostics. A small helper does this for any contextual operation:"
 msgstr "コンテキスト付き演算は `ArithmeticOutcome`、つまり値とその計算中に立った診断を返す。ステップをつなぐには、値を次へ渡し、診断を `combine` する。小さなヘルパーが任意のコンテキスト付き演算についてこれを行う："
 
-#: manual/tutorial/core.md:172
+#: manual/tutorial/core.md:182
 msgid "$2^{24} + 1$ does not fit in a `Float`, so the embedding rounds it to $2^{24}$ and raises `inexact`. The square root of $2^{24}$ is exact, but the combined diagnostics still remember the earlier rounding: flags only accumulate."
 msgstr "$2^{24} + 1$ は `Float` に収まらないので、埋め込みはそれを $2^{24}$ に丸めて `inexact` を立てる。$2^{24}$ の平方根は正確だが、合成した診断は以前の丸めを覚えている。フラグは蓄積するだけである。"
 
-#: manual/tutorial/core.md:176
+#: manual/tutorial/core.md:186
 msgid "Walk the representable numbers"
 msgstr "表現可能な数をたどる"
 
-#: manual/tutorial/core.md:178
+#: manual/tutorial/core.md:188
 msgid "`AdjacentContextual` returns the neighbouring representable value. The gap between a number and its successor is one *unit in the last place* (ulp), which tells you how fine the format is at that magnitude:"
 msgstr "`AdjacentContextual` は隣の表現可能な値を返す。ある数とその次の数との差は一*最終桁単位*（ulp）であり、その大きさで形式がどれだけ細かいかを示す："
 
-#: manual/tutorial/core.md:195
+#: manual/tutorial/core.md:205
 msgid "At $2^{53}$ consecutive doubles are $2$ apart, so integers above it are no longer all representable."
 msgstr "$2^{53}$ では連続する double は $2$ ずつ離れているので、それより大きい整数はもはやすべては表現できない。"
 
-#: manual/tutorial/core.md:198
+#: manual/tutorial/core.md:208
 msgid "Report a certification failure"
 msgstr "証明の失敗を報告する"
 
-#: manual/tutorial/core.md:200
+#: manual/tutorial/core.md:210
 msgid "A proof-backed backend reports that it could not certify a result with a `CertificationFailure` error. Handle it separately from domain errors: the input was valid, and a larger budget may succeed."
 msgstr "証明付きバックエンドは、結果を証明できなかったことを `CertificationFailure` エラーで報告する。定義域エラーとは分けて処理すること。入力は有効であり、予算を増やせば成功するかもしれない。"
 
-#: manual/tutorial/core.md:233
+#: manual/tutorial/core.md:243
 msgid "Going further"
 msgstr "さらに進んで"
 
-#: manual/tutorial/core.md:235
+#: manual/tutorial/core.md:245
 msgid "Implement a contextual trait for your own type"
 msgstr "独自の型にコンテキスト付きトレイトを実装する"
 
-#: manual/tutorial/core.md:237
+#: manual/tutorial/core.md:247
 msgid "Implement a capability only when you can honour it. This fixed-point type stores hundredths; multiplying two values produces ten-thousandths, which must be rounded back. The implementation follows the context's rounding mode, reports the rounding in the diagnostics, and rejects modes it does not support instead of ignoring them:"
 msgstr "能力は守れる場合にだけ実装すること。この固定小数点型は百分の一単位で値を保持する。二つの値を掛けると一万分の一単位になり、丸め戻す必要がある。実装はコンテキストの丸めモードに従い、丸めを診断で報告し、サポートしないモードは無視せずに拒否する："
 
-#: manual/tutorial/core.md:285
+#: manual/tutorial/core.md:295
 msgid "$0.05 \\times 0.10 = 0.005$ and $0.15 \\times 0.10 = 0.015$ are both exact ties; round-to-nearest-even sends them to $0.00$ and $0.02$, the neighbours with an even last digit."
 msgstr "$0.05 \\times 0.10 = 0.005$ と $0.15 \\times 0.10 = 0.015$ はどちらもちょうど中間である。偶数への最近接丸めはそれらを、最後の桁が偶数の隣接値 $0.00$ と $0.02$ に送る。"
 
-#: manual/tutorial/core.md:289
+#: manual/tutorial/core.md:299
 msgid "Compare enclosures with three outcomes"
 msgstr "包含区間を三通りの結果で比較する"
 
-#: manual/tutorial/core.md:291
+#: manual/tutorial/core.md:301
 msgid "For an interval or ball type, \"is $x < y$?\" has three answers: yes for every admissible value, no for every one, or unknown. The two relation traits are enough to compute it:"
 msgstr "区間やボールの型では、「$x < y$ か？」には三つの答えがある。許容されるすべての値で yes、すべての値で no、あるいは不明である。二つの関係トレイトでそれを計算できる："
 
-#: manual/tutorial/core.md:329
+#: manual/tutorial/core.md:339
 msgid "An `Unknown` answer is not a failure: narrow the enclosures (compute with more precision) and ask again. A `Yes` or `No` never changes when the enclosures shrink; the [design page](../design/core.md#soundness-and-monotonicity-of-enclosure-relations) proves why. Interval and ball backends implement the same traits, so `less` works with them unchanged."
 msgstr "`Unknown` という答えは失敗ではない。包含区間を狭めて（より高い精度で計算して）もう一度問えばよい。`Yes` や `No` は包含区間が縮んでも変わらない。その理由は[設計ページ](../design/core.md#soundness-and-monotonicity-of-enclosure-relations)で証明する。区間やボールのバックエンドは同じトレイトを実装するので、`less` はそれらでもそのまま動く。"
 
-#: manual/tutorial/core.md:335
+#: manual/tutorial/core.md:345
 msgid "Combine with algebraic structure"
 msgstr "代数構造と組み合わせる"
 
-#: manual/tutorial/core.md:337
+#: manual/tutorial/core.md:347
 msgid "`arithmetic` does not define rings or fields; `luna-generic` does. Combine the two in a bound when an algorithm needs both, for example a Newton iteration for $\\sqrt{a}$ that only needs field operations, cross-checked against `Sqrt` to within one ulp:"
 msgstr "`arithmetic` は環や体を定義しない。それは `luna-generic` の役割である。アルゴリズムが両方を必要とするときは、境界の中で二つを組み合わせる。例えば体の演算だけを使う $\\sqrt{a}$ のニュートン反復を、`Sqrt` と 1 ulp 以内で照合する："
 
-#: manual/tutorial/core.md:360
+#: manual/tutorial/core.md:370
 msgid "Import `\"Luna-Flow/luna-generic\" @lf_alg` next to `@lf_arith` for this."
 msgstr "そのために `@lf_arith` の隣に `\"Luna-Flow/luna-generic\" @lf_alg` をインポートする。"
 
-#: manual/tutorial/core.md:362
+#: manual/tutorial/core.md:372
 msgid "Choose the tier for performance"
 msgstr "性能のための層の選び方"
 
-#: manual/tutorial/core.md:364
+#: manual/tutorial/core.md:374
 msgid "Unchecked traits compile to a direct call with no allocation. Checked traits wrap the result in a `Result`, and contextual ones also build an `ArithmeticOutcome`. In an inner loop over native scalars, validate the inputs once with a checked call and use the unchecked trait inside. Generic code is specialised per type, so a trait bound costs nothing at run time."
 msgstr "非検査トレイトはアロケーションのない直接呼び出しにコンパイルされる。検査付きトレイトは結果を `Result` に包み、コンテキスト付きトレイトはさらに `ArithmeticOutcome` を作る。ネイティブスカラーの内側のループでは、入力を検査付きの呼び出しで一度検証し、ループ内では非検査トレイトを使う。汎用コードは型ごとに特殊化されるので、トレイト境界の実行時コストはない。"
 
-#: manual/tutorial/core.md:370
+#: manual/tutorial/core.md:380
 msgid "Common pitfalls"
 msgstr "よくある落とし穴"
 
-#: manual/tutorial/core.md:372
+#: manual/tutorial/core.md:382
 msgid "**Empty diagnostics from `Float` and `Double` do not mean exact.** Their contextual arithmetic ignores the context and does not detect rounding: `add_contextual(0.1, 0.2, ctx)` returns `0.30000000000000004` with empty diagnostics. Only the `Float` integer embedding detects loss. Use a context-faithful backend when the flags matter."
 msgstr "**`Float` と `Double` の空の診断は正確を意味しない。** それらのコンテキスト付き算術はコンテキストを無視し、丸めを検出しない。`add_contextual(0.1, 0.2, ctx)` は空の診断とともに `0.30000000000000004` を返す。損失を検出するのは `Float` の整数埋め込みだけである。フラグが重要ならコンテキストに忠実なバックエンドを使うこと。"
 
-#: manual/tutorial/core.md:377
+#: manual/tutorial/core.md:387
 msgid "**The context is a request.** `ArithmeticContext::new(16)` does not make `Double` arithmetic decimal; it tells a backend what to do if it can. `ArithmeticContext::new(0)` silently becomes precision `1`, and `e_min` greater than `e_max` aborts."
 msgstr "**コンテキストは要求である。** `ArithmeticContext::new(16)` は `Double` の算術を十進にはしない。可能ならどうすべきかをバックエンドに伝えるだけである。`ArithmeticContext::new(0)` は黙って精度 `1` になり、`e_min` が `e_max` より大きいと中断する。"
 
-#: manual/tutorial/core.md:381
+#: manual/tutorial/core.md:391
 msgid "**Unchecked `Power` aborts on negative integer exponents.** `@lf_arith.Power::pow(2, -1)` aborts for `Int`, `Int16`, `Int64` and `BigInt`, and the fixed-width integer powers wrap on overflow. Use `PowIntChecked` on a floating type for reciprocals."
 msgstr "**非検査の `Power` は負の整数指数で中断する。** `@lf_arith.Power::pow(2, -1)` は `Int`、`Int16`、`Int64`、`BigInt` で中断し、固定幅整数のべき乗はオーバーフロー時にラップアラウンドする。逆数には浮動小数点型で `PowIntChecked` を使うこと。"
 
-#: manual/tutorial/core.md:385
+#: manual/tutorial/core.md:395
 msgid "**A tiny base with a negative exponent.** `pow_int_checked(1.0e-200, -2, ctx)` returns `DivisionByZero`, because $x^2$ underflows to zero before the reciprocal is taken."
 msgstr "**非常に小さい底と負の指数。** `pow_int_checked(1.0e-200, -2, ctx)` は `DivisionByZero` を返す。逆数を取る前に $x^2$ がゼロへアンダーフローするからである。"
 
-#: manual/tutorial/core.md:388
+#: manual/tutorial/core.md:398
 msgid "**`epsilon_contextual` is $\\varepsilon$, not the unit roundoff.** Round-to-nearest errors are bounded by $u = \\varepsilon/2$."
 msgstr "**`epsilon_contextual` は単位丸め誤差ではなく $\\varepsilon$ である。** 最近接丸めの誤差の上界は $u = \\varepsilon/2$ である。"
 
-#: manual/tutorial/core.md:390
+#: manual/tutorial/core.md:400
 msgid "**`definitely_lt` being false does not mean \"greater or equal\".** For overlapping enclosures both directions are false; ask the opposite question as well, as `less` does above."
 msgstr "**`definitely_lt` が偽であることは「以上」を意味しない。** 重なり合う包含区間ではどちらの向きも偽である。上の `less` のように、逆向きの問いも立てること。"
 
-#: manual/tutorial/core.md:393
+#: manual/tutorial/core.md:403
 msgid "**`maybe_eq` is not equality.** It says the enclosures share a point. Two different values can have overlapping enclosures."
 msgstr "**`maybe_eq` は等価性ではない。** 包含区間が点を共有することを述べるだけである。異なる二つの値が重なり合う包含区間を持つことはありうる。"
 
-#: manual/tutorial/core.md:395
+#: manual/tutorial/core.md:405
 msgid "**`x.sqrt()` on a `Double` is core's method, not the trait.** In generic code call the trait, `@lf_arith.Sqrt::sqrt(x)`; the results agree for `Double`, but only the trait call works for every `T : Sqrt`."
 msgstr "**`Double` の `x.sqrt()` はトレイトではなく core のメソッドである。** 汎用コードではトレイト `@lf_arith.Sqrt::sqrt(x)` を呼ぶこと。`Double` では結果は一致するが、すべての `T : Sqrt` で動くのはトレイトの呼び出しだけである。"
 
-#: manual/tutorial/core.md:399
+#: manual/tutorial/core.md:409
 msgid "Next steps"
 msgstr "次のステップ"
 
-#: manual/tutorial/core.md:401
+#: manual/tutorial/core.md:411
 msgid "The [core API](../api/core.md) lists every trait, type and instance with its exact semantics."
 msgstr "[core API](../api/core.md) は、すべてのトレイト、型、インスタンスを正確な意味とともに列挙する。"
 
-#: manual/tutorial/core.md:403
+#: manual/tutorial/core.md:413
 msgid "The [core design](../design/core.md) explains the three tiers, the explicit context and the enclosure logic, with the rounding-error and correctness derivations."
 msgstr "[core 設計](../design/core.md) は三つの層、明示的なコンテキスト、包含区間の論理を、丸め誤差と正しさの導出とともに説明する。"
 
-#: manual/tutorial/core.md:406
+#: manual/tutorial/core.md:416
 msgid "[`luna-generic`](https://lunaflow.cn/en/luna-generic/) provides the algebraic traits that combine with these capabilities."
 msgstr "[`luna-generic`](https://lunaflow.cn/en/luna-generic/) は、これらの能力と組み合わせる代数トレイトを提供する。"
 
@@ -2177,38 +2451,68 @@ msgid "What the tests establish"
 msgstr "テストが確かめること"
 
 #: manual/verification.md:49
-msgid "`trait_test.mbt` checks that the unchecked traits compose in generic code together with `luna-generic` bounds; representative values of every elementary function for `Float` and `Double`; that `Constants` satisfy $\\tau = 2\\pi$ and $\\ln e = 1$ in both types; exact `Power` for every integer type and `BigInt`; the checked square root and division on valid input, negative input, $0/0$, $\\infty/\\infty$ and zero divisors; NaN rejection by `CompareChecked`; and checked integer powers with zero exponents, negative exponents, zero bases and the most negative `Int`."
-msgstr "`trait_test.mbt` は次を確かめる。非検査トレイトが `luna-generic` の境界とともに汎用コードで組み合わさること、`Float` と `Double` のすべての初等関数の代表的な値、`Constants` が両方の型で $\\tau = 2\\pi$ と $\\ln e = 1$ を満たすこと、すべての整数型と `BigInt` の正確な `Power`、正しい入力・負の入力・$0/0$・$\\infty/\\infty$・ゼロ除数に対する検査付きの平方根と除算、`CompareChecked` による NaN の拒否、そしてゼロ指数・負の指数・ゼロの底・最も小さい負の `Int` に対する検査付き整数べき乗である。"
+msgid "`trait_test.mbt` checks that the unchecked traits compose in generic code together with `luna-generic` bounds; representative values of every elementary function for `Float` and `Double`; that `Constants` satisfy $\\tau = 2\\pi$ and $\\ln e = 1$ up to a small tolerance in both types; exact `Power` on small operands for every integer type and `BigInt` (wrap-around and negative exponents are not tested); the checked square root and division on valid input, negative input, $0/0$, $\\infty/\\infty$ and zero divisors; NaN rejection by `CompareChecked`; and checked integer powers with zero exponents, negative exponents, zero bases and the most negative `Int`."
+msgstr "`trait_test.mbt` は次を確かめる。非検査トレイトが `luna-generic` の境界とともに汎用コードで組み合わさること、`Float` と `Double` のすべての初等関数の代表的な値、`Constants` が両方の型で小さな許容誤差の範囲で $\\tau = 2\\pi$ と $\\ln e = 1$ を満たすこと、すべての整数型と `BigInt` の小さなオペランドでの正確な `Power`（ラップアラウンドと負の指数はテストしていない）、正しい入力・負の入力・$0/0$・$\\infty/\\infty$・ゼロ除数に対する検査付きの平方根と除算、`CompareChecked` による NaN の拒否、そしてゼロ指数・負の指数・ゼロの底・最も小さい負の `Int` に対する検査付き整数べき乗である。"
 
-#: manual/verification.md:58
+#: manual/verification.md:59
 msgid "`contextual_test.mbt` checks exact and rounded `Int` embedding into `Float` and exact embedding into `Double`; the IEEE boundaries of the adjacent operations (signed zeros, smallest subnormals, largest finite values, infinities and NaN); and, through test-local types, that contextual hyperbolic outcomes and certification failures of contextual constants pass through the traits unchanged."
 msgstr "`contextual_test.mbt` は次を確かめる。`Float` への `Int` の正確な埋め込みと丸めを伴う埋め込み、`Double` への正確な埋め込み、隣接値演算の IEEE の境界（符号付きゼロ、最小の非正規化数、最大の有限値、無限大、NaN）、そしてテスト内で定義した型を通して、コンテキスト付き双曲線関数の結果とコンテキスト付き定数の証明失敗がトレイトを変更なく通過することである。"
 
-#: manual/verification.md:65
+#: manual/verification.md:66
 msgid "`certification_error_wbtest.mbt` checks that a `CertificationFailureDetail` survives `ArithmeticError::certification_failure` with every field, and that the error predicates stay disjoint."
 msgstr "`certification_error_wbtest.mbt` は、`CertificationFailureDetail` がすべてのフィールドとともに `ArithmeticError::certification_failure` を通り抜けること、そしてエラーの述語が互いに排他的であることを確かめる。"
 
-#: manual/verification.md:69
+#: manual/verification.md:70
 msgid "What the tests do not claim"
 msgstr "テストが主張しないこと"
 
-#: manual/verification.md:71
+#: manual/verification.md:72
 msgid "The tests do not claim that `Float` or `Double` arithmetic is certified, that their elementary functions are correctly rounded, or that their contextual instances detect rounding. They verify the capability vocabulary, the fixed-format adjacent semantics and the error classification."
 msgstr "テストは、`Float` や `Double` の算術が証明付きであること、その初等関数が正しく丸められること、そのコンテキスト付きインスタンスが丸めを検出することを主張しない。確かめるのは、能力の語彙、固定形式での隣接値の意味、エラーの分類である。"
 
-#: manual/verification.md:76
+#: manual/verification.md:77
 msgid "Continuous integration"
 msgstr "継続的インテグレーション"
 
-#: manual/verification.md:78
+#: manual/verification.md:79
 msgid "CI runs on pull requests and on pushes to `main`: it builds and checks all targets, runs the default, JavaScript and native test suites, verifies that `pkg.generated.mbti` matches the source, and checks formatting. A separate workflow runs the shared Luna Flow documentation check on changes under `doc/`. The `publish-package` workflow accepts an explicit version, requires it to equal the version in `moon.mod`, repeats the checks, publishes to mooncakes and creates the GitHub release. A passing run is repository evidence, not a numerical conformance claim for any backend."
 msgstr "CI はプルリクエストと `main` へのプッシュで実行される。全ターゲットをビルド・検査し、既定・JavaScript・ネイティブのテストスイートを実行し、`pkg.generated.mbti` がソースと一致することを確かめ、フォーマットを検査する。別のワークフローが `doc/` 以下の変更に対して Luna Flow 共通のドキュメント検査を実行する。`publish-package` ワークフローは明示的なバージョンを受け取り、それが `moon.mod` のバージョンと等しいことを要求し、検査を繰り返して mooncakes に公開し、GitHub リリースを作成する。成功した実行はリポジトリとしての証拠であり、どのバックエンドについても数値的な適合性を主張するものではない。"
 
+#~ msgid "This page lists every public item of the `Luna-Flow/arithmetic` package (the package at `src/`, documented as `core`). The examples import it as `@lf_arith`:"
+#~ msgstr "このページは `Luna-Flow/arithmetic` パッケージ（`src/` にあり、`core` として文書化される）のすべての公開項目を列挙する。例ではこれを `@lf_arith` としてインポートする。"
+
+#~ msgid "Where it sits"
+#~ msgstr "位置付け"
+
+#~ msgid "Packages"
+#~ msgstr "パッケージ"
+
+#~ msgid "Package"
+#~ msgstr "パッケージ"
+
+#~ msgid "Import path"
+#~ msgstr "インポートパス"
+
+#~ msgid "capability traits, `ArithmeticContext`, diagnostics, errors and certification details, `Float`/`Double`/integer instances"
+#~ msgstr "能力トレイト、`ArithmeticContext`、診断、エラーと証明の詳細、`Float`/`Double`/整数のインスタンス"
+
+#~ msgid "[API](api/core.md), [tutorial](tutorial/core.md), [design](design/core.md)"
+#~ msgstr "[API](api/core.md)、[チュートリアル](tutorial/core.md)、[設計](design/core.md)"
+
+#~ msgid "Reading paths"
+#~ msgstr "読み進め方"
+
+#~ msgid "The package depends on `Kaida-Amethyst/math` for the `Float` and `Double` elementary functions. Its tests also use `Luna-Flow/luna-generic`."
+#~ msgstr "このパッケージは `Float` と `Double` の初等関数のために `Kaida-Amethyst/math` に依存する。テストでは `Luna-Flow/luna-generic` も使う。"
+
+#~ msgid "Toolchain"
+#~ msgstr "ツールチェーン"
+
+#~ msgid "Guides"
+#~ msgstr "ガイド"
+
 #~ msgid "Arithmetic capability traits and checked analytic operations for LunaFlow numeric types, with default real-valued instances."
 #~ msgstr "LunaFlow の数値型向けの算術 capability trait とチェック付き解析演算。実数値の既定インスタンスを含みます。"
-
-#~ msgid "Purpose"
-#~ msgstr "役割"
 
 #~ msgid "`arithmetic` extends `luna-generic` with analytic capabilities, checked operations, contextual outcomes, and enclosure relations. Public traits remain small so algorithms can request only the capabilities they use."
 #~ msgstr "`arithmetic` は `luna-generic` の上に解析 capability、checked 演算、contextual 結果、enclosure 関係を追加します。公開 traits は小さく保ち、アルゴリズムが必要な能力だけを要求できるようにします。"
@@ -2470,27 +2774,6 @@ msgstr "CI はプルリクエストと `main` へのプッシュで実行され�
 
 #~ msgid "Core documents"
 #~ msgstr "Core ドキュメント"
-
-#~ msgid "[Getting started](./getting_started.md)"
-#~ msgstr "[はじめに](./getting_started.md)"
-
-#~ msgid "[Architecture](./architecture.md)"
-#~ msgstr "[アーキテクチャ](./architecture.md)"
-
-#~ msgid "[Verification](./verification.md)"
-#~ msgstr "[検証](./verification.md)"
-
-#~ msgid "[API reference](./api/core.md)"
-#~ msgstr "[API リファレンス](./api/core.md)"
-
-#~ msgid "[Tutorial](./tutorial/core.md)"
-#~ msgstr "[チュートリアル](./tutorial/core.md)"
-
-#~ msgid "[Design](./design/core.md)"
-#~ msgstr "[設計](./design/core.md)"
-
-#~ msgid "[Repository conventions](./conventions.md)"
-#~ msgstr "[リポジトリの規約](./conventions.md)"
 
 #~ msgid "Generic analytic helper"
 #~ msgstr "汎用解析 Helper"

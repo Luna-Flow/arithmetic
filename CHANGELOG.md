@@ -4,9 +4,33 @@ All notable repository-release changes are tracked here. The main
 [`README.md`](./README.md) stays focused on the current baseline and entry
 points; older release history lives in this file.
 
+## Unreleased
+
+### Changed
+
+- Migrated the package to MoonBit 0.10. Trait methods that were implicitly
+  promoted to methods are now promoted explicitly in `src/extends.mbt`:
+  `equal` stays available on `FpClass`, `RoundingMode`, `ArithmeticContext`,
+  `ArithmeticDiagnostics`, `ArithmeticOutcome`, `ArithmeticError`,
+  `ArithmeticErrorKind`, `CertificationStage`, `CertificationFailureReason`
+  and `CertificationFailureDetail`, and now appears in the interface file.
+- The package imports `moonbitlang/core/debug` for the `Debug` promotions.
+- Blackbox tests call the package through `@arithmetic`, as MoonBit 0.10
+  requires.
+- Documentation rewritten (API, tutorial and design pages for `core`, plus the
+  overview and guides), with complete zh_CN and ja_JP translations. Every
+  runnable example compiles and passes as a test.
+
+### Deprecated
+
+- The implicit method forms `x.not_equal(y)` (all public types above) and
+  `x.to_repr()` (`FpClass`, `ArithmeticDiagnostics`, `ArithmeticOutcome`)
+  remain callable but are deprecated and hidden from the documentation. Use
+  `x != y` and `Repr(x)` instead.
+
 ## 0.5.0 - 2026-07-18
 
-Current repository release.
+Latest published release.
 
 ### Added
 

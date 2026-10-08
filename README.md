@@ -1,175 +1,89 @@
-# Arithmetic
+# arithmetic
 
-Arithmetic capability traits and checked or contextual numeric boundaries for
-Luna Flow projects.
+Analytic capability traits for Luna Flow numeric types. `arithmetic` lets an
+algorithm state exactly which operations it needs (a square root, an
+exponential, a checked division, a correctly reported rounding) and how
+failures must surface, without assuming a universal "real number" type. It
+ships default instances for `Float`, `Double` and the integer types; numeric
+backends implement the same traits with context-faithful and certified
+arithmetic.
 
-## v0.5.0 - Contextual Capability Expansion
+## Capability tiers
 
-This release expands the contextual capability boundary built in `0.3.0` and
-the certification-failure vocabulary added in `0.4.0`. The new traits cover
-integer embedding, adjacent representable values, context-dependent constants,
-and context-dependent hyperbolic functions without bundling unrelated numeric
-requirements.
+| Tier | Traits | Returns |
+| --- | --- | --- |
+| Unchecked | `Sqrt`, `Cbrt`, `Radical`, `Exponential`, `Logarithmic`, `Power`, `Trigonometric`, `InverseTrigonometric`, `Hyperbolic`, `InverseHyperbolic`, `Constants` | `Self` |
+| Checked | `SqrtChecked`, `DivChecked`, `CompareChecked`, `PowNatChecked`, `PowIntChecked`, `ParseChecked` | `Result[Self, ArithmeticError]` |
+| Contextual | `AddContextual`, `SubContextual`, `MulContextual`, `DivContextual`, `AbsContextual`, `SqrtContextual`, `ExpContextual`, `IntegralContextual`, `AdjacentContextual`, `ConstantsContextual`, `HyperbolicContextual`, `NumericFormatContextual` | `Result[ArithmeticOutcome[Self], ArithmeticError]` |
+| Enclosure relations | `Contains`, `Overlaps`, `DefinitelyLt`, `DefinitelyLe`, `MaybeEq` | `Bool` |
 
-For earlier release notes and repository history, see
-[CHANGELOG.md](./CHANGELOG.md).
+Checked and contextual operations take an explicit, immutable
+`ArithmeticContext` (precision, rounding mode, exponent range); there is no
+global numeric state. Contextual results carry `ArithmeticDiagnostics` flags,
+and proof-backed backends report inconclusive evaluations as structured
+certification failures.
 
-### Release Notes
+The built-in `Float` and `Double` contextual instances keep native IEEE
+behaviour: they ignore the context and, except for the `Float` integer
+embedding, do not detect rounding.
 
-- `IntegralContextual` embeds a MoonBit `Int` under an explicit context and
-  returns conversion diagnostics.
-- `AdjacentContextual` exposes next-plus, next-minus, and next-toward
-  operations while preserving signed-zero and infinity boundaries.
-- `ConstantsContextual` and `HyperbolicContextual` define context-faithful
-  outcome surfaces for numeric backends that can report meaningful diagnostics.
-- Proof-backed constant implementations can preserve target-rounding failures
-  through `ArithmeticErrorKind::CertificationFailure`.
+## Install
 
-## Package Positioning
-
-- `luna-generic` expresses algebraic structure such as `Ring`, `Field`, and
-  `Num`.
-- `arithmetic` expresses analytic functions, checked operations, contextual
-  outcomes, and enclosure-style relations.
-- The package describes small capabilities rather than declaring a bundled
-  “real number” abstraction.
-- Concrete numeric packages should implement only the traits whose semantics
-  they can support faithfully.
-
-## Capability Layers
-
-### Unchecked Elementary Traits
-
-- `Sqrt`, `Cbrt`, `Radical`
-- `Exponential`, `Logarithmic`, `Power`
-- `Trigonometric`, `InverseTrigonometric`
-- `Hyperbolic`, `InverseHyperbolic`
-- `Constants`
-
-These traits preserve direct backend behavior and return `Self`.
-
-### Checked Traits
-
-- `SqrtChecked`, `DivChecked`, `CompareChecked`
-- `PowNatChecked`, `PowIntChecked`, `ParseChecked`
-
-Checked traits return `Result[..., ArithmeticError]` and use
-`ArithmeticContext` where the operation needs an explicit context.
-`ArithmeticError` can also carry a `CertificationFailureDetail` when a
-proof-backed backend cannot certify a result at the requested target.
-
-### Contextual Outcome Traits
-
-- `AddContextual`, `SubContextual`, `MulContextual`, `DivContextual`
-- `AbsContextual`, `SqrtContextual`, `ExpContextual`
-- `IntegralContextual`, `AdjacentContextual`
-- `ConstantsContextual`, `HyperbolicContextual`
-- `NumericFormatContextual`
-
-Contextual operations return `ArithmeticOutcome[Self]` inside `Result`, keeping
-the computed value and diagnostic flags together as immutable data.
-
-### Enclosure Relations
-
-- `Contains`, `Overlaps`
-- `DefinitelyLt`, `DefinitelyLe`, `MaybeEq`
-
-These traits model containment and definite or possible relations without
-pretending enclosure values form a scalar total order.
-
-## Context Contract
-
-- `ArithmeticContext::new` clamps precision to at least `1`.
-- If both exponent limits are present, `e_min` must not exceed `e_max`.
-- The decimal presets use precisions `7`, `16`, and `34` with their matching
-  exponent ranges and clamping enabled.
-- `ArithmeticDiagnostics::combine` merges flags with logical OR, so callers can
-  aggregate a sequence of outcomes explicitly.
-
-The built-in `Float` and `Double` contextual implementations do **not** emulate
-arbitrary decimal precision, directed rounding, exponent clamping, or general
-IEEE status-flag detection. Contextual division and square root delegate
-validation to their checked counterparts. Integer embedding reports
-`inexact`/`rounded` when conversion to `Float` loses information. Adjacent
-operations use the fixed IEEE binary format and treat selecting the neighboring
-value as exact. `Float` and `Double` intentionally do not implement
-`ConstantsContextual` or `HyperbolicContextual`, because their native functions
-cannot honor arbitrary contexts or report complete diagnostics.
-
-## Installation
-
-```bash
+```sh
 moon add Luna-Flow/arithmetic@0.5.0
-moon add Luna-Flow/luna-generic@0.3.1
 ```
-
-Use explicit Luna Flow aliases in `moon.pkg`:
 
 ```moonbit nocheck
 import {
-  "Luna-Flow/luna-generic" @lf_alg,
   "Luna-Flow/arithmetic" @lf_arith,
 }
 ```
 
-## Quick Start
+## Example
 
 ```moonbit
-using @lf_alg { trait Add, trait Mul }
-using @lf_arith { trait Sqrt }
-
-fn hypot2[T : Add + Mul + Sqrt](x : T, y : T) -> T {
-  Sqrt::sqrt(x * x + y * y)
+fn[T : Add + Mul + @lf_arith.Sqrt] hypot(x : T, y : T) -> T {
+  @lf_arith.Sqrt::sqrt(x * x + y * y)
 }
 
-let context = @lf_arith.ArithmeticContext::decimal64()
-let outcome = @lf_arith.DivContextual::div_contextual(10.0, 4.0, context).unwrap()
-inspect(outcome.value, content="2.5")
-inspect(outcome.diagnostics.inexact, content="false")
+test "readme" {
+  inspect(hypot(3.0, 4.0), content="5")
+  let ctx = @lf_arith.ArithmeticContext::decimal64()
+  let q = @lf_arith.DivContextual::div_contextual(10.0, 4.0, ctx).unwrap()
+  inspect(q.value, content="2.5")
+  inspect(@lf_arith.DivChecked::div_checked(1.0, 0.0, ctx) is Err(_), content="true")
+}
 ```
+
+## Packages
+
+| Package | Import path | Documentation |
+| --- | --- | --- |
+| `core` (`src/`) | `Luna-Flow/arithmetic` | [API](doc/manual/api/core.md), [tutorial](doc/manual/tutorial/core.md), [design](doc/manual/design/core.md) |
+
+## Requirements
+
+MoonBit `moonc` 0.10 or later with `moon.mod`/`moon.pkg` manifests. All
+backends (`wasm-gc`, `wasm`, `js`, `native`) are supported. The `Float` and
+`Double` elementary functions come from `Kaida-Amethyst/math`.
 
 ## Documentation
 
 The manual is published at
-[luna-flow.github.io/en/arithmetic](https://luna-flow.github.io/en/arithmetic/)
-with Simplified Chinese and Japanese translations. Its English source lives in
-[doc/manual](./doc/manual/index.md):
+[lunaflow.cn/en/arithmetic](https://lunaflow.cn/en/arithmetic/) with Simplified
+Chinese and Japanese translations. Its English source is
+[doc/manual/index.md](doc/manual/index.md); translations are gettext catalogs
+in `doc/locale`.
 
-- [Getting started](./doc/manual/getting_started.md)
-- [Architecture](./doc/manual/architecture.md)
-- [Verification](./doc/manual/verification.md)
-- [API reference](./doc/manual/api/core.md)
-- [Repository conventions](./doc/manual/conventions.md)
+## Contributing
 
-Translations are gettext catalogs in `doc/locale`.
+Run the gate in [doc/manual/verification.md](doc/manual/verification.md)
+(`moon fmt`, `moon info`, `moon check --target all`, `moon test` on the
+default, JavaScript and native targets) and follow
+[doc/manual/conventions.md](doc/manual/conventions.md) for documentation.
+Commits follow Conventional Commits. Release history is in
+[CHANGELOG.md](CHANGELOG.md).
 
-## Changelog
+## License
 
-Historical release notes live in [CHANGELOG.md](./CHANGELOG.md). This README
-stays focused on the current package baseline and entry points.
-
-## Development
-
-Useful local commands:
-
-```bash
-moon fmt
-moon info
-moon check --target all
-moon test
-```
-
-## Release Checklist
-
-1. Bump `moon.mod` to the intended release version.
-2. Update `README.md`, the English manual in `doc/manual` with its catalogs
-   (`lunadoc update`), and `CHANGELOG.md`.
-3. Run `moon fmt --check`, `moon info`, `moon build --target all`,
-   `moon check --target all --frozen`, and the default, JavaScript, and native
-   test suites.
-4. Trigger `publish-package` with the exact `moon.mod` version. The workflow
-   repeats the checks, publishes to mooncakes, and creates the matching GitHub
-   release.
-
-The workflow publishes the version declared in `moon.mod` to mooncakes; it does
-not accept a mismatched release version.
+Apache-2.0. See [LICENSE](LICENSE).

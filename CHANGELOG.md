@@ -23,6 +23,14 @@ points; older release history lives in this file.
 - Documentation rewritten (API, tutorial and design pages for `core`, plus the
   overview and guides), with complete zh_CN and ja_JP translations. Every
   runnable example compiles and passes as a test.
+- Manual brought to the Luna Flow documentation standard: the overview has
+  install, page, export and validation sections; the API page gains purpose
+  and importing sections; the tutorial gains a task table; the design page
+  states its constraints and main decisions. The manual now documents the
+  laws of the integer `Power` instances (and how a wrapped exponent sum breaks
+  them), the limits of Kleene's three-valued logic for correlated conditions,
+  and that `ArithmeticError` and the context types implement neither `Show`
+  nor `Debug`.
 
 ### Deprecated
 

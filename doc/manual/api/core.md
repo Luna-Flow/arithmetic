@@ -1,16 +1,15 @@
 # core API
 
-This page lists every public item of the `Luna-Flow/arithmetic` package (the
-package at `src/`, documented as `core`). The examples import it as
-`@lf_arith`:
+## Purpose
 
-```moonbit nocheck
-import {
-  "Luna-Flow/arithmetic" @lf_arith,
-}
-```
+`Luna-Flow/arithmetic` (the package at `src/`, documented as `core`) is the
+capability layer between algebraic structure and concrete numbers. It does
+not implement numeric algorithms by itself: it defines which analytic
+operations a number type offers and how they fail, and ships baseline
+instances for the native `Float`, `Double` and integer types.
 
-The items fall into four capability tiers and the shared values they use.
+This page lists every public item of the package. The items fall into four
+capability tiers and the shared values they use.
 
 | Tier | Typical signature | Failure channel | Defined in |
 | --- | --- | --- | --- |
@@ -22,6 +21,22 @@ The items fall into four capability tiers and the shared values they use.
 The [core design](../design/core.md) explains why the tiers are separate and
 derives the mathematics behind them. The [core tutorial](../tutorial/core.md)
 uses them on worked tasks.
+
+## Importing
+
+Add the package to your `moon.pkg`:
+
+```moonbit nocheck
+import {
+  "Luna-Flow/arithmetic" @lf_arith,
+}
+```
+
+The examples on this page call every item through the alias, as
+`@lf_arith.Sqrt::sqrt(x)`. Call trait methods through the trait rather than
+with dot syntax: since MoonBit 0.10 an implementation no longer makes the
+trait's methods callable as `x.sqrt()`, and on `Double` that form reaches
+core's own method instead.
 
 ## Shared vocabulary
 
@@ -221,6 +236,13 @@ pub struct ArithmeticError {
 
 `kind` is the machine-readable category and `message` a human-readable
 explanation. Two errors are equal when both fields are equal.
+
+`ArithmeticError` derives only `Eq`: it implements neither `Show` nor
+`Debug`, so print `err.message` or match on `err.kind` instead of passing the
+error to `inspect` or `debug_inspect`. The same holds for
+`ArithmeticErrorKind`, `CertificationFailureDetail`, `CertificationStage`,
+`CertificationFailureReason`, `ArithmeticContext` and `RoundingMode`; only
+`FpClass`, `ArithmeticDiagnostics` and `ArithmeticOutcome` derive `Debug`.
 
 ### Error constructors
 
@@ -671,6 +693,15 @@ pub(open) trait Power {
 The integer instances use binary exponentiation, $O(\log n)$ multiplications.
 $x^0 = 1$ for every base, including $0^0$.
 
+For the integer instances `pow` is the action of the exponent, read as a
+natural number, on the multiplicative monoid of `Self`:
+$x^{m+n} = x^m x^n$ and $x^{mn} = (x^m)^n$ hold whenever $m + n$ and $mn$
+are computed without wrapping. The exponent is itself a value of `Self`, so a
+wrapped exponent sum breaks the first law: for `UInt`,
+`pow(2U, 0xFFFFFFFFU) * pow(2U, 1U)` is `0`, while the wrapped sum `0U` gives
+`pow(2U, 0U) == 1U`. The [design page](../design/core.md#laws-of-power)
+derives which laws hold.
+
 ```moonbit
 test "power" {
   inspect(@lf_arith.Power::pow(2, 10), content="1024")
@@ -678,6 +709,8 @@ test "power" {
   inspect(@lf_arith.Power::pow(2U, 32U), content="0")
   inspect(@lf_arith.Power::pow(2.0, 0.5), content="1.4142135623730951")
   inspect(@lf_arith.Power::pow(10N, 20N), content="100000000000000000000")
+  // the exponent sum 0xFFFFFFFF + 1 wraps to 0, but 2^0 is 1
+  inspect(@lf_arith.Power::pow(2U, 0xFFFFFFFFU) * @lf_arith.Power::pow(2U, 1U), content="0")
 }
 ```
 
@@ -773,8 +806,9 @@ pub(open) trait Constants {
 
 The methods take no argument, so call them with the target type known.
 For `Double`, `pi` is `@math.PI`, `tau` is `2.0 * @math.PI` (exact, since
-doubling only changes the exponent) and `e` is `exp(1.0)`. For `Float`, the
-`Double` values are rounded to `Float`.
+doubling only changes the exponent) and `e` is `exp(1.0)`. For `Float`, `pi`
+and `tau` are the `Double` values rounded to `Float`, and `e` is the `Float`
+exponential of `1`; all three are the `Float` nearest to the constant.
 
 ```moonbit
 test "constants" {

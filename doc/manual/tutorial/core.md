@@ -8,6 +8,16 @@ own types plugged into the same traits. Every example is a test that you can
 paste into a `_test.mbt` file and run with `moon test`; the expected output is
 written in the `inspect` calls.
 
+| I want to | Use |
+| --- | --- |
+| call `sqrt`, `exp`, `sin`, ... on any number type | an unchecked bound such as `T : @lf_arith.Sqrt` |
+| get an error value instead of NaN for invalid input | `SqrtChecked`, `DivChecked`, `CompareChecked`, `PowIntChecked` |
+| know whether a result was rounded, overflowed or underflowed | the contextual traits and `ArithmeticOutcome::diagnostics` |
+| chain several contextual steps and keep every flag | `ArithmeticDiagnostics::combine` |
+| step to the next representable number | `AdjacentContextual::next_plus_contextual` |
+| compare intervals or balls safely | `DefinitelyLt`, `DefinitelyLe`, `MaybeEq` |
+| plug my own number type in | implement only the traits it can honour |
+
 ## Quick start
 
 Add the package to your module:

@@ -49,8 +49,9 @@ package that imports `Luna-Flow/arithmetic` as `@lf_arith` (and
 `trait_test.mbt` checks that the unchecked traits compose in generic code
 together with `luna-generic` bounds; representative values of every
 elementary function for `Float` and `Double`; that `Constants` satisfy
-$\tau = 2\pi$ and $\ln e = 1$ in both types; exact `Power` for every integer
-type and `BigInt`; the checked square
+$\tau = 2\pi$ and $\ln e = 1$ up to a small tolerance in both types; exact
+`Power` on small operands for every integer type and `BigInt` (wrap-around
+and negative exponents are not tested); the checked square
 root and division on valid input, negative input, $0/0$, $\infty/\infty$ and
 zero divisors; NaN rejection by `CompareChecked`; and checked integer powers
 with zero exponents, negative exponents, zero bases and the most negative `Int`.

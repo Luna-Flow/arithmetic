@@ -16,6 +16,35 @@ errors) and a baseline of instances for the native `Float`, `Double` and
 integer types. Correctly rounded, context-faithful and certified arithmetic
 lives in numeric backends, which implement these traits.
 
+## Constraints
+
+- One vocabulary must serve native IEEE binary scalars, decimal types with a
+  configurable precision, and interval or ball types whose values are sets.
+- Every MoonBit target must behave the same, so no design may rely on
+  thread-local or global state.
+- The package sits below every numeric backend in the dependency graph, so it
+  depends on no backend and evaluates nothing it cannot do exactly with the
+  native types.
+- A trait must not promise more than its weakest reasonable instance can
+  honour, and a shipped instance must not claim more than it does.
+
+## Main design decisions
+
+- Three independent tiers, unchecked, checked and contextual, each with its
+  own traits and no supertrait links between them.
+- The context is an explicit, immutable argument, and diagnostics are part of
+  the return value.
+- Errors (no value), diagnostics (a value with notable conditions) and
+  certification failures (a valid input whose result could not be proved) are
+  separate channels.
+- Enclosures get five Boolean relation traits, not an order.
+- One capability per trait, with `Radical` as the only conjunction, and no
+  `Real` super-trait.
+- `Float` and `Double` implement a trait only when its promise is meaningful
+  for a fixed format.
+
+The sections after the mathematics give the reasoning for each decision.
+
 ## Mathematical background
 
 ### Floating-point formats
@@ -286,6 +315,16 @@ a false conjunct is false whatever the other one is.[^kleene]
     comparison with three outcomes goes back to R. E. Moore, *Interval
     Analysis*, 1966.
 
+The table is exact only when the unknowns behind $p$ and $q$ vary
+independently. When both conditions mention the same unknown, Kleene's logic
+is sound but may be too weak: with $X = [0, 2]$, the condition
+$x < 1 \vee \neg(x < 1)$ is true for every $x$, yet the table gives
+$\mathsf{U} \vee \neg\mathsf{U} = \mathsf{U}$. A $\mathsf{T}$ or
+$\mathsf{F}$ from the table is always correct; a $\mathsf{U}$ may hide a
+decided answer. This is the dependency problem of interval arithmetic, and
+the remedy is the same: rewrite the condition so that each unknown appears
+once, or split the enclosure.
+
 ### Certification stages
 
 A proof-backed backend computes $\circ_{p_t}(f(x))$, the correct rounding of a
@@ -334,7 +373,7 @@ increases (`refinements`). `RefinementBudgetExhausted` is the expected reason
 at `TargetRounding`; the other reasons belong to the earlier stages. This
 package defines the vocabulary only; it evaluates nothing.
 
-## Design decisions
+## Decisions in detail
 
 ### Three tiers instead of one signature
 
@@ -588,7 +627,10 @@ invariant in $\mathbb{Z}/2^{k}$, where every step is exact.
 an error count $c(q)$ such that $q = x^{m}\prod_i (1 + \delta_i)^{k_i}$ with
 $|\delta_i| \le u$ and $\sum_i k_i \le c(q)$. Then $c(x) = 0$, and one rounded
 product of $q_1 \approx x^{m_1}$ and $q_2 \approx x^{m_2}$ gives
-$c \le c(q_1) + c(q_2) + 1$. By induction $c(q) \le m - 1$:
+$c \le c(q_1) + c(q_2) + 1$. The initial $\textit{acc} = 1$ approximates
+$x^0$ exactly, and its first product $1 \cdot \textit{f}$ is exact, so after it
+$\textit{acc}$ carries the count of $\textit{f}$. Every other quantity the loop
+computes has $m \ge 1$, and by induction $c(q) \le m - 1$:
 
 $$
 c(q_1 q_2) \le (m_1 - 1) + (m_2 - 1) + 1 = (m_1 + m_2) - 1,
@@ -613,6 +655,48 @@ multiplications.
 
 [^higham]: N. J. Higham, *Accuracy and Stability of Numerical Algorithms*,
     2nd ed., SIAM, 2002, Lemma 3.1 and §3.1.
+
+### Laws of `Power`
+
+For the integer instances, `pow(x, n)` is the action of $\mathbb{N}$ on the
+multiplicative monoid $(\mathbb{Z}/2^{k}, \cdot, 1)$ (or $(\mathbb{Z}, \cdot, 1)$
+for `BigInt`), defined by $x^{0} = 1$ and $x^{n+1} = x^{n} x$. The
+correctness invariant above shows that binary powering computes this map,
+because every step is exact in $\mathbb{Z}/2^{k}$ and the reduction modulo
+$2^{k}$ is a ring homomorphism $\mathbb{Z} \to \mathbb{Z}/2^{k}$. Induction
+on $n$ gives the action laws for natural exponents:
+
+$$
+\begin{aligned}
+x^{m+n} &= x^{m} x^{n}, &\quad
+x^{mn} &= (x^{m})^{n}, &\quad
+(xy)^{n} &= x^{n} y^{n}.
+\end{aligned}
+$$
+
+The first follows from $x^{m+(n+1)} = x^{m+n}x = x^{m}x^{n}x = x^{m}x^{n+1}$
+(associativity); the second from $x^{m(n+1)} = x^{mn+m} = (x^{m})^{n}x^{m}$
+by the first; the third from commutativity of $\cdot$.
+
+These are laws of $\mathbb{N}$ acting on `Self`, but the exponent argument is
+a value of `Self`. For the unsigned instances an exponent sum computed in
+`Self` wraps modulo $2^{k}$. The wrapped law
+$x^{(m+n) \bmod 2^{k}} = x^{m} x^{n}$ needs $x^{2^{k}} = 1$, and it fails for
+every even $x$, for example:
+
+$$
+2^{2^{32}-1} \cdot 2^{1} = 0 \cdot 2 = 0 \ne 1 = 2^{0} \pmod{2^{32}} .
+$$
+
+For odd $x$ the group $(\mathbb{Z}/2^{k})^{\times}$ has exponent $2^{k-2}$ (for
+$k \ge 3$), so $x^{2^{k}} = 1$ and the wrapped law holds. For the signed
+instances a wrapped sum is often negative and `pow` aborts. Code that
+combines exponents therefore adds them in a wider type, or in `BigInt`.
+
+The `Float` and `Double` instances are the C `pow` function. The laws above
+hold for them only approximately, with the rounding error of each side, and
+not at all for a negative base with a non-integer exponent, where the result
+is NaN.
 
 ### Checked division
 

@@ -53,8 +53,11 @@ $\tau = 2\pi$ and $\ln e = 1$ up to a small tolerance in both types; exact
 `Power` on small operands for every integer type and `BigInt` (wrap-around
 and negative exponents are not tested); the checked square
 root and division on valid input, negative input, $0/0$, $\infty/\infty$ and
-zero divisors; NaN rejection by `CompareChecked`; and checked integer powers
-with zero exponents, negative exponents, zero bases and the most negative `Int`.
+zero divisors, NaN propagation through checked square root, division and powers,
+the signed-infinity result for infinity divided by zero, and overflow results
+for natural powers and reciprocal powers; NaN rejection by `CompareChecked`;
+and checked integer powers with zero exponents, negative exponents, zero bases
+and the most negative `Int`.
 
 `contextual_test.mbt` checks exact and rounded `Int` embedding into `Float`
 and exact embedding into `Double`; the IEEE boundaries of the adjacent

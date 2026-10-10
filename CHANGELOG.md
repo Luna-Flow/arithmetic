@@ -8,6 +8,9 @@ points; older release history lives in this file.
 
 ### Changed
 
+- **Breaking behavior clarification for 0.5.1:** for checked `Float` and `Double`, NaN divided by zero changes from `Err(DivisionByZero)` to `Ok(NaN)`, and infinity divided by signed zero changes to the correctly signed `Ok(±inf)`. Power results are unchanged: quiet-NaN zero exponents remain `Ok(1)` and other non-zero NaN exponents remain `Ok(NaN)`, as recorded by IEEE 754-2019 §9.2.1. This tier handles all NaN values as quiet because `Float` and `Double` do not distinguish signaling NaN.
+- Negative-exponent underflow and reciprocal correctness remain tracked by [#1](https://github.com/Luna-Flow/arithmetic/issues/1); this PR does not change those cases.
+
 - The test-only dependency `Luna-Flow/luna-generic` is bumped from 0.3.1 to
   0.4.0. The tests use only `Zero`, `AddMonoid` and `Num`, so no code change
   is needed and nothing deprecated in 0.4.0 is used.

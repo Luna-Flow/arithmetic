@@ -174,12 +174,18 @@ reason the context matters: for decimal64 and `ToNearestEven`, an algorithm
 can rely on $|\delta| \le 5 \times 10^{-16}$ per operation, whatever the
 backend type.
 
-The built-in `Float` and `Double` instances satisfy the model for their own
-fixed format under round-to-nearest, because the hardware operations are
-correctly rounded, but they ignore the context's precision and mode and do not
-detect $\delta \ne 0$. Their elementary functions come from
-`Kaida-Amethyst/math` and are not guaranteed to be correctly rounded, so the
-model holds for them only with an unspecified small multiple of $u$.
+The built-in `Float` and `Double` basic arithmetic is correctly rounded for its
+fixed formats under round-to-nearest, because the hardware operations are
+correctly rounded, but it ignores context precision and mode and does not
+detect $\delta \ne 0$. `Sqrt` delegates to the host square-root operation;
+IEEE 754-2019 §5.4.1 requires `squareRoot` to be correctly rounded and the
+underlying package reports 0 ulp in its own tests, but this crate does not
+independently test or guarantee that property. Other elementary functions use
+`Kaida-Amethyst/math` 0.1.20, which promises neither correct rounding nor a
+published error bound and is not guaranteed bit-identical across `wasm`,
+`wasm-gc`, `js` and `native`. The IEEE 754-2019 §9.2 correctly-rounded
+operation requirement therefore does not apply to those adapters; replacement
+work is tracked in [arithmetic#13](https://github.com/Luna-Flow/arithmetic/issues/13).
 
 ### Adjacent values and the IEEE encoding
 
@@ -693,10 +699,11 @@ $k \ge 3$), so $x^{2^{k}} = 1$ and the wrapped law holds. For the signed
 instances a wrapped sum is often negative and `pow` aborts. Code that
 combines exponents therefore adds them in a wider type, or in `BigInt`.
 
-The `Float` and `Double` instances are the C `pow` function. The laws above
-hold for them only approximately, with the rounding error of each side, and
-not at all for a negative base with a non-integer exponent, where the result
-is NaN.
+The `Float` and `Double` instances use `Kaida-Amethyst/math` 0.1.20 for
+`pow`. The laws above hold only approximately, with rounding error on each
+side; the function has no published error bound and is not guaranteed
+bit-identical across backends. For a negative base and a non-integer exponent,
+the result is NaN.
 
 ### Checked division
 
@@ -786,8 +793,10 @@ to come from an absence of information returns `false` for them instead.
 - The built-in `Float` and `Double` instances do not honour the context's
   precision, rounding mode or exponent range, and their arithmetic adapters do
   not detect rounding, overflow or underflow.
-- It does not promise correctly rounded elementary functions for `Float` and
-  `Double`; they come from `Kaida-Amethyst/math`.
+- Except for host `Sqrt`, it does not promise correctly rounded elementary
+  functions for `Float` and `Double`; they come from `Kaida-Amethyst/math`
+  0.1.20 without a published error bound or cross-backend bit-identity
+  guarantee.
 - It does not define algebraic structure (`Ring`, `Field`, ...), which belongs
   to `luna-generic`, nor vectors, matrices, complex numbers or polynomials.
 - It does not choose branch cuts or special-value conventions for the

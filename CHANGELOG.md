@@ -8,6 +8,8 @@ points; older release history lives in this file.
 
 ### Changed
 
+- Documented that, except for host `Sqrt`, built-in `Float` and `Double` elementary functions use `Kaida-Amethyst/math` 0.1.20 without a correct-rounding, published error-bound, or cross-backend bit-identity guarantee; replacement work is tracked by [#13](https://github.com/Luna-Flow/arithmetic/issues/13).
+
 - **Breaking behavior clarification for 0.5.1:** for checked `Float` and `Double`, NaN divided by zero changes from `Err(DivisionByZero)` to `Ok(NaN)`, and infinity divided by signed zero changes to the correctly signed `Ok(±inf)`. Power results are unchanged: quiet-NaN zero exponents remain `Ok(1)` and other non-zero NaN exponents remain `Ok(NaN)`, as recorded by IEEE 754-2019 §9.2.1. This tier handles all NaN values as quiet because `Float` and `Double` do not distinguish signaling NaN.
 - Negative-exponent underflow and reciprocal correctness remain tracked by [#1](https://github.com/Luna-Flow/arithmetic/issues/1); this PR does not change those cases.
 

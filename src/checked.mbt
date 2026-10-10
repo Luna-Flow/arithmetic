@@ -335,9 +335,11 @@ pub(open) trait CompareChecked {
 /// `x^0` returns the multiplicative identity in this first checked-power layer,
 /// including `0^0`.
 ///
-/// For the built-in `Float` and `Double` instances, a NaN base propagates as
-/// `Ok(NaN)`, including when the exponent is zero. Overflow returns the signed
-/// infinity in `Ok`; underflow follows the floating-point result.
+/// For the built-in `Float` and `Double` instances, a quiet NaN base returns
+/// `Ok(1)` for a zero exponent and `Ok(NaN)` for every other exponent. These
+/// types do not distinguish signaling NaN, so every NaN is handled as quiet.
+/// Overflow returns the signed infinity in `Ok`; underflow follows the
+/// floating-point result.
 
 ///|
 pub(open) trait PowNatChecked {
@@ -353,10 +355,11 @@ pub(open) trait PowNatChecked {
 /// negative exponent must report a structured error or a documented enclosure
 /// fallback rather than silently producing an invalid scalar result.
 ///
-/// For the built-in `Float` and `Double` instances, a NaN base propagates as
-/// `Ok(NaN)`, including when the exponent is zero. Overflow during a positive
-/// power returns the signed infinity in `Ok`. A zero base with a negative
-/// exponent returns `DivisionByZero`.
+/// For the built-in `Float` and `Double` instances, a quiet NaN base returns
+/// `Ok(1)` for a zero exponent and `Ok(NaN)` for every other exponent. These
+/// types do not distinguish signaling NaN, so every NaN is handled as quiet.
+/// Overflow during a positive power returns the signed infinity in `Ok`. A
+/// zero base with a negative exponent returns `DivisionByZero`.
 
 ///|
 pub(open) trait PowIntChecked {

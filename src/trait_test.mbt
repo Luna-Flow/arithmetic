@@ -632,7 +632,7 @@ test "checked float and double powers return infinity on overflow" {
 test "checked float and double powers follow NaN zero-exponent rules" {
   let nan_f : Float = 0.0 / 0.0
   let nan_d : Double = 0.0 / 0.0
-  for exponent in [0, 3, -3] {
+  for exponent in [0, 1, -1] {
     let nat_exponent = if exponent == 0 {
       0U
     } else {

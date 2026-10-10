@@ -711,7 +711,8 @@ does not raise divideByZero. `SqrtChecked` likewise returns a NaN result in
 
 `PowNatChecked` and `PowIntChecked` return `Ok(1)` for a quiet NaN base with a
 zero exponent, as specified by IEEE 754-2019 §9.2.1; every non-zero exponent
-propagates the NaN as `Ok(NaN)`. A positive power that overflows returns its
+propagates the NaN as `Ok(NaN)`. `Float` and `Double` do not distinguish
+signaling NaN, so this tier handles every NaN value as quiet. A positive power that overflows returns its
 signed infinity in `Ok`, the default overflow result under IEEE 754 §7.4. The
 checked tier does not return contextual exception flags; those are the
 responsibility of the contextual operations. For a negative exponent, the

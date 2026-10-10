@@ -923,6 +923,8 @@ pub(open) trait PowNatChecked {
 $x^0$ is the multiplicative identity, including $0^0$. For `Float` and
 `Double`, a quiet NaN base returns `Ok(1)` when the exponent is zero, as
 specified by IEEE 754-2019 §9.2.1; every non-zero exponent returns `Ok(NaN)`.
+`Float` and `Double` do not distinguish signaling NaN, so this tier handles
+every NaN value as quiet.
 The instances never return an error: overflow returns the signed infinity in
 `Ok`, and underflow follows IEEE arithmetic. They use binary exponentiation
 with at most $2\lfloor\log_2 n\rfloor$ rounded multiplications. The [design
@@ -941,7 +943,9 @@ pub(open) trait PowIntChecked {
 
 A negative exponent means a reciprocal. For `Float` and `Double`, a quiet NaN
 base with exponent zero returns `Ok(1)` under IEEE 754-2019 §9.2.1; every
-other non-zero exponent returns `Ok(NaN)`. Overflow during the positive power
+other non-zero exponent returns `Ok(NaN)`. `Float` and `Double` do not
+distinguish signaling NaN, so this tier handles every NaN value as quiet.
+Overflow during the positive power
 calculation returns the signed infinity in `Ok`. A zero base with a negative
 exponent returns `DivisionByZero` for `Float` and `Double`; an enclosure
 implementation may return a documented enclosure instead.

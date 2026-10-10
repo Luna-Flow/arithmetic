@@ -214,7 +214,7 @@ msgid "Meaning"
 msgstr ""
 
 #: manual/api/core.md:214
-msgid "a non-zero or NaN value divided by zero, or a reciprocal of zero"
+msgid "a finite non-zero value divided by zero, or a reciprocal of zero"
 msgstr ""
 
 #: manual/api/core.md:215
@@ -630,291 +630,291 @@ msgid "`PowNatChecked` raises a value to a non-negative integer power."
 msgstr ""
 
 #: manual/api/core.md:923
-msgid "$x^0$ is the multiplicative identity for non-NaN inputs, including $0^0$. For `Float` and `Double`, a NaN base returns `Ok(NaN)` even when the exponent is zero. The instances never return an error: overflow returns the signed infinity in `Ok`, and underflow follows IEEE arithmetic. They use binary exponentiation with at most $2\\lfloor\\log_2 n\\rfloor$ rounded multiplications. The [design page](../design/core.md#error-bound-of-binary-powering) bounds the rounding error."
+msgid "$x^0$ is the multiplicative identity, including $0^0$. For `Float` and `Double`, a quiet NaN base returns `Ok(1)` when the exponent is zero, as specified by IEEE 754-2019 §9.2.1; every non-zero exponent returns `Ok(NaN)`. The instances never return an error: overflow returns the signed infinity in `Ok`, and underflow follows IEEE arithmetic. They use binary exponentiation with at most $2\\lfloor\\log_2 n\\rfloor$ rounded multiplications. The [design page](../design/core.md#error-bound-of-binary-powering) bounds the rounding error."
 msgstr ""
 
-#: manual/api/core.md:933
+#: manual/api/core.md:934
 msgid "`PowIntChecked` raises a value to a signed integer power."
 msgstr ""
 
-#: manual/api/core.md:941
-msgid "A negative exponent means a reciprocal. For `Float` and `Double`, a NaN base returns `Ok(NaN)`, including when the exponent is zero. Overflow during the positive power calculation returns the signed infinity in `Ok`. A zero base with a negative exponent returns `DivisionByZero` for `Float` and `Double`; an enclosure implementation may return a documented enclosure instead."
-msgstr ""
-
-#: manual/api/core.md:947
-msgid "$x^0 = 1$ for a non-NaN base;"
-msgstr ""
-
-#: manual/api/core.md:948
-msgid "$x^n$ for $n > 0$ is `pow_nat_checked(x, n)`;"
+#: manual/api/core.md:942
+msgid "A negative exponent means a reciprocal. For `Float` and `Double`, a quiet NaN base with exponent zero returns `Ok(1)` under IEEE 754-2019 §9.2.1; every other non-zero exponent returns `Ok(NaN)`. Overflow during the positive power calculation returns the signed infinity in `Ok`. A zero base with a negative exponent returns `DivisionByZero` for `Float` and `Double`; an enclosure implementation may return a documented enclosure instead."
 msgstr ""
 
 #: manual/api/core.md:949
+msgid "$x^0 = 1$ for every quiet-NaN-capable floating base;"
+msgstr ""
+
+#: manual/api/core.md:950
+msgid "$x^n$ for $n > 0$ is `pow_nat_checked(x, n)`;"
+msgstr ""
+
+#: manual/api/core.md:951
 msgid "$x^{-n}$ is `DivisionByZero` when $x = \\pm 0$, and otherwise `div_checked(1, x^n)`. The most negative `Int` exponent is handled without negation overflow."
 msgstr ""
 
-#: manual/api/core.md:953
+#: manual/api/core.md:955
 msgid "[!NOTE] Because the reciprocal is taken after the power, a tiny base whose power underflows to zero, such as `pow_int_checked(1.0e-200, -2, ctx)`, returns a `DivisionByZero` error even though the exact result $10^{400}$ only overflows."
 msgstr ""
 
-#: manual/api/core.md:972
+#: manual/api/core.md:974
 msgid "`ParseChecked` parses text into `Self` under a context."
 msgstr ""
 
-#: manual/api/core.md:980
+#: manual/api/core.md:982
 msgid "The context lets a decimal backend round the parsed value to its precision. Failures use `ParseError`, or `FormatError` when the text is well formed but the format cannot hold it. This package ships no instance; parsing belongs to backends with a textual format, such as decimal types."
 msgstr ""
 
-#: manual/api/core.md:985
+#: manual/api/core.md:987
 msgid "Contextual capability traits"
 msgstr ""
 
-#: manual/api/core.md:987
+#: manual/api/core.md:989
 msgid "A contextual trait returns `Result[ArithmeticOutcome[Self], ArithmeticError]`. `Err` means the operation was rejected; `Ok` carries the value and the diagnostics a backend detected while producing it."
 msgstr ""
 
-#: manual/api/core.md:991
+#: manual/api/core.md:993
 msgid "[!IMPORTANT] The built-in `Float` and `Double` instances ignore the context and do not detect rounding, overflow or underflow. Except for `Float`'s `IntegralContextual`, they return `ArithmeticOutcome::exact`, so their empty diagnostics mean \"nothing detected\", not \"the result is exact\": `0.1 + 0.2` returns `0.30000000000000004` with empty diagnostics."
 msgstr ""
 
-#: manual/api/core.md:1000
+#: manual/api/core.md:1002
 msgid "These four traits are the contextual forms of `+`, `-`, `*` and `/`."
 msgstr ""
 
-#: manual/api/core.md:1017
+#: manual/api/core.md:1019
 msgid "A context-faithful backend returns $\\operatorname{fl}(x \\circ y)$, the exact result rounded under the context, and sets the diagnostics that the rounding caused. For `Float` and `Double`, add, sub and mul never fail; `div_contextual` fails exactly when `DivChecked::div_checked` does."
 msgstr ""
 
-#: manual/api/core.md:1036
+#: manual/api/core.md:1038
 msgid "`AbsContextual` is the contextual absolute value."
 msgstr ""
 
-#: manual/api/core.md:1044
+#: manual/api/core.md:1046
 msgid "A backend may round when the context precision is below the operand's. For `Float` and `Double` it is the exact IEEE `abs`."
 msgstr ""
 
-#: manual/api/core.md:1049
+#: manual/api/core.md:1051
 msgid "`SqrtContextual` is the contextual square root."
 msgstr ""
 
-#: manual/api/core.md:1057
+#: manual/api/core.md:1059
 msgid "For `Float` and `Double` it fails exactly when `SqrtChecked::sqrt_checked` does."
 msgstr ""
 
-#: manual/api/core.md:1062
+#: manual/api/core.md:1064
 msgid "`ExpContextual` is the contextual natural exponential."
 msgstr ""
 
-#: manual/api/core.md:1070
+#: manual/api/core.md:1072
 msgid "For `Float` and `Double` it is `Exponential::exp` wrapped in an exact outcome."
 msgstr ""
 
-#: manual/api/core.md:1084
+#: manual/api/core.md:1086
 msgid "`IntegralContextual` embeds a MoonBit `Int` into `Self` under a context."
 msgstr ""
 
-#: manual/api/core.md:1092
+#: manual/api/core.md:1094
 msgid "The source is always `Int`; wider or arbitrary-precision sources need separate capabilities. A backend may reject a context it does not support. For `Double` every `Int` is exact. For `Float`, an integer with $|n| > 2^{24}$ that is not a multiple of the spacing at its magnitude is rounded, and the outcome then has `inexact` and `rounded` set."
 msgstr ""
 
-#: manual/api/core.md:1115
+#: manual/api/core.md:1117
 msgid "`AdjacentContextual` steps to the neighbouring representable value."
 msgstr ""
 
-#: manual/api/core.md:1125
+#: manual/api/core.md:1127
 msgid "`next_plus_contextual(x)` is the least representable value greater than $x$ and `next_minus_contextual(x)` the greatest one less than $x$. `next_toward_contextual(x, t)` steps from $x$ toward $t$; when $x = t$ it returns $t$, so `next_toward(0.0, -0.0)` is $-0$. A backend whose representable set depends on the context reports range conditions in the diagnostics."
 msgstr ""
 
-#: manual/api/core.md:1132
+#: manual/api/core.md:1134
 msgid "For `Float` and `Double` the representable set is the fixed IEEE binary format and the result is always exact:"
 msgstr ""
 
-#: manual/api/core.md:1135
+#: manual/api/core.md:1137
 msgid "Input"
 msgstr ""
 
-#: manual/api/core.md:1137
+#: manual/api/core.md:1139
 msgid "smallest positive subnormal"
 msgstr ""
 
-#: manual/api/core.md:1137
+#: manual/api/core.md:1139
 msgid "smallest negative subnormal"
 msgstr ""
 
-#: manual/api/core.md:1138
-#: manual/api/core.md:1139
+#: manual/api/core.md:1140
+#: manual/api/core.md:1141
 msgid "largest finite"
 msgstr ""
 
-#: manual/api/core.md:1138
+#: manual/api/core.md:1140
 msgid "predecessor"
 msgstr ""
 
-#: manual/api/core.md:1141
+#: manual/api/core.md:1143
 msgid "NaN"
 msgstr ""
 
-#: manual/api/core.md:1143
+#: manual/api/core.md:1145
 msgid "`next_toward` returns NaN if either operand is NaN."
 msgstr ""
 
-#: manual/api/core.md:1159
+#: manual/api/core.md:1161
 msgid "`ConstantsContextual` produces $\\pi$, $\\tau$ and $e$ under a context."
 msgstr ""
 
-#: manual/api/core.md:1169
+#: manual/api/core.md:1171
 msgid "Implement it only when the constants honour the context and the diagnostics are meaningful. A proof-backed backend returns a `CertificationFailure` error when it cannot certify the target rounding. `Float` and `Double` do not implement it; see the [design page](../design/core.md#native-scalars-implement-only-what-they-can-honour)."
 msgstr ""
 
-#: manual/api/core.md:1176
+#: manual/api/core.md:1178
 msgid "`HyperbolicContextual` provides `sinh`, `cosh` and `tanh` under a context."
 msgstr ""
 
-#: manual/api/core.md:1186
+#: manual/api/core.md:1188
 msgid "The same rule as for `ConstantsContextual` applies, and `Float` and `Double` do not implement it either."
 msgstr ""
 
-#: manual/api/core.md:1191
+#: manual/api/core.md:1193
 msgid "`NumericFormatContextual` describes the numeric format of `Self` under a context: its distinguished values and the class of a value."
 msgstr ""
 
-#: manual/api/core.md:1205
+#: manual/api/core.md:1207
 msgid "`epsilon_contextual` is the machine epsilon $\\varepsilon = \\beta^{1-p}$, the distance from $1$ to the next larger representable value; the unit roundoff of round-to-nearest is $u = \\varepsilon / 2$. These methods do not fail. For the fixed formats the context is ignored:"
 msgstr ""
 
-#: manual/api/core.md:1210
+#: manual/api/core.md:1212
 msgid "Method"
 msgstr ""
 
-#: manual/api/core.md:1210
+#: manual/api/core.md:1212
 msgid "`Float` (binary32)"
 msgstr ""
 
-#: manual/api/core.md:1210
+#: manual/api/core.md:1212
 msgid "`Double` (binary64)"
 msgstr ""
 
-#: manual/api/core.md:1227
+#: manual/api/core.md:1229
 msgid "Enclosure relations"
 msgstr ""
 
-#: manual/api/core.md:1229
+#: manual/api/core.md:1231
 msgid "An enclosure is a value that stands for an unknown real number known to lie in a set, such as an interval or a ball. These five traits relate two enclosures $X$ and $Y$. They are relations, not an order: for overlapping enclosures both `definitely_lt(X, Y)` and `definitely_lt(Y, X)` are false. Read them as statements about every pair of points $x \\in X$, $y \\in Y$. This package ships no instance; interval and ball backends implement them. The [design page](../design/core.md#enclosures-and-three-valued-comparison) derives the interval formulas below."
 msgstr ""
 
-#: manual/api/core.md:1238
-#: manual/api/core.md:1330
+#: manual/api/core.md:1240
+#: manual/api/core.md:1332
 msgid "Trait"
 msgstr ""
 
-#: manual/api/core.md:1238
+#: manual/api/core.md:1240
 msgid "Holds when"
 msgstr ""
 
-#: manual/api/core.md:1238
+#: manual/api/core.md:1240
 msgid "For intervals $X = [a, b]$, $Y = [c, d]$"
 msgstr ""
 
-#: manual/api/core.md:1240
+#: manual/api/core.md:1242
 msgid "$a \\le c$ and $d \\le b$"
 msgstr ""
 
-#: manual/api/core.md:1241
-#: manual/api/core.md:1244
+#: manual/api/core.md:1243
+#: manual/api/core.md:1246
 msgid "$a \\le d$ and $c \\le b$"
 msgstr ""
 
-#: manual/api/core.md:1242
+#: manual/api/core.md:1244
 msgid "$x < y$ for all $x \\in X$, $y \\in Y$"
 msgstr ""
 
-#: manual/api/core.md:1243
+#: manual/api/core.md:1245
 msgid "$x \\le y$ for all $x \\in X$, $y \\in Y$"
 msgstr ""
 
-#: manual/api/core.md:1244
+#: manual/api/core.md:1246
 msgid "$x = y$ for some $x \\in X$, $y \\in Y$"
 msgstr ""
 
-#: manual/api/core.md:1248
+#: manual/api/core.md:1250
 msgid "`Contains` tests whether the first enclosure contains the second."
 msgstr ""
 
-#: manual/api/core.md:1258
+#: manual/api/core.md:1260
 msgid "`Overlaps` tests whether two enclosures share a point."
 msgstr ""
 
-#: manual/api/core.md:1268
+#: manual/api/core.md:1270
 msgid "`DefinitelyLt` tests whether every point of the first enclosure is less than every point of the second."
 msgstr ""
 
-#: manual/api/core.md:1279
+#: manual/api/core.md:1281
 msgid "`DefinitelyLe` tests whether every point of the first enclosure is at most every point of the second."
 msgstr ""
 
-#: manual/api/core.md:1290
+#: manual/api/core.md:1292
 msgid "`MaybeEq` tests whether the two enclosures may denote the same number."
 msgstr ""
 
-#: manual/api/core.md:1298
+#: manual/api/core.md:1300
 msgid "For real enclosures `maybe_eq` coincides with `overlaps`; the trait exists so that generic code can ask the question it means."
 msgstr ""
 
-#: manual/api/core.md:1328
+#: manual/api/core.md:1330
 #: manual/architecture.md:68
 #: manual/index.md:95
 msgid "Shipped instances"
 msgstr ""
 
-#: manual/api/core.md:1330
+#: manual/api/core.md:1332
 msgid "integers and `BigInt`"
 msgstr ""
 
-#: manual/api/core.md:1332
-#: manual/api/core.md:1333
-#: manual/api/core.md:1334
-#: manual/api/core.md:1336
-msgid "yes"
-msgstr ""
-
-#: manual/api/core.md:1332
 #: manual/api/core.md:1334
 #: manual/api/core.md:1335
 #: manual/api/core.md:1336
+#: manual/api/core.md:1338
+msgid "yes"
+msgstr ""
+
+#: manual/api/core.md:1334
+#: manual/api/core.md:1336
 #: manual/api/core.md:1337
 #: manual/api/core.md:1338
+#: manual/api/core.md:1339
+#: manual/api/core.md:1340
 msgid "no"
 msgstr ""
 
-#: manual/api/core.md:1340
+#: manual/api/core.md:1342
 msgid "The `Float` and `Double` elementary functions come from [`Kaida-Amethyst/math`](https://mooncakes.io/docs/Kaida-Amethyst/math), which does not promise correct rounding."
 msgstr ""
 
-#: manual/api/core.md:1344
+#: manual/api/core.md:1346
 msgid "Deprecated"
 msgstr ""
 
-#: manual/api/core.md:1346
+#: manual/api/core.md:1348
 msgid "Before MoonBit 0.10, implementing a trait for a type silently made its methods callable with dot syntax. These implicit method forms are still callable on the package's public types, but are deprecated and hidden from the interface file:"
 msgstr ""
 
-#: manual/api/core.md:1350
+#: manual/api/core.md:1352
 msgid "Deprecated form"
 msgstr ""
 
-#: manual/api/core.md:1350
+#: manual/api/core.md:1352
 msgid "Types"
 msgstr ""
 
-#: manual/api/core.md:1350
+#: manual/api/core.md:1352
 msgid "Replacement"
 msgstr ""
 
-#: manual/api/core.md:1352
+#: manual/api/core.md:1354
 msgid "every type listed under [Equality](#equality)"
 msgstr ""
 
-#: manual/api/core.md:1353
+#: manual/api/core.md:1355
 msgid "`Repr(x)` or `@debug.to_string(x)`"
 msgstr ""
 
@@ -1764,93 +1764,93 @@ msgid "The `Float` and `Double` `DivChecked` instances propagate NaN operands as
 msgstr ""
 
 #: manual/design/core.md:712
-msgid "`PowNatChecked` and `PowIntChecked` propagate a NaN base as `Ok(NaN)`, including for a zero exponent. A positive power that overflows returns its signed infinity in `Ok`, the default overflow result under IEEE 754 §7.4. The checked tier does not return contextual exception flags; those are the responsibility of the contextual operations. For a negative exponent, the current `PowIntChecked` implementation takes the reciprocal after computing the positive power, so an underflowed intermediate can still be reported as `DivisionByZero`; exact negative-power handling is tracked separately in [arithmetic#1](https://github.com/Luna-Flow/arithmetic/issues/1)."
-msgstr ""
-
-#: manual/design/core.md:722
-msgid "Soundness and monotonicity of enclosure relations"
+msgid "`PowNatChecked` and `PowIntChecked` return `Ok(1)` for a quiet NaN base with a zero exponent, as specified by IEEE 754-2019 §9.2.1; every non-zero exponent propagates the NaN as `Ok(NaN)`. A positive power that overflows returns its signed infinity in `Ok`, the default overflow result under IEEE 754 §7.4. The checked tier does not return contextual exception flags; those are the responsibility of the contextual operations. For a negative exponent, the current `PowIntChecked` implementation takes the reciprocal after computing the positive power, so an underflowed intermediate can still be reported as `DivisionByZero` or produce an underflowed zero instead of the correctly rounded reciprocal; exact negative-power handling is tracked separately in [arithmetic#1](https://github.com/Luna-Flow/arithmetic/issues/1)."
 msgstr ""
 
 #: manual/design/core.md:724
+msgid "Soundness and monotonicity of enclosure relations"
+msgstr ""
+
+#: manual/design/core.md:726
 msgid ""
 "*Soundness.* If $x \\in X$, $y \\in Y$ and $\\texttt{definitely\\_lt}(X, Y)$, then $x < y$: the relation is a universal statement over $X \\times Y$, which contains $(x, y)$. Dually, if $\\n"
 "eg\\,\\texttt{maybe\\_eq}(X, Y)$, then $x \\n"
 "e y$."
 msgstr ""
 
-#: manual/design/core.md:729
+#: manual/design/core.md:731
 msgid "*Monotonicity under refinement.* If $X' \\subseteq X$ and $Y' \\subseteq Y$, then"
 msgstr ""
 
-#: manual/design/core.md:738
+#: manual/design/core.md:740
 msgid "because a universal statement survives shrinking its domain and an existential one survives growing it. In three-valued terms, refining the enclosures can turn $\\mathsf{U}$ into $\\mathsf{T}$ or $\\mathsf{F}$ but never turns $\\mathsf{T}$ into $\\mathsf{F}$. This is what makes \"refine until decided\" loops, such as the target-rounding stage above, correct: a decision once made stays valid. `Contains` is how such a loop checks that a refined enclosure $X'$ is inside the old one, $\\texttt{contains}(X, X')$."
 msgstr ""
 
-#: manual/design/core.md:746
+#: manual/design/core.md:748
 msgid "The traits do not fix the convention for empty enclosures; each backend documents its own. Under the quantifier reading the definite relations would hold vacuously for an empty argument, so a backend that wants $\\mathsf{T}$ never to come from an absence of information returns `false` for them instead."
 msgstr ""
 
-#: manual/design/core.md:751
+#: manual/design/core.md:753
 msgid "Alternatives rejected"
 msgstr ""
 
-#: manual/design/core.md:753
+#: manual/design/core.md:755
 msgid "**A global or thread-local context with sticky flags**, as in C `<fenv.h>` and Python `decimal`. Rejected for the reasons under [explicit values](#context-and-diagnostics-are-explicit-values): it makes results depend on hidden state and leaks flags between computations."
 msgstr ""
 
-#: manual/design/core.md:757
+#: manual/design/core.md:759
 msgid "**A `Real` or `Number` super-trait.** Rejected because it hides the differences between exact, approximate and enclosure-valued types."
 msgstr ""
 
-#: manual/design/core.md:759
+#: manual/design/core.md:761
 msgid "**`Compare` for enclosures.** Rejected because the definite order is not total."
 msgstr ""
 
-#: manual/design/core.md:761
+#: manual/design/core.md:763
 msgid "**A three-valued result type** (`True | False | Unknown`) for comparisons. The two Boolean projections `definitely_*` and `maybe_eq` are enough to reconstruct it, as shown above, and they compose with ordinary `if`; a separate type would force every caller to handle $\\mathsf{U}$ even when it only asks one direction."
 msgstr ""
 
-#: manual/design/core.md:766
+#: manual/design/core.md:768
 msgid "**A `definitely_eq` relation.** For non-degenerate enclosures it is always false, so it would only be a test for equal single points."
 msgstr ""
 
-#: manual/design/core.md:768
+#: manual/design/core.md:770
 msgid "**Diagnostics reported as errors.** Rejected because an inexact or overflowing IEEE result is a correct answer, and turning it into `Err` would make every rounded operation fail."
 msgstr ""
 
-#: manual/design/core.md:771
+#: manual/design/core.md:773
 msgid "**`Option` or `raise` for checked results.** `Option` loses the reason; MoonBit's `raise` would put the failure outside the return type. Luna-Flow uses `Result` with a structured error across repositories."
 msgstr ""
 
-#: manual/design/core.md:774
+#: manual/design/core.md:776
 msgid "**Implementing `ConstantsContextual` and `HyperbolicContextual` for native scalars by ignoring the context.** Rejected because those traits exist to promise context-faithful results."
 msgstr ""
 
-#: manual/design/core.md:778
+#: manual/design/core.md:780
 msgid "Boundaries"
 msgstr ""
 
-#: manual/design/core.md:780
+#: manual/design/core.md:782
 msgid "The package does not implement arbitrary-precision, decimal, interval or ball arithmetic, and it does not evaluate certified functions; it defines the traits those backends implement."
 msgstr ""
 
-#: manual/design/core.md:783
+#: manual/design/core.md:785
 msgid "The built-in `Float` and `Double` instances do not honour the context's precision, rounding mode or exponent range, and their arithmetic adapters do not detect rounding, overflow or underflow."
 msgstr ""
 
-#: manual/design/core.md:786
+#: manual/design/core.md:788
 msgid "It does not promise correctly rounded elementary functions for `Float` and `Double`; they come from `Kaida-Amethyst/math`."
 msgstr ""
 
-#: manual/design/core.md:788
+#: manual/design/core.md:790
 msgid "It does not define algebraic structure (`Ring`, `Field`, ...), which belongs to `luna-generic`, nor vectors, matrices, complex numbers or polynomials."
 msgstr ""
 
-#: manual/design/core.md:790
+#: manual/design/core.md:792
 msgid "It does not choose branch cuts or special-value conventions for the unchecked traits beyond what each shipped instance inherits."
 msgstr ""
 
-#: manual/design/core.md:792
+#: manual/design/core.md:794
 msgid "It does not prescribe a retry or precision-escalation policy for certification failures."
 msgstr ""
 

@@ -709,14 +709,16 @@ signed zero returns the signed infinity in `Ok`, as specified by IEEE 754; it
 does not raise divideByZero. `SqrtChecked` likewise returns a NaN result in
 `Ok`.
 
-`PowNatChecked` and `PowIntChecked` propagate a NaN base as `Ok(NaN)`,
-including for a zero exponent. A positive power that overflows returns its
+`PowNatChecked` and `PowIntChecked` return `Ok(1)` for a quiet NaN base with a
+zero exponent, as specified by IEEE 754-2019 §9.2.1; every non-zero exponent
+propagates the NaN as `Ok(NaN)`. A positive power that overflows returns its
 signed infinity in `Ok`, the default overflow result under IEEE 754 §7.4. The
 checked tier does not return contextual exception flags; those are the
 responsibility of the contextual operations. For a negative exponent, the
 current `PowIntChecked` implementation takes the reciprocal after computing
 the positive power, so an underflowed intermediate can still be reported as
-`DivisionByZero`; exact negative-power handling is tracked separately in
+`DivisionByZero` or produce an underflowed zero instead of the correctly
+rounded reciprocal; exact negative-power handling is tracked separately in
 [arithmetic#1](https://github.com/Luna-Flow/arithmetic/issues/1).
 
 ### Soundness and monotonicity of enclosure relations

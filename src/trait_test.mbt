@@ -511,6 +511,28 @@ test "checked float and double division returns signed infinity over zero" {
       )
   }
   match
+    @arithmetic.DivChecked::div_checked(pos_inf_f, (-0.0 : Float), default_ctx) {
+    Ok(value) => {
+      assert_eq(Float::is_inf(value), true)
+      assert_eq(value < 0.0, true)
+    }
+    Err(_) =>
+      fail(
+        "expected positive infinity divided by negative zero to return Ok(-inf)",
+      )
+  }
+  match
+    @arithmetic.DivChecked::div_checked(neg_inf_d, (-0.0 : Double), default_ctx) {
+    Ok(value) => {
+      assert_eq(Double::is_inf(value), true)
+      assert_eq(value > 0.0, true)
+    }
+    Err(_) =>
+      fail(
+        "expected negative infinity divided by negative zero to return Ok(+inf)",
+      )
+  }
+  match
     @arithmetic.DivChecked::div_checked(pos_inf_d, (-0.0 : Double), default_ctx) {
     Ok(value) => {
       assert_eq(Double::is_inf(value), true)
@@ -603,11 +625,11 @@ test "checked float and double powers return infinity on overflow" {
   }
 }
 
-/// D-A4 applies NaN propagation before power identity short-circuits.
-/// Expected rows: NaN^0, NaN^3, and NaN^-3 -> Ok(NaN) for Float/Double.
+/// IEEE 754-2019 §9.2.1 makes quiet-NaN^0 an exception to general NaN
+/// propagation: it returns one. Every non-zero exponent propagates NaN.
 
 ///|
-test "checked float and double powers propagate NaN for every integer exponent" {
+test "checked float and double powers follow NaN zero-exponent rules" {
   let nan_f : Float = 0.0 / 0.0
   let nan_d : Double = 0.0 / 0.0
   for exponent in [0, 3, -3] {
@@ -618,28 +640,48 @@ test "checked float and double powers propagate NaN for every integer exponent" 
     }
     match
       @arithmetic.PowIntChecked::pow_int_checked(nan_f, exponent, default_ctx) {
-      Ok(value) => assert_eq(value != value, true)
-      Err(_) => fail("expected Float NaN integer power to propagate")
+      Ok(value) =>
+        if exponent == 0 {
+          assert_eq(value, 1.0)
+        } else {
+          assert_eq(value != value, true)
+        }
+      Err(_) => fail("expected Float NaN integer power to return a value")
     }
     match
       @arithmetic.PowIntChecked::pow_int_checked(nan_d, exponent, default_ctx) {
-      Ok(value) => assert_eq(value != value, true)
-      Err(_) => fail("expected Double NaN integer power to propagate")
+      Ok(value) =>
+        if exponent == 0 {
+          assert_eq(value, 1.0)
+        } else {
+          assert_eq(value != value, true)
+        }
+      Err(_) => fail("expected Double NaN integer power to return a value")
     }
     if exponent >= 0 {
       match
         @arithmetic.PowNatChecked::pow_nat_checked(
           nan_f, nat_exponent, default_ctx,
         ) {
-        Ok(value) => assert_eq(value != value, true)
-        Err(_) => fail("expected Float NaN natural power to propagate")
+        Ok(value) =>
+          if exponent == 0 {
+            assert_eq(value, 1.0)
+          } else {
+            assert_eq(value != value, true)
+          }
+        Err(_) => fail("expected Float NaN natural power to return a value")
       }
       match
         @arithmetic.PowNatChecked::pow_nat_checked(
           nan_d, nat_exponent, default_ctx,
         ) {
-        Ok(value) => assert_eq(value != value, true)
-        Err(_) => fail("expected Double NaN natural power to propagate")
+        Ok(value) =>
+          if exponent == 0 {
+            assert_eq(value, 1.0)
+          } else {
+            assert_eq(value != value, true)
+          }
+        Err(_) => fail("expected Double NaN natural power to return a value")
       }
     }
   }

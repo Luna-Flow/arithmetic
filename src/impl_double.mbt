@@ -212,7 +212,7 @@ pub impl PowNatChecked for Double with fn pow_nat_checked(base, exponent, _ctx) 
   Double,
   ArithmeticError,
 ] {
-  if double_is_nan(base) {
+  if exponent > 0U && double_is_nan(base) {
     return Ok(base + base)
   }
   Ok(double_pow_nat(base, exponent))
@@ -223,11 +223,11 @@ pub impl PowIntChecked for Double with fn pow_int_checked(base, exponent, ctx) -
   Double,
   ArithmeticError,
 ] {
-  if double_is_nan(base) {
-    return Ok(base + base)
-  }
   if exponent == 0 {
     return Ok(1.0)
+  }
+  if double_is_nan(base) {
+    return Ok(base + base)
   }
   if exponent < 0 {
     guard base != 0.0 else {

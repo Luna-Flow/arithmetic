@@ -700,18 +700,24 @@ is NaN.
 
 ### Checked division
 
-The `Float` and `Double` `DivChecked` instances reject every zero divisor and
-use the kind to say why. $0/0$ and $\infty/\infty$ are indeterminate: the
-limits $\lim (\lambda t)/t = \lambda$ take every value as $t \to 0$ or
-$t \to \infty$, so no quotient is meaningful and the kind is `DomainError`.
-For $x \ne 0$, $x/t$ diverges as $t \to 0$, a pole, and the kind is
-`DivisionByZero`. This matches IEEE 754's invalid operation and division by
-zero exceptions, but is stricter: IEEE returns $\pm\infty$ for $\infty/0$ and
-NaN for NaN$/0$ silently, where the checked instance returns
-`DivisionByZero`. A NaN dividend with a non-zero divisor still propagates as
-`Ok(NaN)`, and `SqrtChecked` lets NaN pass in the same way: a checked
-operation rejects invalid arguments, it does not re-report an earlier
-invalid result.
+The `Float` and `Double` `DivChecked` instances propagate NaN operands as
+`Ok(NaN)` before checking for division errors. They return `DomainError` for
+$0/0$ and $\infty/\infty$, and `DivisionByZero` for a finite non-zero
+dividend divided by signed zero. These checked errors identify the IEEE invalid
+operation (§7.2) and divideByZero (§7.3) conditions. Infinity divided by
+signed zero returns the signed infinity in `Ok`, as specified by IEEE 754; it
+does not raise divideByZero. `SqrtChecked` likewise returns a NaN result in
+`Ok`.
+
+`PowNatChecked` and `PowIntChecked` propagate a NaN base as `Ok(NaN)`,
+including for a zero exponent. A positive power that overflows returns its
+signed infinity in `Ok`, the default overflow result under IEEE 754 §7.4. The
+checked tier does not return contextual exception flags; those are the
+responsibility of the contextual operations. For a negative exponent, the
+current `PowIntChecked` implementation takes the reciprocal after computing
+the positive power, so an underflowed intermediate can still be reported as
+`DivisionByZero`; exact negative-power handling is tracked separately in
+[arithmetic#1](https://github.com/Luna-Flow/arithmetic/issues/1).
 
 ### Soundness and monotonicity of enclosure relations
 

@@ -1,6 +1,6 @@
 ///|
 fn float_is_nan(x : Float) -> Bool {
-  Float::is_nan(x)
+  x != x
 }
 
 ///|
@@ -177,6 +177,9 @@ pub impl DivChecked for Float with fn div_checked(lhs, rhs, _ctx) -> Result[
   Float,
   ArithmeticError,
 ] {
+  if float_is_nan(lhs) || float_is_nan(rhs) {
+    return Ok(lhs / rhs)
+  }
   guard !(lhs == 0.0 && rhs == 0.0) else {
     return Err(
       ArithmeticError::domain_error("zero divided by zero is undefined"),
@@ -187,7 +190,7 @@ pub impl DivChecked for Float with fn div_checked(lhs, rhs, _ctx) -> Result[
       ArithmeticError::domain_error("infinity divided by infinity is undefined"),
     )
   }
-  guard rhs != 0.0 else {
+  guard rhs != 0.0 || float_is_inf(lhs) else {
     return Err(ArithmeticError::division_by_zero("division by zero"))
   }
   Ok(lhs / rhs)
@@ -209,6 +212,9 @@ pub impl PowNatChecked for Float with fn pow_nat_checked(base, exponent, _ctx) -
   Float,
   ArithmeticError,
 ] {
+  if float_is_nan(base) {
+    return Ok(base + base)
+  }
   Ok(float_pow_nat(base, exponent))
 }
 
@@ -217,6 +223,9 @@ pub impl PowIntChecked for Float with fn pow_int_checked(base, exponent, ctx) ->
   Float,
   ArithmeticError,
 ] {
+  if float_is_nan(base) {
+    return Ok(base + base)
+  }
   if exponent == 0 {
     return Ok(1.0)
   }

@@ -6,6 +6,10 @@ points; older release history lives in this file.
 
 ## Unreleased
 
+### Fixed
+
+- Fixed the checked `Float` and `Double` special-value contract in [#5](https://github.com/Luna-Flow/arithmetic/issues/5): NaN operands propagate as `Ok(NaN)`, infinity divided by zero returns signed infinity, and floating-point power overflow remains `Ok(±inf)`.
+
 ### Changed
 
 - The test-only dependency `Luna-Flow/luna-generic` is bumped from 0.3.1 to

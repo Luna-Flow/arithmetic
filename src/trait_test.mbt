@@ -328,6 +328,24 @@ test "checked float and double sqrt reject negative real inputs" {
   }
 }
 
+/// IEEE 754-2019 §6.2.3 and the #5 maintainer decision: checked square root
+/// returns a quiet NaN value in Ok rather than a structured domain error.
+/// Expected rows: sqrt(NaN) -> Ok(NaN), for both Float and Double.
+
+///|
+test "checked float and double sqrt propagates NaN" {
+  let nan_f : Float = 0.0 / 0.0
+  let nan_d : Double = 0.0 / 0.0
+  match @arithmetic.SqrtChecked::sqrt_checked(nan_f, default_ctx) {
+    Ok(value) => assert_eq(value != value, true)
+    Err(_) => fail("expected Float NaN square root to propagate as Ok(NaN)")
+  }
+  match @arithmetic.SqrtChecked::sqrt_checked(nan_d, default_ctx) {
+    Ok(value) => assert_eq(value != value, true)
+    Err(_) => fail("expected Double NaN square root to propagate as Ok(NaN)")
+  }
+}
+
 ///|
 test "checked float and double division lift enforces explicit zero-division errors" {
   match
@@ -381,6 +399,249 @@ test "checked float and double division classifies indeterminate forms" {
     @arithmetic.DivChecked::div_checked((1.0 : Float), float_inf, default_ctx) {
     Ok(value) => assert_eq(approx_eq_float(value, (0.0 : Float)), true)
     Err(_) => fail("expected finite division by infinity to succeed")
+  }
+}
+
+/// IEEE 754-2019 §§6.2.3, 7.2, 7.3: NaN operands propagate; 0/0 is invalid;
+/// divideByZero applies to finite non-zero divided by zero, not infinity/zero.
+/// The #5 maintainer decision maps NaN and infinity results to Ok values while
+/// retaining checked errors for invalid 0/0 and finite non-zero/zero.
+/// Expected rows: NaN/0, 0/NaN, NaN/1 -> Ok(NaN).
+/// The same contract applies to Float and Double.
+
+///|
+test "checked float and double division propagates NaN before zero checks" {
+  let nan_f : Float = 0.0 / 0.0
+  let nan_d : Double = 0.0 / 0.0
+
+  let nan_over_zero_f = @arithmetic.DivChecked::div_checked(
+    nan_f,
+    (0.0 : Float),
+    default_ctx,
+  )
+  match nan_over_zero_f {
+    Ok(value) => assert_eq(value != value, true)
+    Err(_) => fail("expected NaN divided by zero to propagate as Ok(NaN)")
+  }
+  let zero_over_nan_f = @arithmetic.DivChecked::div_checked(
+    (0.0 : Float),
+    nan_f,
+    default_ctx,
+  )
+  match zero_over_nan_f {
+    Ok(value) => assert_eq(value != value, true)
+    Err(_) => fail("expected zero divided by NaN to propagate as Ok(NaN)")
+  }
+  match @arithmetic.DivChecked::div_checked(nan_f, (1.0 : Float), default_ctx) {
+    Ok(value) => assert_eq(value != value, true)
+    Err(_) => fail("expected Float NaN divided by one to propagate as Ok(NaN)")
+  }
+  match
+    @arithmetic.DivChecked::div_checked(nan_d, (0.0 : Double), default_ctx) {
+    Ok(value) => assert_eq(value != value, true)
+    Err(_) =>
+      fail("expected Double NaN divided by zero to propagate as Ok(NaN)")
+  }
+  match
+    @arithmetic.DivChecked::div_checked((0.0 : Double), nan_d, default_ctx) {
+    Ok(value) => assert_eq(value != value, true)
+    Err(_) =>
+      fail("expected Double zero divided by NaN to propagate as Ok(NaN)")
+  }
+  match
+    @arithmetic.DivChecked::div_checked(nan_d, (1.0 : Double), default_ctx) {
+    Ok(value) => assert_eq(value != value, true)
+    Err(_) => fail("expected Double NaN divided by one to propagate as Ok(NaN)")
+  }
+}
+
+/// IEEE 754-2019 §§7.2–7.3: 0/0 is invalid; divideByZero applies to finite
+/// non-zero divided by zero, not infinity/zero. D-A4 keeps the checked error
+/// for the former and returns the IEEE signed infinity in Ok for the latter.
+/// Expected rows: ±inf/±0 -> the correctly signed Ok(±inf); 0/0 and inf/inf ->
+/// Err(DomainError), checked for both Float and Double.
+
+///|
+test "checked float and double division returns signed infinity over zero" {
+  let pos_inf_f : Float = 1.0 / 0.0
+  let neg_inf_f : Float = -1.0 / 0.0
+  let pos_inf_d : Double = 1.0 / 0.0
+  let neg_inf_d : Double = -1.0 / 0.0
+  match @arithmetic.DivChecked::div_checked((0.0 : Double), 0.0, default_ctx) {
+    Ok(_) => fail("expected Double zero divided by zero to return DomainError")
+    Err(err) => assert_eq(err.is_domain_error(), true)
+  }
+  match @arithmetic.DivChecked::div_checked(pos_inf_f, pos_inf_f, default_ctx) {
+    Ok(_) =>
+      fail("expected Float infinity divided by infinity to return DomainError")
+    Err(err) => assert_eq(err.is_domain_error(), true)
+  }
+
+  match
+    @arithmetic.DivChecked::div_checked(pos_inf_f, (0.0 : Float), default_ctx) {
+    Ok(value) => {
+      assert_eq(Float::is_inf(value), true)
+      assert_eq(value > 0.0, true)
+    }
+    Err(_) =>
+      fail(
+        "expected positive infinity divided by positive zero to return Ok(+inf)",
+      )
+  }
+  match
+    @arithmetic.DivChecked::div_checked(neg_inf_f, (-0.0 : Float), default_ctx) {
+    Ok(value) => {
+      assert_eq(Float::is_inf(value), true)
+      assert_eq(value > 0.0, true)
+    }
+    Err(_) =>
+      fail(
+        "expected negative infinity divided by negative zero to return Ok(+inf)",
+      )
+  }
+  match
+    @arithmetic.DivChecked::div_checked(neg_inf_d, (0.0 : Double), default_ctx) {
+    Ok(value) => {
+      assert_eq(Double::is_inf(value), true)
+      assert_eq(value < 0.0, true)
+    }
+    Err(_) =>
+      fail(
+        "expected negative infinity divided by positive zero to return Ok(-inf)",
+      )
+  }
+  match
+    @arithmetic.DivChecked::div_checked(pos_inf_d, (-0.0 : Double), default_ctx) {
+    Ok(value) => {
+      assert_eq(Double::is_inf(value), true)
+      assert_eq(value < 0.0, true)
+    }
+    Err(_) =>
+      fail(
+        "expected positive infinity divided by negative zero to return Ok(-inf)",
+      )
+  }
+}
+
+/// IEEE 754-2019 §7.4: overflow to infinity is the default for untrapped
+/// floating-point operations; D-A4 requires the checked tier to return Ok.
+/// Exact magnitudes 10^400 and 10^41 exceed the finite ranges of binary64 and
+/// binary32 respectively. Expected rows: 10^400 -> Ok(+inf) for Double;
+/// (-10)^41 -> Ok(-inf) for Float; (-10)^400 -> Ok(+inf) for Double.
+
+///|
+test "checked float and double powers return infinity on overflow" {
+  match
+    @arithmetic.PowNatChecked::pow_nat_checked(
+      (10.0 : Double),
+      400U,
+      default_ctx,
+    ) {
+    Ok(value) => {
+      assert_eq(Double::is_inf(value), true)
+      assert_eq(value > 0.0, true)
+    }
+    Err(_) => fail("expected Double power overflow to return Ok(+inf)")
+  }
+  match
+    @arithmetic.PowNatChecked::pow_nat_checked(
+      (-10.0 : Float),
+      41U,
+      default_ctx,
+    ) {
+    Ok(value) => {
+      assert_eq(Float::is_inf(value), true)
+      assert_eq(value < 0.0, true)
+    }
+    Err(_) => fail("expected Float power overflow to return Ok(-inf)")
+  }
+  match
+    @arithmetic.PowIntChecked::pow_int_checked((-10.0 : Float), 41, default_ctx) {
+    Ok(value) => {
+      assert_eq(Float::is_inf(value), true)
+      assert_eq(value < 0.0, true)
+    }
+    Err(_) =>
+      fail("expected Float signed integer power overflow to return Ok(-inf)")
+  }
+  match
+    @arithmetic.PowIntChecked::pow_int_checked(
+      (-10.0 : Double),
+      400,
+      default_ctx,
+    ) {
+    Ok(value) => {
+      assert_eq(Double::is_inf(value), true)
+      assert_eq(value > 0.0, true)
+    }
+    Err(_) =>
+      fail("expected Double signed integer power overflow to return Ok(+inf)")
+  }
+  match
+    @arithmetic.PowIntChecked::pow_int_checked(
+      (1.0e-320 : Double),
+      -1,
+      default_ctx,
+    ) {
+    Ok(value) => {
+      assert_eq(Double::is_inf(value), true)
+      assert_eq(value > 0.0, true)
+    }
+    Err(_) => fail("expected Double reciprocal overflow to return Ok(+inf)")
+  }
+  match
+    @arithmetic.PowIntChecked::pow_int_checked(
+      (1.0e-39 : Float),
+      -1,
+      default_ctx,
+    ) {
+    Ok(value) => {
+      assert_eq(Float::is_inf(value), true)
+      assert_eq(value > 0.0, true)
+    }
+    Err(_) => fail("expected Float reciprocal overflow to return Ok(+inf)")
+  }
+}
+
+/// D-A4 applies NaN propagation before power identity short-circuits.
+/// Expected rows: NaN^0, NaN^3, and NaN^-3 -> Ok(NaN) for Float/Double.
+
+///|
+test "checked float and double powers propagate NaN for every integer exponent" {
+  let nan_f : Float = 0.0 / 0.0
+  let nan_d : Double = 0.0 / 0.0
+  for exponent in [0, 3, -3] {
+    let nat_exponent = if exponent == 0 {
+      0U
+    } else {
+      exponent.reinterpret_as_uint()
+    }
+    match
+      @arithmetic.PowIntChecked::pow_int_checked(nan_f, exponent, default_ctx) {
+      Ok(value) => assert_eq(value != value, true)
+      Err(_) => fail("expected Float NaN integer power to propagate")
+    }
+    match
+      @arithmetic.PowIntChecked::pow_int_checked(nan_d, exponent, default_ctx) {
+      Ok(value) => assert_eq(value != value, true)
+      Err(_) => fail("expected Double NaN integer power to propagate")
+    }
+    if exponent >= 0 {
+      match
+        @arithmetic.PowNatChecked::pow_nat_checked(
+          nan_f, nat_exponent, default_ctx,
+        ) {
+        Ok(value) => assert_eq(value != value, true)
+        Err(_) => fail("expected Float NaN natural power to propagate")
+      }
+      match
+        @arithmetic.PowNatChecked::pow_nat_checked(
+          nan_d, nat_exponent, default_ctx,
+        ) {
+        Ok(value) => assert_eq(value != value, true)
+        Err(_) => fail("expected Double NaN natural power to propagate")
+      }
+    }
   }
 }
 

@@ -292,6 +292,11 @@ pub fn ArithmeticError::is_certification_failure(
 /// require a real-number ordering, zero comparison, or a universal notion of a
 /// negative input. Implementations should report structured domain errors for
 /// values that are invalid in their own mathematical domain.
+///
+/// For the built-in `Float` and `Double` instances, a NaN input propagates as
+/// `Ok(NaN)`. A negative finite value or negative infinity returns
+/// `DomainError`; signed zero, positive infinity, and NaN are passed to the
+/// underlying square-root operation.
 
 ///|
 pub(open) trait SqrtChecked {
@@ -304,6 +309,11 @@ pub(open) trait SqrtChecked {
 /// require IEEE floating-point values, infinities, NaN, or a scalar total
 /// order. Implementations should use structured errors for division cases that
 /// are invalid in their own mathematical domain.
+///
+/// For the built-in `Float` and `Double` instances, any NaN operand propagates
+/// as `Ok(NaN)`. `0/0` and `infinity/infinity` return `DomainError`; finite
+/// non-zero divided by signed zero returns `DivisionByZero`; infinity divided
+/// by signed zero returns the signed infinity in `Ok`.
 
 ///|
 pub(open) trait DivChecked {
@@ -324,6 +334,10 @@ pub(open) trait CompareChecked {
 ///
 /// `x^0` returns the multiplicative identity in this first checked-power layer,
 /// including `0^0`.
+///
+/// For the built-in `Float` and `Double` instances, a NaN base propagates as
+/// `Ok(NaN)`, including when the exponent is zero. Overflow returns the signed
+/// infinity in `Ok`; underflow follows the floating-point result.
 
 ///|
 pub(open) trait PowNatChecked {
@@ -338,6 +352,11 @@ pub(open) trait PowNatChecked {
 /// Negative exponents require reciprocal/division semantics. Zero base with a
 /// negative exponent must report a structured error or a documented enclosure
 /// fallback rather than silently producing an invalid scalar result.
+///
+/// For the built-in `Float` and `Double` instances, a NaN base propagates as
+/// `Ok(NaN)`, including when the exponent is zero. Overflow during a positive
+/// power returns the signed infinity in `Ok`. A zero base with a negative
+/// exponent returns `DivisionByZero`.
 
 ///|
 pub(open) trait PowIntChecked {

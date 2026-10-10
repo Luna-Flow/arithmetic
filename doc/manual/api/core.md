@@ -840,7 +840,8 @@ pub(open) trait SqrtChecked {
 
 The domain is defined by each instance; the trait does not assume an order.
 For `Float` and `Double`, an argument $x < 0$ (including $-\infty$) gives
-`DomainError`; $-0$, $+\infty$ and NaN pass through to `Sqrt::sqrt`.
+`DomainError`; $-0$, $+\infty$ and NaN pass through to `Sqrt::sqrt`. A NaN
+therefore returns as `Ok(NaN)`.
 
 ```moonbit
 test "checked square root" {
@@ -864,13 +865,15 @@ pub(open) trait DivChecked {
 }
 ```
 
-For `Float` and `Double` the checks run in this order:
+For `Float` and `Double`, NaN operands propagate as `Ok(NaN)` before the
+division checks. The remaining cases are:
 
 | Case | Result |
 | --- | --- |
 | $\pm 0 / \pm 0$ | `DomainError` (`zero divided by zero is undefined`) |
 | $\pm\infty / \pm\infty$ | `DomainError` (`infinity divided by infinity is undefined`) |
-| any other $x / \pm 0$, including NaN $/\, 0$ | `DivisionByZero` (`division by zero`) |
+| finite non-zero $x / \pm 0$ | `DivisionByZero` (`division by zero`) |
+| $\pm\infty / \pm 0$ | `Ok(\pm\infty)` with the quotient's sign |
 | otherwise | `Ok(x / y)`, with IEEE NaN propagation |
 
 ```moonbit
@@ -917,11 +920,13 @@ pub(open) trait PowNatChecked {
 }
 ```
 
-$x^0$ is the multiplicative identity, including $0^0$. The `Float` and
-`Double` instances never fail: they use binary exponentiation with at most
-$2\lfloor\log_2 n\rfloor$ rounded multiplications, and overflow to $\pm\infty$
-or underflow to zero like any IEEE product. The [design page](../design/core.md#error-bound-of-binary-powering)
-bounds the rounding error.
+$x^0$ is the multiplicative identity for non-NaN inputs, including $0^0$. For
+`Float` and `Double`, a NaN base returns `Ok(NaN)` even when the exponent is
+zero. The instances never return an error: overflow returns the signed infinity
+in `Ok`, and underflow follows IEEE arithmetic. They use binary exponentiation
+with at most $2\lfloor\log_2 n\rfloor$ rounded multiplications. The [design
+page](../design/core.md#error-bound-of-binary-powering) bounds the rounding
+error.
 
 ### `PowIntChecked`
 
@@ -933,11 +938,13 @@ pub(open) trait PowIntChecked {
 }
 ```
 
-A negative exponent means a reciprocal. A zero base with a negative exponent
-must be reported as an error (or, for an enclosure type, as a documented
-enclosure), never as a silent invalid value. For `Float` and `Double`:
+A negative exponent means a reciprocal. For `Float` and `Double`, a NaN base
+returns `Ok(NaN)`, including when the exponent is zero. Overflow during the
+positive power calculation returns the signed infinity in `Ok`. A zero base
+with a negative exponent returns `DivisionByZero` for `Float` and `Double`; an
+enclosure implementation may return a documented enclosure instead.
 
-- $x^0 = 1$;
+- $x^0 = 1$ for a non-NaN base;
 - $x^n$ for $n > 0$ is `pow_nat_checked(x, n)`;
 - $x^{-n}$ is `DivisionByZero` when $x = \pm 0$, and otherwise
   `div_checked(1, x^n)`. The most negative `Int` exponent is handled

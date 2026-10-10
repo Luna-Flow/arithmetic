@@ -118,7 +118,7 @@ msgid "Mode"
 msgstr "模式"
 
 #: manual/api/core.md:95
-#: manual/api/core.md:869
+#: manual/api/core.md:871
 #: manual/architecture.md:40
 msgid "Result"
 msgstr "返回值"
@@ -586,327 +586,335 @@ msgid "`SqrtChecked` computes a square root or reports a domain error."
 msgstr "`SqrtChecked` 计算平方根，或报告定义域错误。"
 
 #: manual/api/core.md:841
-msgid "The domain is defined by each instance; the trait does not assume an order. For `Float` and `Double`, an argument $x < 0$ (including $-\\infty$) gives `DomainError`; $-0$, $+\\infty$ and NaN pass through to `Sqrt::sqrt`."
-msgstr "定义域由各实例规定；trait 不假定存在序。对于 `Float` 和 `Double`，参数 $x < 0$（包括 $-\\infty$）得到 `DomainError`；$-0$、$+\\infty$ 和 NaN 直接交给 `Sqrt::sqrt` 处理。"
+msgid "The domain is defined by each instance; the trait does not assume an order. For `Float` and `Double`, an argument $x < 0$ (including $-\\infty$) gives `DomainError`; $-0$, $+\\infty$ and NaN pass through to `Sqrt::sqrt`. A NaN therefore returns as `Ok(NaN)`."
+msgstr "定义域由各实例规定；trait 不假定存在序。对于 `Float` 和 `Double`，参数 $x < 0$（包括 $-\\infty$）得到 `DomainError`；$-0$、$+\\infty$ 和 NaN 直接交给 `Sqrt::sqrt` 处理。因此 NaN 的结果为 `Ok(NaN)`。"
 
-#: manual/api/core.md:859
+#: manual/api/core.md:860
 msgid "`DivChecked` divides or reports why the quotient is undefined."
 msgstr "`DivChecked` 执行除法，或报告商无定义的原因。"
 
-#: manual/api/core.md:867
-msgid "For `Float` and `Double` the checks run in this order:"
-msgstr "对于 `Float` 和 `Double`，检查按以下顺序进行："
+#: manual/api/core.md:868
+msgid "For `Float` and `Double`, NaN operands propagate as `Ok(NaN)` before the division checks. The remaining cases are:"
+msgstr "对于 `Float` 和 `Double`，NaN 操作数会在除法检查前以 `Ok(NaN)` 传播。其余情况如下："
 
-#: manual/api/core.md:869
+#: manual/api/core.md:871
 msgid "Case"
 msgstr "情形"
 
-#: manual/api/core.md:873
-msgid "any other $x / \\pm 0$, including NaN $/\\, 0$"
-msgstr "其他任何 $x / \\pm 0$，包括 NaN $/\\, 0$"
+#: manual/api/core.md:875
+msgid "finite non-zero $x / \\pm 0$"
+msgstr "有限非零值 $x / \\pm 0$"
 
-#: manual/api/core.md:874
+#: manual/api/core.md:876
+msgid "`Ok(\\pm\\infty)` with the quotient's sign"
+msgstr "返回 `Ok(\\pm\\infty)`，符号与商的符号相同"
+
+#: manual/api/core.md:877
 msgid "otherwise"
 msgstr "其他情况"
 
-#: manual/api/core.md:874
+#: manual/api/core.md:877
 msgid "`Ok(x / y)`, with IEEE NaN propagation"
 msgstr "`Ok(x / y)`，按 IEEE 规则传播 NaN"
 
-#: manual/api/core.md:889
+#: manual/api/core.md:892
 msgid "`CompareChecked` compares two values or reports that they are unordered."
 msgstr "`CompareChecked` 比较两个值，或报告它们无序。"
 
-#: manual/api/core.md:897
+#: manual/api/core.md:900
 msgid "On ordered inputs the result is `-1`, `0` or `1`. For `Float` and `Double`, a NaN operand gives `UnorderedComparison`, and $-0$ and $+0$ compare equal."
 msgstr "对有序输入，结果为 `-1`、`0` 或 `1`。对于 `Float` 和 `Double`，NaN 操作数得到 `UnorderedComparison`，且 $-0$ 与 $+0$ 比较相等。"
 
-#: manual/api/core.md:912
+#: manual/api/core.md:915
 msgid "`PowNatChecked` raises a value to a non-negative integer power."
 msgstr "`PowNatChecked` 求一个值的非负整数次幂。"
 
-#: manual/api/core.md:920
-msgid "$x^0$ is the multiplicative identity, including $0^0$. The `Float` and `Double` instances never fail: they use binary exponentiation with at most $2\\lfloor\\log_2 n\\rfloor$ rounded multiplications, and overflow to $\\pm\\infty$ or underflow to zero like any IEEE product. The [design page](../design/core.md#error-bound-of-binary-powering) bounds the rounding error."
-msgstr "$x^0$ 是乘法单位元，包括 $0^0$。`Float` 和 `Double` 实例从不失败：它们使用二进制快速幂，至多进行 $2\\lfloor\\log_2 n\\rfloor$ 次舍入乘法，并像任何 IEEE 乘积一样上溢到 $\\pm\\infty$ 或下溢到零。[设计页](../design/core.md#error-bound-of-binary-powering)给出了舍入误差的界。"
+#: manual/api/core.md:923
+msgid "$x^0$ is the multiplicative identity for non-NaN inputs, including $0^0$. For `Float` and `Double`, a NaN base returns `Ok(NaN)` even when the exponent is zero. The instances never return an error: overflow returns the signed infinity in `Ok`, and underflow follows IEEE arithmetic. They use binary exponentiation with at most $2\\lfloor\\log_2 n\\rfloor$ rounded multiplications. The [design page](../design/core.md#error-bound-of-binary-powering) bounds the rounding error."
+msgstr "对于非 NaN 输入，$x^0$ 是乘法单位元，包括 $0^0$。对于 `Float` 和 `Double`，即使指数为零，NaN 底数也会返回 `Ok(NaN)`。这些实例不会返回错误：上溢时在 `Ok` 中返回带符号的无穷大，下溢遵循 IEEE 算术。它们使用二进制快速幂，舍入乘法至多为 $2\\lfloor\\log_2 n\\rfloor$ 次。[设计页](../design/core.md#error-bound-of-binary-powering)给出了舍入误差界。"
 
-#: manual/api/core.md:928
+#: manual/api/core.md:933
 msgid "`PowIntChecked` raises a value to a signed integer power."
 msgstr "`PowIntChecked` 求一个值的有符号整数次幂。"
 
-#: manual/api/core.md:936
-msgid "A negative exponent means a reciprocal. A zero base with a negative exponent must be reported as an error (or, for an enclosure type, as a documented enclosure), never as a silent invalid value. For `Float` and `Double`:"
-msgstr "负指数表示取倒数。底数为零且指数为负时，必须报告为错误（对于包络类型，则报告为有文档说明的包络），绝不能静默返回无效值。对于 `Float` 和 `Double`："
-
 #: manual/api/core.md:941
+msgid "A negative exponent means a reciprocal. For `Float` and `Double`, a NaN base returns `Ok(NaN)`, including when the exponent is zero. Overflow during the positive power calculation returns the signed infinity in `Ok`. A zero base with a negative exponent returns `DivisionByZero` for `Float` and `Double`; an enclosure implementation may return a documented enclosure instead."
+msgstr "负指数表示取倒数。对于 `Float` 和 `Double`，NaN 底数（包括指数为零时）会返回 `Ok(NaN)`。正指数幂计算发生上溢时，在 `Ok` 中返回带符号的无穷大。对于 `Float` 和 `Double`，底数为零且指数为负时返回 `DivisionByZero`；包络实现可以改为返回有文档说明的包络。"
+
+#: manual/api/core.md:947
+msgid "$x^0 = 1$ for a non-NaN base;"
+msgstr "对于非 NaN 底数，$x^0 = 1$；"
+
+#: manual/api/core.md:948
 msgid "$x^n$ for $n > 0$ is `pow_nat_checked(x, n)`;"
 msgstr "$n > 0$ 时，$x^n$ 即 `pow_nat_checked(x, n)`；"
 
-#: manual/api/core.md:942
+#: manual/api/core.md:949
 msgid "$x^{-n}$ is `DivisionByZero` when $x = \\pm 0$, and otherwise `div_checked(1, x^n)`. The most negative `Int` exponent is handled without negation overflow."
 msgstr "当 $x = \\pm 0$ 时，$x^{-n}$ 为 `DivisionByZero`，否则为 `div_checked(1, x^n)`。对最小的负 `Int` 指数也能正确处理，不会因取负而溢出。"
 
-#: manual/api/core.md:946
+#: manual/api/core.md:953
 msgid "[!NOTE] Because the reciprocal is taken after the power, a tiny base whose power underflows to zero, such as `pow_int_checked(1.0e-200, -2, ctx)`, returns a `DivisionByZero` error even though the exact result $10^{400}$ only overflows."
 msgstr "[!NOTE] 由于倒数是在求幂之后才取的，幂下溢为零的极小底数，例如 `pow_int_checked(1.0e-200, -2, ctx)`，会返回 `DivisionByZero` 错误，尽管精确结果 $10^{400}$ 只是上溢。"
 
-#: manual/api/core.md:965
+#: manual/api/core.md:972
 msgid "`ParseChecked` parses text into `Self` under a context."
 msgstr "`ParseChecked` 在给定上下文下把文本解析为 `Self`。"
 
-#: manual/api/core.md:973
+#: manual/api/core.md:980
 msgid "The context lets a decimal backend round the parsed value to its precision. Failures use `ParseError`, or `FormatError` when the text is well formed but the format cannot hold it. This package ships no instance; parsing belongs to backends with a textual format, such as decimal types."
 msgstr "上下文使十进制后端可以把解析得到的值舍入到其精度。失败时使用 `ParseError`；若文本格式正确但该格式无法容纳该值，则使用 `FormatError`。本包不提供任何实例；解析属于具有文本格式的后端，例如十进制类型。"
 
-#: manual/api/core.md:978
+#: manual/api/core.md:985
 msgid "Contextual capability traits"
 msgstr "上下文能力 trait"
 
-#: manual/api/core.md:980
+#: manual/api/core.md:987
 msgid "A contextual trait returns `Result[ArithmeticOutcome[Self], ArithmeticError]`. `Err` means the operation was rejected; `Ok` carries the value and the diagnostics a backend detected while producing it."
 msgstr "上下文 trait 返回 `Result[ArithmeticOutcome[Self], ArithmeticError]`。`Err` 表示运算被拒绝；`Ok` 携带值以及后端在计算过程中检测到的诊断。"
 
-#: manual/api/core.md:984
+#: manual/api/core.md:991
 msgid "[!IMPORTANT] The built-in `Float` and `Double` instances ignore the context and do not detect rounding, overflow or underflow. Except for `Float`'s `IntegralContextual`, they return `ArithmeticOutcome::exact`, so their empty diagnostics mean \"nothing detected\", not \"the result is exact\": `0.1 + 0.2` returns `0.30000000000000004` with empty diagnostics."
 msgstr "[!IMPORTANT] 内置的 `Float` 和 `Double` 实例会忽略上下文，也不检测舍入、上溢或下溢。除 `Float` 的 `IntegralContextual` 外，它们都返回 `ArithmeticOutcome::exact`，因此其空诊断的含义是“未检测到任何情况”，而不是“结果精确”：`0.1 + 0.2` 返回 `0.30000000000000004`，诊断为空。"
 
-#: manual/api/core.md:993
+#: manual/api/core.md:1000
 msgid "These four traits are the contextual forms of `+`, `-`, `*` and `/`."
 msgstr "这四个 trait 是 `+`、`-`、`*` 和 `/` 的上下文形式。"
 
-#: manual/api/core.md:1010
+#: manual/api/core.md:1017
 msgid "A context-faithful backend returns $\\operatorname{fl}(x \\circ y)$, the exact result rounded under the context, and sets the diagnostics that the rounding caused. For `Float` and `Double`, add, sub and mul never fail; `div_contextual` fails exactly when `DivChecked::div_checked` does."
 msgstr "忠实遵循上下文的后端返回 $\\operatorname{fl}(x \\circ y)$，即在上下文下舍入后的精确结果，并设置由该舍入引起的诊断。对于 `Float` 和 `Double`，加、减、乘从不失败；`div_contextual` 恰好在 `DivChecked::div_checked` 失败时失败。"
 
-#: manual/api/core.md:1029
+#: manual/api/core.md:1036
 msgid "`AbsContextual` is the contextual absolute value."
 msgstr "`AbsContextual` 是上下文形式的绝对值。"
 
-#: manual/api/core.md:1037
+#: manual/api/core.md:1044
 msgid "A backend may round when the context precision is below the operand's. For `Float` and `Double` it is the exact IEEE `abs`."
 msgstr "当上下文精度低于操作数精度时，后端可以进行舍入。对于 `Float` 和 `Double`，它就是精确的 IEEE `abs`。"
 
-#: manual/api/core.md:1042
+#: manual/api/core.md:1049
 msgid "`SqrtContextual` is the contextual square root."
 msgstr "`SqrtContextual` 是上下文形式的平方根。"
 
-#: manual/api/core.md:1050
+#: manual/api/core.md:1057
 msgid "For `Float` and `Double` it fails exactly when `SqrtChecked::sqrt_checked` does."
 msgstr "对于 `Float` 和 `Double`，它恰好在 `SqrtChecked::sqrt_checked` 失败时失败。"
 
-#: manual/api/core.md:1055
+#: manual/api/core.md:1062
 msgid "`ExpContextual` is the contextual natural exponential."
 msgstr "`ExpContextual` 是上下文形式的自然指数函数。"
 
-#: manual/api/core.md:1063
+#: manual/api/core.md:1070
 msgid "For `Float` and `Double` it is `Exponential::exp` wrapped in an exact outcome."
 msgstr "对于 `Float` 和 `Double`，它就是包装在精确结果中的 `Exponential::exp`。"
 
-#: manual/api/core.md:1077
+#: manual/api/core.md:1084
 msgid "`IntegralContextual` embeds a MoonBit `Int` into `Self` under a context."
 msgstr "`IntegralContextual` 在给定上下文下把 MoonBit `Int` 嵌入 `Self`。"
 
-#: manual/api/core.md:1085
+#: manual/api/core.md:1092
 msgid "The source is always `Int`; wider or arbitrary-precision sources need separate capabilities. A backend may reject a context it does not support. For `Double` every `Int` is exact. For `Float`, an integer with $|n| > 2^{24}$ that is not a multiple of the spacing at its magnitude is rounded, and the outcome then has `inexact` and `rounded` set."
 msgstr "源类型始终是 `Int`；更宽或任意精度的源类型需要单独的能力。后端可以拒绝它不支持的上下文。对于 `Double`，每个 `Int` 都能精确表示。对于 `Float`，满足 $|n| > 2^{24}$ 且不是该量级间距整数倍的整数会被舍入，此时结果中会设置 `inexact` 和 `rounded`。"
 
-#: manual/api/core.md:1108
+#: manual/api/core.md:1115
 msgid "`AdjacentContextual` steps to the neighbouring representable value."
 msgstr "`AdjacentContextual` 步进到相邻的可表示值。"
 
-#: manual/api/core.md:1118
+#: manual/api/core.md:1125
 msgid "`next_plus_contextual(x)` is the least representable value greater than $x$ and `next_minus_contextual(x)` the greatest one less than $x$. `next_toward_contextual(x, t)` steps from $x$ toward $t$; when $x = t$ it returns $t$, so `next_toward(0.0, -0.0)` is $-0$. A backend whose representable set depends on the context reports range conditions in the diagnostics."
 msgstr "`next_plus_contextual(x)` 是大于 $x$ 的最小可表示值，`next_minus_contextual(x)` 是小于 $x$ 的最大可表示值。`next_toward_contextual(x, t)` 从 $x$ 向 $t$ 步进；当 $x = t$ 时返回 $t$，因此 `next_toward(0.0, -0.0)` 为 $-0$。若后端的可表示值集合依赖于上下文，则在诊断中报告范围相关的条件。"
 
-#: manual/api/core.md:1125
+#: manual/api/core.md:1132
 msgid "For `Float` and `Double` the representable set is the fixed IEEE binary format and the result is always exact:"
 msgstr "对于 `Float` 和 `Double`，可表示值集合是固定的 IEEE 二进制格式，结果总是精确的："
 
-#: manual/api/core.md:1128
+#: manual/api/core.md:1135
 msgid "Input"
 msgstr "输入"
 
-#: manual/api/core.md:1130
+#: manual/api/core.md:1137
 msgid "smallest positive subnormal"
 msgstr "最小正次正规数"
 
-#: manual/api/core.md:1130
+#: manual/api/core.md:1137
 msgid "smallest negative subnormal"
 msgstr "最大负次正规数（绝对值最小）"
 
-#: manual/api/core.md:1131
-#: manual/api/core.md:1132
+#: manual/api/core.md:1138
+#: manual/api/core.md:1139
 msgid "largest finite"
 msgstr "最大有限值"
 
-#: manual/api/core.md:1131
+#: manual/api/core.md:1138
 msgid "predecessor"
 msgstr "前驱"
 
-#: manual/api/core.md:1134
+#: manual/api/core.md:1141
 msgid "NaN"
 msgstr "NaN"
 
-#: manual/api/core.md:1136
+#: manual/api/core.md:1143
 msgid "`next_toward` returns NaN if either operand is NaN."
 msgstr "任一操作数为 NaN 时，`next_toward` 返回 NaN。"
 
-#: manual/api/core.md:1152
+#: manual/api/core.md:1159
 msgid "`ConstantsContextual` produces $\\pi$, $\\tau$ and $e$ under a context."
 msgstr "`ConstantsContextual` 在给定上下文下生成 $\\pi$、$\\tau$ 和 $e$。"
 
-#: manual/api/core.md:1162
+#: manual/api/core.md:1169
 msgid "Implement it only when the constants honour the context and the diagnostics are meaningful. A proof-backed backend returns a `CertificationFailure` error when it cannot certify the target rounding. `Float` and `Double` do not implement it; see the [design page](../design/core.md#native-scalars-implement-only-what-they-can-honour)."
 msgstr "仅当常量确实遵循上下文、且诊断有意义时才实现它。基于证明的后端在无法认证目标舍入时返回 `CertificationFailure` 错误。`Float` 和 `Double` 不实现它；参见[设计页](../design/core.md#native-scalars-implement-only-what-they-can-honour)。"
 
-#: manual/api/core.md:1169
+#: manual/api/core.md:1176
 msgid "`HyperbolicContextual` provides `sinh`, `cosh` and `tanh` under a context."
 msgstr "`HyperbolicContextual` 在给定上下文下提供 `sinh`、`cosh` 和 `tanh`。"
 
-#: manual/api/core.md:1179
+#: manual/api/core.md:1186
 msgid "The same rule as for `ConstantsContextual` applies, and `Float` and `Double` do not implement it either."
 msgstr "适用与 `ConstantsContextual` 相同的规则，`Float` 和 `Double` 同样不实现它。"
 
-#: manual/api/core.md:1184
+#: manual/api/core.md:1191
 msgid "`NumericFormatContextual` describes the numeric format of `Self` under a context: its distinguished values and the class of a value."
 msgstr "`NumericFormatContextual` 描述 `Self` 在给定上下文下的数值格式：其特殊值以及值的类别。"
 
-#: manual/api/core.md:1198
+#: manual/api/core.md:1205
 msgid "`epsilon_contextual` is the machine epsilon $\\varepsilon = \\beta^{1-p}$, the distance from $1$ to the next larger representable value; the unit roundoff of round-to-nearest is $u = \\varepsilon / 2$. These methods do not fail. For the fixed formats the context is ignored:"
 msgstr "`epsilon_contextual` 是机器 epsilon $\\varepsilon = \\beta^{1-p}$，即 $1$ 到下一个更大可表示值的距离；就近舍入的单位舍入误差为 $u = \\varepsilon / 2$。这些方法不会失败。对于固定格式，上下文被忽略："
 
-#: manual/api/core.md:1203
+#: manual/api/core.md:1210
 msgid "Method"
 msgstr "方法"
 
-#: manual/api/core.md:1203
+#: manual/api/core.md:1210
 msgid "`Float` (binary32)"
 msgstr "`Float`（binary32）"
 
-#: manual/api/core.md:1203
+#: manual/api/core.md:1210
 msgid "`Double` (binary64)"
 msgstr "`Double`（binary64）"
 
-#: manual/api/core.md:1220
+#: manual/api/core.md:1227
 msgid "Enclosure relations"
 msgstr "包络关系"
 
-#: manual/api/core.md:1222
+#: manual/api/core.md:1229
 msgid "An enclosure is a value that stands for an unknown real number known to lie in a set, such as an interval or a ball. These five traits relate two enclosures $X$ and $Y$. They are relations, not an order: for overlapping enclosures both `definitely_lt(X, Y)` and `definitely_lt(Y, X)` are false. Read them as statements about every pair of points $x \\in X$, $y \\in Y$. This package ships no instance; interval and ball backends implement them. The [design page](../design/core.md#enclosures-and-three-valued-comparison) derives the interval formulas below."
 msgstr "包络是这样一种值：它代表一个未知实数，并已知该实数位于某个集合中，例如区间或球。这五个 trait 描述两个包络 $X$ 与 $Y$ 之间的关系。它们是关系而不是序：对于相互重叠的包络，`definitely_lt(X, Y)` 和 `definitely_lt(Y, X)` 都为假。应把它们理解为关于每一对点 $x \\in X$、$y \\in Y$ 的陈述。本包不提供任何实例；由区间后端和球后端实现它们。[设计页](../design/core.md#enclosures-and-three-valued-comparison)推导了下面的区间公式。"
 
-#: manual/api/core.md:1231
-#: manual/api/core.md:1323
+#: manual/api/core.md:1238
+#: manual/api/core.md:1330
 msgid "Trait"
 msgstr "Trait"
 
-#: manual/api/core.md:1231
+#: manual/api/core.md:1238
 msgid "Holds when"
 msgstr "成立条件"
 
-#: manual/api/core.md:1231
+#: manual/api/core.md:1238
 msgid "For intervals $X = [a, b]$, $Y = [c, d]$"
 msgstr "对区间 $X = [a, b]$、$Y = [c, d]$"
 
-#: manual/api/core.md:1233
+#: manual/api/core.md:1240
 msgid "$a \\le c$ and $d \\le b$"
 msgstr "$a \\le c$ 且 $d \\le b$"
 
-#: manual/api/core.md:1234
-#: manual/api/core.md:1237
+#: manual/api/core.md:1241
+#: manual/api/core.md:1244
 msgid "$a \\le d$ and $c \\le b$"
 msgstr "$a \\le d$ 且 $c \\le b$"
 
-#: manual/api/core.md:1235
+#: manual/api/core.md:1242
 msgid "$x < y$ for all $x \\in X$, $y \\in Y$"
 msgstr "对所有 $x \\in X$、$y \\in Y$ 都有 $x < y$"
 
-#: manual/api/core.md:1236
+#: manual/api/core.md:1243
 msgid "$x \\le y$ for all $x \\in X$, $y \\in Y$"
 msgstr "对所有 $x \\in X$、$y \\in Y$ 都有 $x \\le y$"
 
-#: manual/api/core.md:1237
+#: manual/api/core.md:1244
 msgid "$x = y$ for some $x \\in X$, $y \\in Y$"
 msgstr "存在 $x \\in X$、$y \\in Y$ 使 $x = y$"
 
-#: manual/api/core.md:1241
+#: manual/api/core.md:1248
 msgid "`Contains` tests whether the first enclosure contains the second."
 msgstr "`Contains` 检测第一个包络是否包含第二个。"
 
-#: manual/api/core.md:1251
+#: manual/api/core.md:1258
 msgid "`Overlaps` tests whether two enclosures share a point."
 msgstr "`Overlaps` 检测两个包络是否有公共点。"
 
-#: manual/api/core.md:1261
+#: manual/api/core.md:1268
 msgid "`DefinitelyLt` tests whether every point of the first enclosure is less than every point of the second."
 msgstr "`DefinitelyLt` 检测第一个包络中的每个点是否都小于第二个包络中的每个点。"
 
-#: manual/api/core.md:1272
+#: manual/api/core.md:1279
 msgid "`DefinitelyLe` tests whether every point of the first enclosure is at most every point of the second."
 msgstr "`DefinitelyLe` 检测第一个包络中的每个点是否都不大于第二个包络中的每个点。"
 
-#: manual/api/core.md:1283
+#: manual/api/core.md:1290
 msgid "`MaybeEq` tests whether the two enclosures may denote the same number."
 msgstr "`MaybeEq` 检测两个包络是否可能表示同一个数。"
 
-#: manual/api/core.md:1291
+#: manual/api/core.md:1298
 msgid "For real enclosures `maybe_eq` coincides with `overlaps`; the trait exists so that generic code can ask the question it means."
 msgstr "对于实数包络，`maybe_eq` 与 `overlaps` 一致；该 trait 的存在是为了让泛型代码能按其本意提问。"
 
-#: manual/api/core.md:1321
+#: manual/api/core.md:1328
 #: manual/architecture.md:68
 #: manual/index.md:95
 msgid "Shipped instances"
 msgstr "内置实例"
 
-#: manual/api/core.md:1323
+#: manual/api/core.md:1330
 msgid "integers and `BigInt`"
 msgstr "整数类型与 `BigInt`"
 
-#: manual/api/core.md:1325
-#: manual/api/core.md:1326
-#: manual/api/core.md:1327
-#: manual/api/core.md:1329
+#: manual/api/core.md:1332
+#: manual/api/core.md:1333
+#: manual/api/core.md:1334
+#: manual/api/core.md:1336
 msgid "yes"
 msgstr "是"
 
-#: manual/api/core.md:1325
-#: manual/api/core.md:1327
-#: manual/api/core.md:1328
-#: manual/api/core.md:1329
-#: manual/api/core.md:1330
-#: manual/api/core.md:1331
+#: manual/api/core.md:1332
+#: manual/api/core.md:1334
+#: manual/api/core.md:1335
+#: manual/api/core.md:1336
+#: manual/api/core.md:1337
+#: manual/api/core.md:1338
 msgid "no"
 msgstr "否"
 
-#: manual/api/core.md:1333
+#: manual/api/core.md:1340
 msgid "The `Float` and `Double` elementary functions come from [`Kaida-Amethyst/math`](https://mooncakes.io/docs/Kaida-Amethyst/math), which does not promise correct rounding."
 msgstr "`Float` 和 `Double` 的初等函数来自 [`Kaida-Amethyst/math`](https://mooncakes.io/docs/Kaida-Amethyst/math)，后者不保证正确舍入。"
 
-#: manual/api/core.md:1337
+#: manual/api/core.md:1344
 msgid "Deprecated"
 msgstr "已弃用"
 
-#: manual/api/core.md:1339
+#: manual/api/core.md:1346
 msgid "Before MoonBit 0.10, implementing a trait for a type silently made its methods callable with dot syntax. These implicit method forms are still callable on the package's public types, but are deprecated and hidden from the interface file:"
 msgstr "在 MoonBit 0.10 之前，为某个类型实现 trait 会隐式地使其方法可以用点语法调用。这些隐式方法形式在本包的公开类型上仍可调用，但已弃用，并且不出现在接口文件中："
 
-#: manual/api/core.md:1343
+#: manual/api/core.md:1350
 msgid "Deprecated form"
 msgstr "弃用形式"
 
-#: manual/api/core.md:1343
+#: manual/api/core.md:1350
 msgid "Types"
 msgstr "类型"
 
-#: manual/api/core.md:1343
+#: manual/api/core.md:1350
 msgid "Replacement"
 msgstr "替代写法"
 
-#: manual/api/core.md:1345
+#: manual/api/core.md:1352
 msgid "every type listed under [Equality](#equality)"
 msgstr "[相等性](#equality)一节列出的所有类型"
 
-#: manual/api/core.md:1346
+#: manual/api/core.md:1353
 msgid "`Repr(x)` or `@debug.to_string(x)`"
 msgstr "`Repr(x)` 或 `@debug.to_string(x)`"
 
@@ -1769,18 +1777,18 @@ msgid "Checked division"
 msgstr "检查除法"
 
 #: manual/design/core.md:703
-msgid ""
-"The `Float` and `Double` `DivChecked` instances reject every zero divisor and use the kind to say why. $0/0$ and $\\infty/\\infty$ are indeterminate: the limits $\\lim (\\lambda t)/t = \\lambda$ take every value as $t \\to 0$ or $t \\to \\infty$, so no quotient is meaningful and the kind is `DomainError`. For $x \\n"
-"e 0$, $x/t$ diverges as $t \\to 0$, a pole, and the kind is `DivisionByZero`. This matches IEEE 754's invalid operation and division by zero exceptions, but is stricter: IEEE returns $\\pm\\infty$ for $\\infty/0$ and NaN for NaN$/0$ silently, where the checked instance returns `DivisionByZero`. A NaN dividend with a non-zero divisor still propagates as `Ok(NaN)`, and `SqrtChecked` lets NaN pass in the same way: a checked operation rejects invalid arguments, it does not re-report an earlier invalid result."
-msgstr ""
-"`Float` 和 `Double` 的 `DivChecked` 实例拒绝所有零除数，并用错误类别说明原因。$0/0$ 和 $\\infty/\\infty$ 是不定式：当 $t \\to 0$ 或 $t \\to \\infty$ 时，极限 $\\lim (\\lambda t)/t = \\lambda$ 可以取任意值，因此任何商都没有意义，类别为 `DomainError`。对 $x \\n"
-"e 0$，当 $t \\to 0$ 时 $x/t$ 发散，这是一个极点，类别为 `DivisionByZero`。这与 IEEE 754 的无效运算和除以零异常相对应，但更为严格：IEEE 对 $\\infty/0$ 静默返回 $\\pm\\infty$，对 NaN$/0$ 静默返回 NaN，而检查实例返回 `DivisionByZero`。被除数为 NaN 且除数非零时，仍以 `Ok(NaN)` 传播；`SqrtChecked` 同样放行 NaN：检查运算拒绝无效参数，但不会重复报告先前的无效结果。"
+msgid "The `Float` and `Double` `DivChecked` instances propagate NaN operands as `Ok(NaN)` before checking for division errors. They return `DomainError` for $0/0$ and $\\infty/\\infty$, and `DivisionByZero` for a finite non-zero dividend divided by signed zero. These checked errors identify the IEEE invalid operation (§7.2) and divideByZero (§7.3) conditions. Infinity divided by signed zero returns the signed infinity in `Ok`, as specified by IEEE 754; it does not raise divideByZero. `SqrtChecked` likewise returns a NaN result in `Ok`."
+msgstr "`Float` 和 `Double` 的 `DivChecked` 实例会在检查除法错误前，将 NaN 操作数传播为 `Ok(NaN)`。对于 $0/0$ 和 $\\infty/\\infty$，它们返回 `DomainError`；有限非零被除数除以带符号的零则返回 `DivisionByZero`。这些错误分别对应 IEEE 无效操作（§7.2）和除以零（§7.3）条件。按 IEEE 754 的规定，无穷大除以带符号的零会在 `Ok` 中返回带符号的无穷大，不会引发除以零条件。`SqrtChecked` 同样会在 `Ok` 中返回 NaN 结果。"
 
-#: manual/design/core.md:716
+#: manual/design/core.md:712
+msgid "`PowNatChecked` and `PowIntChecked` propagate a NaN base as `Ok(NaN)`, including for a zero exponent. A positive power that overflows returns its signed infinity in `Ok`, the default overflow result under IEEE 754 §7.4. The checked tier does not return contextual exception flags; those are the responsibility of the contextual operations. For a negative exponent, the current `PowIntChecked` implementation takes the reciprocal after computing the positive power, so an underflowed intermediate can still be reported as `DivisionByZero`; exact negative-power handling is tracked separately in [arithmetic#1](https://github.com/Luna-Flow/arithmetic/issues/1)."
+msgstr "`PowNatChecked` 和 `PowIntChecked` 会将 NaN 底数传播为 `Ok(NaN)`，包括指数为零的情况。正指数幂上溢时，会在 `Ok` 中返回带符号的无穷大，这是 IEEE 754 §7.4 规定的默认上溢结果。checked 层不返回上下文异常标志；这些标志由 contextual 运算负责。对于负指数，当前 `PowIntChecked` 实现在计算正指数幂后再取倒数，因此中间结果下溢后仍可能报告 `DivisionByZero`；精确处理负指数幂的问题另见 [arithmetic#1](https://github.com/Luna-Flow/arithmetic/issues/1)。"
+
+#: manual/design/core.md:722
 msgid "Soundness and monotonicity of enclosure relations"
 msgstr "包络关系的可靠性与单调性"
 
-#: manual/design/core.md:718
+#: manual/design/core.md:724
 msgid ""
 "*Soundness.* If $x \\in X$, $y \\in Y$ and $\\texttt{definitely\\_lt}(X, Y)$, then $x < y$: the relation is a universal statement over $X \\times Y$, which contains $(x, y)$. Dually, if $\\n"
 "eg\\,\\texttt{maybe\\_eq}(X, Y)$, then $x \\n"
@@ -1790,79 +1798,79 @@ msgstr ""
 "eg\\,\\texttt{maybe\\_eq}(X, Y)$，则 $x \\n"
 "e y$。"
 
-#: manual/design/core.md:723
+#: manual/design/core.md:729
 msgid "*Monotonicity under refinement.* If $X' \\subseteq X$ and $Y' \\subseteq Y$, then"
 msgstr "*细化下的单调性。* 若 $X' \\subseteq X$ 且 $Y' \\subseteq Y$，则"
 
-#: manual/design/core.md:732
+#: manual/design/core.md:738
 msgid "because a universal statement survives shrinking its domain and an existential one survives growing it. In three-valued terms, refining the enclosures can turn $\\mathsf{U}$ into $\\mathsf{T}$ or $\\mathsf{F}$ but never turns $\\mathsf{T}$ into $\\mathsf{F}$. This is what makes \"refine until decided\" loops, such as the target-rounding stage above, correct: a decision once made stays valid. `Contains` is how such a loop checks that a refined enclosure $X'$ is inside the old one, $\\texttt{contains}(X, X')$."
 msgstr "因为全称陈述在定义域缩小后仍然成立，而存在陈述在定义域扩大后仍然成立。用三值逻辑的话说，细化包络可以把 $\\mathsf{U}$ 变为 $\\mathsf{T}$ 或 $\\mathsf{F}$，但绝不会把 $\\mathsf{T}$ 变为 $\\mathsf{F}$。正因如此，“细化直到能作出判定”的循环（例如上文的目标舍入阶段）才是正确的：一旦作出判定，它就始终有效。这类循环用 `Contains` 检查细化后的包络 $X'$ 是否位于原包络之内，即 $\\texttt{contains}(X, X')$。"
 
-#: manual/design/core.md:740
+#: manual/design/core.md:746
 msgid "The traits do not fix the convention for empty enclosures; each backend documents its own. Under the quantifier reading the definite relations would hold vacuously for an empty argument, so a backend that wants $\\mathsf{T}$ never to come from an absence of information returns `false` for them instead."
 msgstr "这些 trait 不规定空包络的约定；由各后端自行说明。按照量词解读，当参数为空时，确定关系会空真地成立，因此若后端希望 $\\mathsf{T}$ 绝不来自信息的缺失，就应对空包络返回 `false`。"
 
-#: manual/design/core.md:745
+#: manual/design/core.md:751
 msgid "Alternatives rejected"
 msgstr "被否决的方案"
 
-#: manual/design/core.md:747
+#: manual/design/core.md:753
 msgid "**A global or thread-local context with sticky flags**, as in C `<fenv.h>` and Python `decimal`. Rejected for the reasons under [explicit values](#context-and-diagnostics-are-explicit-values): it makes results depend on hidden state and leaks flags between computations."
 msgstr "**带粘滞标志的全局或线程局部上下文**，如 C 的 `<fenv.h>` 和 Python 的 `decimal`。否决理由见[显式的值](#context-and-diagnostics-are-explicit-values)：它使结果依赖于隐藏状态，并让标志在不同计算之间泄漏。"
 
-#: manual/design/core.md:751
+#: manual/design/core.md:757
 msgid "**A `Real` or `Number` super-trait.** Rejected because it hides the differences between exact, approximate and enclosure-valued types."
 msgstr "**`Real` 或 `Number` 超 trait。** 否决，因为它掩盖了精确类型、近似类型和以包络为值的类型之间的差异。"
 
-#: manual/design/core.md:753
+#: manual/design/core.md:759
 msgid "**`Compare` for enclosures.** Rejected because the definite order is not total."
 msgstr "**为包络实现 `Compare`。** 否决，因为确定序不是全序。"
 
-#: manual/design/core.md:755
+#: manual/design/core.md:761
 msgid "**A three-valued result type** (`True | False | Unknown`) for comparisons. The two Boolean projections `definitely_*` and `maybe_eq` are enough to reconstruct it, as shown above, and they compose with ordinary `if`; a separate type would force every caller to handle $\\mathsf{U}$ even when it only asks one direction."
 msgstr "**用于比较的三值结果类型**（`True | False | Unknown`）。如上所示，两个布尔投影 `definitely_*` 和 `maybe_eq` 足以重建它，并且它们可以与普通的 `if` 组合；单独的类型会迫使每个调用方都处理 $\\mathsf{U}$，即使它只关心一个方向。"
 
-#: manual/design/core.md:760
+#: manual/design/core.md:766
 msgid "**A `definitely_eq` relation.** For non-degenerate enclosures it is always false, so it would only be a test for equal single points."
 msgstr "**`definitely_eq` 关系。** 对于非退化的包络，它总是为假，因此它只能用来检测相等的单点。"
 
-#: manual/design/core.md:762
+#: manual/design/core.md:768
 msgid "**Diagnostics reported as errors.** Rejected because an inexact or overflowing IEEE result is a correct answer, and turning it into `Err` would make every rounded operation fail."
 msgstr "**把诊断作为错误报告。** 否决，因为不精确或上溢的 IEEE 结果是正确答案，把它变成 `Err` 会使每个经过舍入的运算都失败。"
 
-#: manual/design/core.md:765
+#: manual/design/core.md:771
 msgid "**`Option` or `raise` for checked results.** `Option` loses the reason; MoonBit's `raise` would put the failure outside the return type. Luna-Flow uses `Result` with a structured error across repositories."
 msgstr "**用 `Option` 或 `raise` 表示检查结果。** `Option` 会丢失原因；MoonBit 的 `raise` 会把失败置于返回类型之外。Luna-Flow 在各仓库中统一使用带结构化错误的 `Result`。"
 
-#: manual/design/core.md:768
+#: manual/design/core.md:774
 msgid "**Implementing `ConstantsContextual` and `HyperbolicContextual` for native scalars by ignoring the context.** Rejected because those traits exist to promise context-faithful results."
 msgstr "**通过忽略上下文为原生标量实现 `ConstantsContextual` 和 `HyperbolicContextual`。** 否决，因为这些 trait 存在的意义就是承诺忠实遵循上下文的结果。"
 
-#: manual/design/core.md:772
+#: manual/design/core.md:778
 msgid "Boundaries"
 msgstr "边界"
 
-#: manual/design/core.md:774
+#: manual/design/core.md:780
 msgid "The package does not implement arbitrary-precision, decimal, interval or ball arithmetic, and it does not evaluate certified functions; it defines the traits those backends implement."
 msgstr "本包不实现任意精度、十进制、区间或球算术，也不对经认证的函数求值；它定义的是这些后端所实现的 trait。"
 
-#: manual/design/core.md:777
+#: manual/design/core.md:783
 msgid "The built-in `Float` and `Double` instances do not honour the context's precision, rounding mode or exponent range, and their arithmetic adapters do not detect rounding, overflow or underflow."
 msgstr "内置的 `Float` 和 `Double` 实例不遵循上下文的精度、舍入模式或指数范围，它们的算术适配器也不检测舍入、上溢或下溢。"
 
-#: manual/design/core.md:780
+#: manual/design/core.md:786
 msgid "It does not promise correctly rounded elementary functions for `Float` and `Double`; they come from `Kaida-Amethyst/math`."
 msgstr "本包不承诺 `Float` 和 `Double` 的初等函数是正确舍入的；它们来自 `Kaida-Amethyst/math`。"
 
-#: manual/design/core.md:782
+#: manual/design/core.md:788
 msgid "It does not define algebraic structure (`Ring`, `Field`, ...), which belongs to `luna-generic`, nor vectors, matrices, complex numbers or polynomials."
 msgstr "本包不定义代数结构（`Ring`、`Field` 等），这些属于 `luna-generic`；也不定义向量、矩阵、复数或多项式。"
 
-#: manual/design/core.md:784
+#: manual/design/core.md:790
 msgid "It does not choose branch cuts or special-value conventions for the unchecked traits beyond what each shipped instance inherits."
 msgstr "除各随包实例所继承的行为之外，本包不为非检查 trait 选定分支割线或特殊值约定。"
 
-#: manual/design/core.md:786
+#: manual/design/core.md:792
 msgid "It does not prescribe a retry or precision-escalation policy for certification failures."
 msgstr "本包不为认证失败规定重试或精度提升策略。"
 
@@ -2451,32 +2459,45 @@ msgid "What the tests establish"
 msgstr "测试验证了什么"
 
 #: manual/verification.md:49
-msgid "`trait_test.mbt` checks that the unchecked traits compose in generic code together with `luna-generic` bounds; representative values of every elementary function for `Float` and `Double`; that `Constants` satisfy $\\tau = 2\\pi$ and $\\ln e = 1$ up to a small tolerance in both types; exact `Power` on small operands for every integer type and `BigInt` (wrap-around and negative exponents are not tested); the checked square root and division on valid input, negative input, $0/0$, $\\infty/\\infty$ and zero divisors; NaN rejection by `CompareChecked`; and checked integer powers with zero exponents, negative exponents, zero bases and the most negative `Int`."
-msgstr "`trait_test.mbt` 检查：非检查 trait 能在泛型代码中与 `luna-generic` 约束组合使用；`Float` 和 `Double` 上每个初等函数的代表性取值；`Constants` 在两种类型中都在小容差内满足 $\\tau = 2\\pi$ 和 $\\ln e = 1$；每种整数类型和 `BigInt` 在小操作数上的精确 `Power`（未测试回绕和负指数）；检查平方根和检查除法在有效输入、负输入、$0/0$、$\\infty/\\infty$ 和零除数下的行为；`CompareChecked` 对 NaN 的拒绝；以及检查整数幂在零指数、负指数、零底数和最小的负 `Int` 下的行为。"
+msgid "`trait_test.mbt` checks that the unchecked traits compose in generic code together with `luna-generic` bounds; representative values of every elementary function for `Float` and `Double`; that `Constants` satisfy $\\tau = 2\\pi$ and $\\ln e = 1$ up to a small tolerance in both types; exact `Power` on small operands for every integer type and `BigInt` (wrap-around and negative exponents are not tested); the checked square root and division on valid input, negative input, $0/0$, $\\infty/\\infty$ and zero divisors, NaN propagation through checked square root, division and powers, the signed-infinity result for infinity divided by zero, and overflow results for natural powers and reciprocal powers; NaN rejection by `CompareChecked`; and checked integer powers with zero exponents, negative exponents, zero bases and the most negative `Int`."
+msgstr "`trait_test.mbt` 检查：非检查 trait 能在泛型代码中与 `luna-generic` 约束组合使用；`Float` 和 `Double` 上每个初等函数的代表性取值；`Constants` 在两种类型中都在小容差内满足 $\\tau = 2\\pi$ 和 $\\ln e = 1$；每种整数类型和 `BigInt` 在小操作数上的精确 `Power`（未测试回绕和负指数）；检查平方根和检查除法在有效输入、负输入、$0/0$、$\\infty/\\infty$ 和零除数下的行为；检查平方根、除法和幂对 NaN 的传播；无穷大除以零时返回带符号无穷大的行为；自然数幂和倒数幂的溢出结果；`CompareChecked` 对 NaN 的拒绝；以及检查整数幂在零指数、负指数、零底数和最小的负 `Int` 下的行为。"
 
-#: manual/verification.md:59
+#: manual/verification.md:62
 msgid "`contextual_test.mbt` checks exact and rounded `Int` embedding into `Float` and exact embedding into `Double`; the IEEE boundaries of the adjacent operations (signed zeros, smallest subnormals, largest finite values, infinities and NaN); and, through test-local types, that contextual hyperbolic outcomes and certification failures of contextual constants pass through the traits unchanged."
 msgstr "`contextual_test.mbt` 检查：`Int` 嵌入 `Float` 时的精确与舍入情形，以及嵌入 `Double` 时的精确性；相邻运算的 IEEE 边界（有符号零、最小次正规数、最大有限值、无穷和 NaN）；以及借助测试内部定义的类型，验证上下文双曲函数的结果和上下文常量的认证失败能原样经过 trait 传递。"
 
-#: manual/verification.md:66
+#: manual/verification.md:69
 msgid "`certification_error_wbtest.mbt` checks that a `CertificationFailureDetail` survives `ArithmeticError::certification_failure` with every field, and that the error predicates stay disjoint."
 msgstr "`certification_error_wbtest.mbt` 检查 `CertificationFailureDetail` 经过 `ArithmeticError::certification_failure` 后所有字段都得以保留，并检查各错误谓词保持互斥。"
 
-#: manual/verification.md:70
+#: manual/verification.md:73
 msgid "What the tests do not claim"
 msgstr "测试不作的声明"
 
-#: manual/verification.md:72
+#: manual/verification.md:75
 msgid "The tests do not claim that `Float` or `Double` arithmetic is certified, that their elementary functions are correctly rounded, or that their contextual instances detect rounding. They verify the capability vocabulary, the fixed-format adjacent semantics and the error classification."
 msgstr "测试并不声称 `Float` 或 `Double` 的算术是经认证的、它们的初等函数是正确舍入的，或它们的上下文实例会检测舍入。测试验证的是能力词汇、固定格式下的相邻值语义以及错误分类。"
 
-#: manual/verification.md:77
+#: manual/verification.md:80
 msgid "Continuous integration"
 msgstr "持续集成"
 
-#: manual/verification.md:79
+#: manual/verification.md:82
 msgid "CI runs on pull requests and on pushes to `main`: it builds and checks all targets, runs the default, JavaScript and native test suites, verifies that `pkg.generated.mbti` matches the source, and checks formatting. A separate workflow runs the shared Luna Flow documentation check on changes under `doc/`. The `publish-package` workflow accepts an explicit version, requires it to equal the version in `moon.mod`, repeats the checks, publishes to mooncakes and creates the GitHub release. A passing run is repository evidence, not a numerical conformance claim for any backend."
 msgstr "CI 在 pull request 以及推送到 `main` 时运行：它构建并检查所有目标，运行默认、JavaScript 和 native 测试套件，验证 `pkg.generated.mbti` 与源码一致，并检查格式。另有一个工作流在 `doc/` 下有改动时运行 Luna Flow 共享的文档检查。`publish-package` 工作流接受一个显式版本号，要求它与 `moon.mod` 中的版本一致，重复上述检查，发布到 mooncakes 并创建 GitHub release。一次通过的运行只是仓库层面的证据，而不是对任何后端的数值符合性声明。"
+
+#~ msgid "For `Float` and `Double` the checks run in this order:"
+#~ msgstr "对于 `Float` 和 `Double`，检查按以下顺序进行："
+
+#~ msgid "any other $x / \\pm 0$, including NaN $/\\, 0$"
+#~ msgstr "其他任何 $x / \\pm 0$，包括 NaN $/\\, 0$"
+
+#~ msgid ""
+#~ "The `Float` and `Double` `DivChecked` instances reject every zero divisor and use the kind to say why. $0/0$ and $\\infty/\\infty$ are indeterminate: the limits $\\lim (\\lambda t)/t = \\lambda$ take every value as $t \\to 0$ or $t \\to \\infty$, so no quotient is meaningful and the kind is `DomainError`. For $x \\n"
+#~ "e 0$, $x/t$ diverges as $t \\to 0$, a pole, and the kind is `DivisionByZero`. This matches IEEE 754's invalid operation and division by zero exceptions, but is stricter: IEEE returns $\\pm\\infty$ for $\\infty/0$ and NaN for NaN$/0$ silently, where the checked instance returns `DivisionByZero`. A NaN dividend with a non-zero divisor still propagates as `Ok(NaN)`, and `SqrtChecked` lets NaN pass in the same way: a checked operation rejects invalid arguments, it does not re-report an earlier invalid result."
+#~ msgstr ""
+#~ "`Float` 和 `Double` 的 `DivChecked` 实例拒绝所有零除数，并用错误类别说明原因。$0/0$ 和 $\\infty/\\infty$ 是不定式：当 $t \\to 0$ 或 $t \\to \\infty$ 时，极限 $\\lim (\\lambda t)/t = \\lambda$ 可以取任意值，因此任何商都没有意义，类别为 `DomainError`。对 $x \\n"
+#~ "e 0$，当 $t \\to 0$ 时 $x/t$ 发散，这是一个极点，类别为 `DivisionByZero`。这与 IEEE 754 的无效运算和除以零异常相对应，但更为严格：IEEE 对 $\\infty/0$ 静默返回 $\\pm\\infty$，对 NaN$/0$ 静默返回 NaN，而检查实例返回 `DivisionByZero`。被除数为 NaN 且除数非零时，仍以 `Ok(NaN)` 传播；`SqrtChecked` 同样放行 NaN：检查运算拒绝无效参数，但不会重复报告先前的无效结果。"
 
 #~ msgid "This page lists every public item of the `Luna-Flow/arithmetic` package (the package at `src/`, documented as `core`). The examples import it as `@lf_arith`:"
 #~ msgstr "本页列出 `Luna-Flow/arithmetic` 包（位于 `src/` 的包，文档中称为 `core`）的全部公开项。示例以 `@lf_arith` 导入该包："

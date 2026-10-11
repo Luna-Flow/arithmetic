@@ -587,8 +587,11 @@ pub(open) trait Sqrt {
 }
 ```
 
-For `Float` and `Double`, `sqrt` follows IEEE 754: it returns NaN for negative
-input, and $\sqrt{-0} = -0$.
+For `Float` and `Double`, `sqrt` delegates to the host square-root operation:
+negative input returns NaN and $\sqrt{-0} = -0$. IEEE 754-2019 §5.4.1 requires
+`squareRoot` to be correctly rounded; the underlying math package reports 0 ulp
+in its own tests, but this crate does not independently test or guarantee that
+property.
 
 ```moonbit
 fn[T : Add + Mul + @lf_arith.Sqrt] hypot_naive(x : T, y : T) -> T {
@@ -1343,9 +1346,12 @@ test "interval relations" {
 | `ConstantsContextual`, `HyperbolicContextual` | no | no |
 | `Contains`, `Overlaps`, `DefinitelyLt`, `DefinitelyLe`, `MaybeEq` | no | no |
 
-The `Float` and `Double` elementary functions come from
-[`Kaida-Amethyst/math`](https://mooncakes.io/docs/Kaida-Amethyst/math), which
-does not promise correct rounding.
+Except for `Sqrt` above, the `Float` and `Double` elementary functions come
+from [`Kaida-Amethyst/math`](https://mooncakes.io/docs/Kaida-Amethyst/math)
+0.1.20. They do not promise correct rounding, have no published error bound,
+and are not guaranteed bit-identical across `wasm`, `wasm-gc`, `js` and
+`native`. Under IEEE 754-2019 §9.2, these are therefore not conforming
+correctly-rounded operations. Replacement work is tracked in [arithmetic#13](https://github.com/Luna-Flow/arithmetic/issues/13).
 
 ## Deprecated
 

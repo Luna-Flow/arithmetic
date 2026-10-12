@@ -46,7 +46,7 @@ fn[T : PowNatChecked] square_checked(
 ///|
 fn[T : PowIntChecked] reciprocal_power_checked(
   x : T,
-  exponent : Int,
+  exponent : Int32,
   ctx : @arithmetic.ArithmeticContext,
 ) -> Result[T, @arithmetic.ArithmeticError] {
   @arithmetic.PowIntChecked::pow_int_checked(x, exponent, ctx)

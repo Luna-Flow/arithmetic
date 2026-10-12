@@ -1,7 +1,7 @@
 ///|
-fn uint_pow_impl(base : UInt, exponent : UInt) -> UInt {
+fn uint_pow_impl(base : UInt32, exponent : UInt32) -> UInt32 {
   let mut exp = exponent
-  let mut acc : UInt = 1U
+  let mut acc : UInt32 = 1U
   let mut factor = base
   while exp > 0U {
     if (exp & 1U) == 1U {
@@ -44,7 +44,7 @@ fn uint64_pow_impl(base : UInt64, exponent : UInt64) -> UInt64 {
 }
 
 ///|
-pub impl Power for UInt with fn pow(base, exponent) -> UInt {
+pub impl Power for UInt32 with fn pow(base, exponent) -> UInt32 {
   uint_pow_impl(base, exponent)
 }
 

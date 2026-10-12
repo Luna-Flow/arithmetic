@@ -1348,7 +1348,7 @@ test "interval relations" {
 
 Except for `Sqrt` above, the `Float` and `Double` elementary functions come
 from [`Kaida-Amethyst/math`](https://mooncakes.io/docs/Kaida-Amethyst/math)
-0.1.20. They do not promise correct rounding, have no published error bound,
+0.1.21. They do not promise correct rounding, have no published error bound,
 and are not guaranteed bit-identical across `wasm`, `wasm-gc`, `js` and
 `native`. Under IEEE 754-2019 §9.2, these are therefore not conforming
 correctly-rounded operations. Replacement work is tracked in [arithmetic#13](https://github.com/Luna-Flow/arithmetic/issues/13).

@@ -9,7 +9,7 @@ fn double_is_inf(x : Double) -> Bool {
 }
 
 ///|
-fn double_pow_nat(base : Double, exponent : UInt) -> Double {
+fn double_pow_nat(base : Double, exponent : UInt32) -> Double {
   let mut exp = exponent
   let mut acc : Double = 1.0
   let mut factor = base
@@ -26,7 +26,7 @@ fn double_pow_nat(base : Double, exponent : UInt) -> Double {
 }
 
 ///|
-fn double_int_abs_magnitude_as_uint(exponent : Int) -> UInt {
+fn double_int_abs_magnitude_as_uint(exponent : Int32) -> UInt32 {
   if exponent >= 0 {
     exponent.reinterpret_as_uint()
   } else {
@@ -198,7 +198,7 @@ pub impl DivChecked for Double with fn div_checked(lhs, rhs, _ctx) -> Result[
 
 ///|
 pub impl CompareChecked for Double with fn compare_checked(lhs, rhs) -> Result[
-  Int,
+  Int32,
   ArithmeticError,
 ] {
   guard !double_is_nan(lhs) && !double_is_nan(rhs) else {

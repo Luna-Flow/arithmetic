@@ -1,6 +1,6 @@
 # arithmetic
 
-This manual documents release `0.5.0` of `Luna-Flow/arithmetic` together with
+This manual documents release `0.5.1` of `Luna-Flow/arithmetic` together with
 the unreleased MoonBit 0.10 migration listed in
 [CHANGELOG.md](../../CHANGELOG.md).
 
@@ -29,7 +29,7 @@ algorithms depend on the traits instead of on concrete number types.
 ## Install
 
 ```sh
-moon add Luna-Flow/arithmetic@0.5.0
+moon add Luna-Flow/arithmetic@0.5.1
 ```
 
 Then import `"Luna-Flow/arithmetic"` in your `moon.pkg`. Luna Flow code uses

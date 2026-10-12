@@ -1092,7 +1092,7 @@ msgid "Baseline and history"
 msgstr "基线与历史"
 
 #: manual/conventions.md:8
-msgid "The manual describes the code on the current branch: release `0.5.0` plus the changes listed under `Unreleased` in [CHANGELOG.md](../../CHANGELOG.md). [CHANGELOG.md](../../CHANGELOG.md) owns the release timeline, so the [overview](index.md) and the repository README describe only the current baseline."
+msgid "The manual describes the code on the current branch: release `0.5.1` plus the changes listed under `Unreleased` in [CHANGELOG.md](../../CHANGELOG.md). [CHANGELOG.md](../../CHANGELOG.md) owns the release timeline, so the [overview](index.md) and the repository README describe only the current baseline."
 msgstr "本手册描述当前分支上的代码：即 `0.5.0` 版本加上 [CHANGELOG.md](../../CHANGELOG.md) 中 `Unreleased` 下列出的改动。发布时间线由 [CHANGELOG.md](../../CHANGELOG.md) 维护，因此[概览](index.md)和仓库 README 只描述当前基线。"
 
 #: manual/conventions.md:14
@@ -1953,7 +1953,7 @@ msgid "arithmetic"
 msgstr "arithmetic"
 
 #: manual/index.md:3
-msgid "This manual documents release `0.5.0` of `Luna-Flow/arithmetic` together with the unreleased MoonBit 0.10 migration listed in [CHANGELOG.md](../../CHANGELOG.md)."
+msgid "This manual documents release `0.5.1` of `Luna-Flow/arithmetic` together with the unreleased MoonBit 0.10 migration listed in [CHANGELOG.md](../../CHANGELOG.md)."
 msgstr "本手册描述 `Luna-Flow/arithmetic` 的 `0.5.0` 版本，以及 [CHANGELOG.md](../../CHANGELOG.md) 中列出的尚未发布的 MoonBit 0.10 迁移。"
 
 #: manual/index.md:7

@@ -1,5 +1,5 @@
 ///|
-fn int_pow_impl(base : Int, exponent : Int) -> Int {
+fn int_pow_impl(base : Int32, exponent : Int32) -> Int32 {
   guard exponent >= 0 else {
     abort("Power::pow for Int requires a non-negative exponent")
   }
@@ -53,7 +53,7 @@ fn int64_pow_impl(base : Int64, exponent : Int64) -> Int64 {
 }
 
 ///|
-pub impl Power for Int with fn pow(base, exponent) -> Int {
+pub impl Power for Int32 with fn pow(base, exponent) -> Int32 {
   int_pow_impl(base, exponent)
 }
 

@@ -22,10 +22,10 @@ pub(all) enum RoundingMode {
 
 ///|
 pub struct ArithmeticContext {
-  precision : Int
+  precision : Int32
   rounding : RoundingMode
-  e_min : Int?
-  e_max : Int?
+  e_min : Int32?
+  e_max : Int32?
   clamp : Bool
 } derive(Eq)
 
@@ -60,9 +60,9 @@ pub struct CertificationFailureDetail {
   operation : String
   stage : CertificationStage
   reason : CertificationFailureReason
-  target_precision : Int
-  work_precision : Int
-  refinements : Int
+  target_precision : Int32
+  work_precision : Int32
+  refinements : Int32
 } derive(Eq)
 
 /// Structured arithmetic error categories shared across Luna-Flow.
@@ -88,16 +88,16 @@ pub struct ArithmeticError {
 
 ///|
 pub fn ArithmeticContext::new(
-  precision : Int,
-  rounding? : RoundingMode = RoundingMode::ToNearestEven,
-  e_min? : Int,
-  e_max? : Int,
-  clamp? : Bool = false,
+  precision : Int32,
+  rounding~ : RoundingMode = RoundingMode::ToNearestEven,
+  e_min? : Int32,
+  e_max? : Int32,
+  clamp~ : Bool = false,
 ) -> ArithmeticContext {
   guard e_min is None || e_max is None || e_min.unwrap() <= e_max.unwrap() else {
     abort("ArithmeticContext::new: e_min must not exceed e_max")
   }
-  { precision: Int::max(1, precision), rounding, e_min, e_max, clamp, }
+  { precision: Int32::max(1, precision), rounding, e_min, e_max, clamp, }
 }
 
 ///|
@@ -120,17 +120,17 @@ pub fn CertificationFailureDetail::new(
   operation : String,
   stage : CertificationStage,
   reason : CertificationFailureReason,
-  target_precision : Int,
-  work_precision : Int,
-  refinements : Int,
+  target_precision : Int32,
+  work_precision : Int32,
+  refinements : Int32,
 ) -> CertificationFailureDetail {
   {
     operation,
     stage,
     reason,
-    target_precision: Int::max(1, target_precision),
-    work_precision: Int::max(1, work_precision),
-    refinements: Int::max(0, refinements),
+    target_precision: Int32::max(1, target_precision),
+    work_precision: Int32::max(1, work_precision),
+    refinements: Int32::max(0, refinements),
   }
 }
 
@@ -158,21 +158,21 @@ pub fn CertificationFailureDetail::reason(
 ///|
 pub fn CertificationFailureDetail::target_precision(
   self : CertificationFailureDetail,
-) -> Int {
+) -> Int32 {
   self.target_precision
 }
 
 ///|
 pub fn CertificationFailureDetail::work_precision(
   self : CertificationFailureDetail,
-) -> Int {
+) -> Int32 {
   self.work_precision
 }
 
 ///|
 pub fn CertificationFailureDetail::refinements(
   self : CertificationFailureDetail,
-) -> Int {
+) -> Int32 {
   self.refinements
 }
 
@@ -327,7 +327,7 @@ pub(open) trait DivChecked {
 
 ///|
 pub(open) trait CompareChecked {
-  fn compare_checked(Self, Self) -> Result[Int, ArithmeticError]
+  fn compare_checked(Self, Self) -> Result[Int32, ArithmeticError]
 }
 
 /// Checked non-negative integer power capability.
@@ -343,7 +343,7 @@ pub(open) trait CompareChecked {
 
 ///|
 pub(open) trait PowNatChecked {
-  fn pow_nat_checked(Self, UInt, ArithmeticContext) -> Result[
+  fn pow_nat_checked(Self, UInt32, ArithmeticContext) -> Result[
     Self,
     ArithmeticError,
   ]
@@ -363,7 +363,7 @@ pub(open) trait PowNatChecked {
 
 ///|
 pub(open) trait PowIntChecked {
-  fn pow_int_checked(Self, Int, ArithmeticContext) -> Result[
+  fn pow_int_checked(Self, Int32, ArithmeticContext) -> Result[
     Self,
     ArithmeticError,
   ]

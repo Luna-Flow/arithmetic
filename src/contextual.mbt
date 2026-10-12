@@ -22,12 +22,12 @@ pub fn ArithmeticDiagnostics::empty() -> ArithmeticDiagnostics {
 
 ///|
 pub fn ArithmeticDiagnostics::new(
-  inexact? : Bool = false,
-  rounded? : Bool = false,
-  overflow? : Bool = false,
-  underflow? : Bool = false,
-  subnormal? : Bool = false,
-  clamped? : Bool = false,
+  inexact~ : Bool = false,
+  rounded~ : Bool = false,
+  overflow~ : Bool = false,
+  underflow~ : Bool = false,
+  subnormal~ : Bool = false,
+  clamped~ : Bool = false,
 ) -> ArithmeticDiagnostics {
   { inexact, rounded, overflow, underflow, subnormal, clamped, }
 }
@@ -131,7 +131,7 @@ pub(open) trait ExpContextual {
 
 ///|
 pub(open) trait IntegralContextual {
-  fn from_int_contextual(Int, ArithmeticContext) -> Result[
+  fn from_int_contextual(Int32, ArithmeticContext) -> Result[
     ArithmeticOutcome[Self],
     ArithmeticError,
   ]

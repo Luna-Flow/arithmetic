@@ -9,7 +9,7 @@ fn float_is_inf(x : Float) -> Bool {
 }
 
 ///|
-fn float_pow_nat(base : Float, exponent : UInt) -> Float {
+fn float_pow_nat(base : Float, exponent : UInt32) -> Float {
   let mut exp = exponent
   let mut acc : Float = 1.0
   let mut factor = base
@@ -26,7 +26,7 @@ fn float_pow_nat(base : Float, exponent : UInt) -> Float {
 }
 
 ///|
-fn float_int_abs_magnitude_as_uint(exponent : Int) -> UInt {
+fn float_int_abs_magnitude_as_uint(exponent : Int32) -> UInt32 {
   if exponent >= 0 {
     exponent.reinterpret_as_uint()
   } else {
@@ -198,7 +198,7 @@ pub impl DivChecked for Float with fn div_checked(lhs, rhs, _ctx) -> Result[
 
 ///|
 pub impl CompareChecked for Float with fn compare_checked(lhs, rhs) -> Result[
-  Int,
+  Int32,
   ArithmeticError,
 ] {
   guard !float_is_nan(lhs) && !float_is_nan(rhs) else {

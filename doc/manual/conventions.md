@@ -5,7 +5,7 @@ documentation standard.
 
 ## Baseline and history
 
-The manual describes the code on the current branch: release `0.5.0` plus the
+The manual describes the code on the current branch: release `0.5.1` plus the
 changes listed under `Unreleased` in [CHANGELOG.md](../../CHANGELOG.md).
 [CHANGELOG.md](../../CHANGELOG.md) owns the release timeline, so the
 [overview](index.md) and the repository README describe only the current

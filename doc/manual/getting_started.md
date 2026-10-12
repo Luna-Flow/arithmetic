@@ -9,7 +9,7 @@ here with complete tasks.
 Add the package to `moon.mod`:
 
 ```sh
-moon add Luna-Flow/arithmetic@0.5.0
+moon add Luna-Flow/arithmetic@0.5.1
 ```
 
 Import it in the `moon.pkg` of every package that uses it, with the alias Luna

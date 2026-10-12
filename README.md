@@ -30,7 +30,7 @@ embedding, do not detect rounding.
 ## Install
 
 ```sh
-moon add Luna-Flow/arithmetic@0.5.0
+moon add Luna-Flow/arithmetic@0.5.1
 ```
 
 ```moonbit nocheck

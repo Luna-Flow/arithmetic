@@ -1092,7 +1092,7 @@ msgid "Baseline and history"
 msgstr ""
 
 #: manual/conventions.md:8
-msgid "The manual describes the code on the current branch: release `0.5.0` plus the changes listed under `Unreleased` in [CHANGELOG.md](../../CHANGELOG.md). [CHANGELOG.md](../../CHANGELOG.md) owns the release timeline, so the [overview](index.md) and the repository README describe only the current baseline."
+msgid "The manual describes the code on the current branch: release `0.5.1` plus the changes listed under `Unreleased` in [CHANGELOG.md](../../CHANGELOG.md). [CHANGELOG.md](../../CHANGELOG.md) owns the release timeline, so the [overview](index.md) and the repository README describe only the current baseline."
 msgstr ""
 
 #: manual/conventions.md:14
@@ -1935,7 +1935,7 @@ msgid "arithmetic"
 msgstr ""
 
 #: manual/index.md:3
-msgid "This manual documents release `0.5.0` of `Luna-Flow/arithmetic` together with the unreleased MoonBit 0.10 migration listed in [CHANGELOG.md](../../CHANGELOG.md)."
+msgid "This manual documents release `0.5.1` of `Luna-Flow/arithmetic` together with the unreleased MoonBit 0.10 migration listed in [CHANGELOG.md](../../CHANGELOG.md)."
 msgstr ""
 
 #: manual/index.md:7

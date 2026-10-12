@@ -887,8 +887,8 @@ msgid "no"
 msgstr "否"
 
 #: manual/api/core.md:1349
-msgid "Except for `Sqrt` above, the `Float` and `Double` elementary functions come from [`Kaida-Amethyst/math`](https://mooncakes.io/docs/Kaida-Amethyst/math) 0.1.20. They do not promise correct rounding, have no published error bound, and are not guaranteed bit-identical across `wasm`, `wasm-gc`, `js` and `native`. Under IEEE 754-2019 §9.2, these are therefore not conforming correctly-rounded operations. Replacement work is tracked in [arithmetic#13](https://github.com/Luna-Flow/arithmetic/issues/13)."
-msgstr "除上述 `Sqrt` 外，`Float` 和 `Double` 的初等函数来自 [`Kaida-Amethyst/math`](https://mooncakes.io/docs/Kaida-Amethyst/math) 0.1.20。不承诺正确舍入，没有公布误差界，也不保证在 `wasm`、`wasm-gc`、`js` 和 `native` 上位级一致。根据 IEEE 754-2019 §9.2，这些不是符合要求的正确舍入运算。替换工作见 [arithmetic#13](https://github.com/Luna-Flow/arithmetic/issues/13)。"
+msgid "Except for `Sqrt` above, the `Float` and `Double` elementary functions come from [`Kaida-Amethyst/math`](https://mooncakes.io/docs/Kaida-Amethyst/math) 0.1.21. They do not promise correct rounding, have no published error bound, and are not guaranteed bit-identical across `wasm`, `wasm-gc`, `js` and `native`. Under IEEE 754-2019 §9.2, these are therefore not conforming correctly-rounded operations. Replacement work is tracked in [arithmetic#13](https://github.com/Luna-Flow/arithmetic/issues/13)."
+msgstr "除上述 `Sqrt` 外，`Float` 和 `Double` 的初等函数来自 [`Kaida-Amethyst/math`](https://mooncakes.io/docs/Kaida-Amethyst/math) 0.1.21。不承诺正确舍入，没有公布误差界，也不保证在 `wasm`、`wasm-gc`、`js` 和 `native` 上位级一致。根据 IEEE 754-2019 §9.2，这些不是符合要求的正确舍入运算。替换工作见 [arithmetic#13](https://github.com/Luna-Flow/arithmetic/issues/13)。"
 
 #: manual/api/core.md:1356
 msgid "Deprecated"
@@ -1325,8 +1325,8 @@ msgstr ""
 #: manual/design/core.md:177
 msgid ""
 "The built-in `Float` and `Double` basic arithmetic is correctly rounded for its fixed formats under round-to-nearest, because the hardware operations are correctly rounded, but it ignores context precision and mode and does not detect $\\delta \\n"
-"e 0$. `Sqrt` delegates to the host square-root operation; IEEE 754-2019 §5.4.1 requires `squareRoot` to be correctly rounded and the underlying package reports 0 ulp in its own tests, but this crate does not independently test or guarantee that property. Other elementary functions use `Kaida-Amethyst/math` 0.1.20, which promises neither correct rounding nor a published error bound and is not guaranteed bit-identical across `wasm`, `wasm-gc`, `js` and `native`. The IEEE 754-2019 §9.2 correctly-rounded operation requirement therefore does not apply to those adapters; replacement work is tracked in [arithmetic#13](https://github.com/Luna-Flow/arithmetic/issues/13)."
-msgstr "内置 `Float` 和 `Double` 基本算术在最近舍入的固定格式下正确舍入，但 `Sqrt` 委托给主机平方根。IEEE 754-2019 §5.4.1 要求正确舍入，底层包在自身测试中报告 0 ulp，但本包不独立测试或保证该属性。其他初等函数使用 `Kaida-Amethyst/math` 0.1.20，不保证正确舍入、公布误差界或跨后端位级一致，因此不属于 IEEE 754-2019 §9.2 的符合要求运算。替换工作见 arithmetic#13。"
+"e 0$. `Sqrt` delegates to the host square-root operation; IEEE 754-2019 §5.4.1 requires `squareRoot` to be correctly rounded and the underlying package reports 0 ulp in its own tests, but this crate does not independently test or guarantee that property. Other elementary functions use `Kaida-Amethyst/math` 0.1.21, which promises neither correct rounding nor a published error bound and is not guaranteed bit-identical across `wasm`, `wasm-gc`, `js` and `native`. The IEEE 754-2019 §9.2 correctly-rounded operation requirement therefore does not apply to those adapters; replacement work is tracked in [arithmetic#13](https://github.com/Luna-Flow/arithmetic/issues/13)."
+msgstr "内置 `Float` 和 `Double` 基本算术在最近舍入的固定格式下正确舍入，但 `Sqrt` 委托给主机平方根。IEEE 754-2019 §5.4.1 要求正确舍入，底层包在自身测试中报告 0 ulp，但本包不独立测试或保证该属性。其他初等函数使用 `Kaida-Amethyst/math` 0.1.21，不保证正确舍入、公布误差界或跨后端位级一致，因此不属于 IEEE 754-2019 §9.2 的符合要求运算。替换工作见 arithmetic#13。"
 
 #: manual/design/core.md:190
 msgid "Adjacent values and the IEEE encoding"
@@ -1767,8 +1767,8 @@ msgid "For odd $x$ the group $(\\mathbb{Z}/2^{k})^{\\times}$ has exponent $2^{k-
 msgstr "对奇数 $x$，群 $(\\mathbb{Z}/2^{k})^{\\times}$ 的指数为 $2^{k-2}$（当 $k \\ge 3$ 时），因此 $x^{2^{k}} = 1$，回绕后的定律成立。对有符号实例，回绕后的和常常为负，`pow` 会中止。因此需要合并指数的代码应在更宽的类型或 `BigInt` 中相加。"
 
 #: manual/design/core.md:702
-msgid "The `Float` and `Double` instances use `Kaida-Amethyst/math` 0.1.20 for `pow`. The laws above hold only approximately, with rounding error on each side; the function has no published error bound and is not guaranteed bit-identical across backends. For a negative base and a non-integer exponent, the result is NaN."
-msgstr "`Float` 和 `Double` 实例的 `pow` 使用 `Kaida-Amethyst/math` 0.1.20。上述定律对它们只近似成立，两边各带舍入误差；该函数没有已公布的误差界，也不保证在各后端逐位相同。对负底数和非整数指数，结果为 NaN。"
+msgid "The `Float` and `Double` instances use `Kaida-Amethyst/math` 0.1.21 for `pow`. The laws above hold only approximately, with rounding error on each side; the function has no published error bound and is not guaranteed bit-identical across backends. For a negative base and a non-integer exponent, the result is NaN."
+msgstr "`Float` 和 `Double` 实例的 `pow` 使用 `Kaida-Amethyst/math` 0.1.21。上述定律对它们只近似成立，两边各带舍入误差；该函数没有已公布的误差界，也不保证在各后端逐位相同。对负底数和非整数指数，结果为 NaN。"
 
 #: manual/design/core.md:708
 msgid "Checked division"
@@ -1857,8 +1857,8 @@ msgid "The built-in `Float` and `Double` instances do not honour the context's p
 msgstr "内置的 `Float` 和 `Double` 实例不遵循上下文的精度、舍入模式或指数范围，它们的算术适配器也不检测舍入、上溢或下溢。"
 
 #: manual/design/core.md:796
-msgid "Except for host `Sqrt`, it does not promise correctly rounded elementary functions for `Float` and `Double`; they come from `Kaida-Amethyst/math` 0.1.20 without a published error bound or cross-backend bit-identity guarantee."
-msgstr "除宿主 `Sqrt` 外，本包不承诺 `Float` 和 `Double` 的初等函数是正确舍入的；它们来自 `Kaida-Amethyst/math` 0.1.20，没有已公布的误差界，也不保证跨后端逐位相同。"
+msgid "Except for host `Sqrt`, it does not promise correctly rounded elementary functions for `Float` and `Double`; they come from `Kaida-Amethyst/math` 0.1.21 without a published error bound or cross-backend bit-identity guarantee."
+msgstr "除宿主 `Sqrt` 外，本包不承诺 `Float` 和 `Double` 的初等函数是正确舍入的；它们来自 `Kaida-Amethyst/math` 0.1.21，没有已公布的误差界，也不保证跨后端逐位相同。"
 
 #: manual/design/core.md:800
 msgid "It does not define algebraic structure (`Ring`, `Field`, ...), which belongs to `luna-generic`, nor vectors, matrices, complex numbers or polynomials."

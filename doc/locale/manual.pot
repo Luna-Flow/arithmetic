@@ -887,7 +887,7 @@ msgid "no"
 msgstr ""
 
 #: manual/api/core.md:1349
-msgid "Except for `Sqrt` above, the `Float` and `Double` elementary functions come from [`Kaida-Amethyst/math`](https://mooncakes.io/docs/Kaida-Amethyst/math) 0.1.20. They do not promise correct rounding, have no published error bound, and are not guaranteed bit-identical across `wasm`, `wasm-gc`, `js` and `native`. Under IEEE 754-2019 §9.2, these are therefore not conforming correctly-rounded operations. Replacement work is tracked in [arithmetic#13](https://github.com/Luna-Flow/arithmetic/issues/13)."
+msgid "Except for `Sqrt` above, the `Float` and `Double` elementary functions come from [`Kaida-Amethyst/math`](https://mooncakes.io/docs/Kaida-Amethyst/math) 0.1.21. They do not promise correct rounding, have no published error bound, and are not guaranteed bit-identical across `wasm`, `wasm-gc`, `js` and `native`. Under IEEE 754-2019 §9.2, these are therefore not conforming correctly-rounded operations. Replacement work is tracked in [arithmetic#13](https://github.com/Luna-Flow/arithmetic/issues/13)."
 msgstr ""
 
 #: manual/api/core.md:1356
@@ -1321,7 +1321,7 @@ msgstr ""
 #: manual/design/core.md:177
 msgid ""
 "The built-in `Float` and `Double` basic arithmetic is correctly rounded for its fixed formats under round-to-nearest, because the hardware operations are correctly rounded, but it ignores context precision and mode and does not detect $\\delta \\n"
-"e 0$. `Sqrt` delegates to the host square-root operation; IEEE 754-2019 §5.4.1 requires `squareRoot` to be correctly rounded and the underlying package reports 0 ulp in its own tests, but this crate does not independently test or guarantee that property. Other elementary functions use `Kaida-Amethyst/math` 0.1.20, which promises neither correct rounding nor a published error bound and is not guaranteed bit-identical across `wasm`, `wasm-gc`, `js` and `native`. The IEEE 754-2019 §9.2 correctly-rounded operation requirement therefore does not apply to those adapters; replacement work is tracked in [arithmetic#13](https://github.com/Luna-Flow/arithmetic/issues/13)."
+"e 0$. `Sqrt` delegates to the host square-root operation; IEEE 754-2019 §5.4.1 requires `squareRoot` to be correctly rounded and the underlying package reports 0 ulp in its own tests, but this crate does not independently test or guarantee that property. Other elementary functions use `Kaida-Amethyst/math` 0.1.21, which promises neither correct rounding nor a published error bound and is not guaranteed bit-identical across `wasm`, `wasm-gc`, `js` and `native`. The IEEE 754-2019 §9.2 correctly-rounded operation requirement therefore does not apply to those adapters; replacement work is tracked in [arithmetic#13](https://github.com/Luna-Flow/arithmetic/issues/13)."
 msgstr ""
 
 #: manual/design/core.md:190
@@ -1752,7 +1752,7 @@ msgid "For odd $x$ the group $(\\mathbb{Z}/2^{k})^{\\times}$ has exponent $2^{k-
 msgstr ""
 
 #: manual/design/core.md:702
-msgid "The `Float` and `Double` instances use `Kaida-Amethyst/math` 0.1.20 for `pow`. The laws above hold only approximately, with rounding error on each side; the function has no published error bound and is not guaranteed bit-identical across backends. For a negative base and a non-integer exponent, the result is NaN."
+msgid "The `Float` and `Double` instances use `Kaida-Amethyst/math` 0.1.21 for `pow`. The laws above hold only approximately, with rounding error on each side; the function has no published error bound and is not guaranteed bit-identical across backends. For a negative base and a non-integer exponent, the result is NaN."
 msgstr ""
 
 #: manual/design/core.md:708
@@ -1839,7 +1839,7 @@ msgid "The built-in `Float` and `Double` instances do not honour the context's p
 msgstr ""
 
 #: manual/design/core.md:796
-msgid "Except for host `Sqrt`, it does not promise correctly rounded elementary functions for `Float` and `Double`; they come from `Kaida-Amethyst/math` 0.1.20 without a published error bound or cross-backend bit-identity guarantee."
+msgid "Except for host `Sqrt`, it does not promise correctly rounded elementary functions for `Float` and `Double`; they come from `Kaida-Amethyst/math` 0.1.21 without a published error bound or cross-backend bit-identity guarantee."
 msgstr ""
 
 #: manual/design/core.md:800

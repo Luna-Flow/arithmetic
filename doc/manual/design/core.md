@@ -181,7 +181,7 @@ detect $\delta \ne 0$. `Sqrt` delegates to the host square-root operation;
 IEEE 754-2019 §5.4.1 requires `squareRoot` to be correctly rounded and the
 underlying package reports 0 ulp in its own tests, but this crate does not
 independently test or guarantee that property. Other elementary functions use
-`Kaida-Amethyst/math` 0.1.20, which promises neither correct rounding nor a
+`Kaida-Amethyst/math` 0.1.21, which promises neither correct rounding nor a
 published error bound and is not guaranteed bit-identical across `wasm`,
 `wasm-gc`, `js` and `native`. The IEEE 754-2019 §9.2 correctly-rounded
 operation requirement therefore does not apply to those adapters; replacement
@@ -699,7 +699,7 @@ $k \ge 3$), so $x^{2^{k}} = 1$ and the wrapped law holds. For the signed
 instances a wrapped sum is often negative and `pow` aborts. Code that
 combines exponents therefore adds them in a wider type, or in `BigInt`.
 
-The `Float` and `Double` instances use `Kaida-Amethyst/math` 0.1.20 for
+The `Float` and `Double` instances use `Kaida-Amethyst/math` 0.1.21 for
 `pow`. The laws above hold only approximately, with rounding error on each
 side; the function has no published error bound and is not guaranteed
 bit-identical across backends. For a negative base and a non-integer exponent,
@@ -795,7 +795,7 @@ to come from an absence of information returns `false` for them instead.
   not detect rounding, overflow or underflow.
 - Except for host `Sqrt`, it does not promise correctly rounded elementary
   functions for `Float` and `Double`; they come from `Kaida-Amethyst/math`
-  0.1.20 without a published error bound or cross-backend bit-identity
+  0.1.21 without a published error bound or cross-backend bit-identity
   guarantee.
 - It does not define algebraic structure (`Ring`, `Field`, ...), which belongs
   to `luna-generic`, nor vectors, matrices, complex numbers or polynomials.

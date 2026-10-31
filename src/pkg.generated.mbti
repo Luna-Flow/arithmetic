@@ -12,17 +12,17 @@ import {
 
 // Types and methods
 pub struct ArithmeticContext {
-  precision : Int
+  precision : Int32
   rounding : RoundingMode
-  e_min : Int?
-  e_max : Int?
+  e_min : Int32?
+  e_max : Int32?
   clamp : Bool
 } derive(Eq)
 pub fn ArithmeticContext::decimal128() -> Self
 pub fn ArithmeticContext::decimal32() -> Self
 pub fn ArithmeticContext::decimal64() -> Self
 pub fn ArithmeticContext::equal(Self, Self) -> Bool
-pub fn ArithmeticContext::new(Int, rounding? : RoundingMode, e_min? : Int, e_max? : Int, clamp? : Bool) -> Self
+pub fn ArithmeticContext::new(Int32, rounding? : RoundingMode, e_min? : Int32, e_max? : Int32, clamp? : Bool) -> Self
 
 pub struct ArithmeticDiagnostics {
   inexact : Bool
@@ -81,18 +81,18 @@ pub struct CertificationFailureDetail {
   operation : String
   stage : CertificationStage
   reason : CertificationFailureReason
-  target_precision : Int
-  work_precision : Int
-  refinements : Int
+  target_precision : Int32
+  work_precision : Int32
+  refinements : Int32
 } derive(Eq)
 pub fn CertificationFailureDetail::equal(Self, Self) -> Bool
-pub fn CertificationFailureDetail::new(String, CertificationStage, CertificationFailureReason, Int, Int, Int) -> Self
+pub fn CertificationFailureDetail::new(String, CertificationStage, CertificationFailureReason, Int32, Int32, Int32) -> Self
 pub fn CertificationFailureDetail::operation(Self) -> String
 pub fn CertificationFailureDetail::reason(Self) -> CertificationFailureReason
-pub fn CertificationFailureDetail::refinements(Self) -> Int
+pub fn CertificationFailureDetail::refinements(Self) -> Int32
 pub fn CertificationFailureDetail::stage(Self) -> CertificationStage
-pub fn CertificationFailureDetail::target_precision(Self) -> Int
-pub fn CertificationFailureDetail::work_precision(Self) -> Int
+pub fn CertificationFailureDetail::target_precision(Self) -> Int32
+pub fn CertificationFailureDetail::work_precision(Self) -> Int32
 
 pub(all) enum CertificationFailureReason {
   RangeNotCertified
@@ -157,7 +157,7 @@ pub impl Cbrt for Float
 pub impl Cbrt for Double
 
 pub(open) trait CompareChecked {
-  fn compare_checked(Self, Self) -> Result[Int, ArithmeticError]
+  fn compare_checked(Self, Self) -> Result[Int32, ArithmeticError]
 }
 pub impl CompareChecked for Float
 pub impl CompareChecked for Double
@@ -228,7 +228,7 @@ pub(open) trait HyperbolicContextual {
 }
 
 pub(open) trait IntegralContextual {
-  fn from_int_contextual(Int, ArithmeticContext) -> Result[ArithmeticOutcome[Self], ArithmeticError]
+  fn from_int_contextual(Int32, ArithmeticContext) -> Result[ArithmeticOutcome[Self], ArithmeticError]
 }
 pub impl IntegralContextual for Float
 pub impl IntegralContextual for Double
@@ -288,13 +288,13 @@ pub(open) trait ParseChecked {
 }
 
 pub(open) trait PowIntChecked {
-  fn pow_int_checked(Self, Int, ArithmeticContext) -> Result[Self, ArithmeticError]
+  fn pow_int_checked(Self, Int32, ArithmeticContext) -> Result[Self, ArithmeticError]
 }
 pub impl PowIntChecked for Float
 pub impl PowIntChecked for Double
 
 pub(open) trait PowNatChecked {
-  fn pow_nat_checked(Self, UInt, ArithmeticContext) -> Result[Self, ArithmeticError]
+  fn pow_nat_checked(Self, UInt32, ArithmeticContext) -> Result[Self, ArithmeticError]
 }
 pub impl PowNatChecked for Float
 pub impl PowNatChecked for Double
@@ -302,10 +302,10 @@ pub impl PowNatChecked for Double
 pub(open) trait Power {
   fn pow(Self, Self) -> Self
 }
-pub impl Power for Int
+pub impl Power for Int32
 pub impl Power for Int16
 pub impl Power for Int64
-pub impl Power for UInt
+pub impl Power for UInt32
 pub impl Power for UInt16
 pub impl Power for UInt64
 pub impl Power for Float

@@ -23,7 +23,7 @@ written in the `inspect` calls.
 Add the package to your module:
 
 ```sh
-moon add Luna-Flow/arithmetic@0.5.1
+moon add Luna-Flow/arithmetic@0.5.2
 ```
 
 Import it in the `moon.pkg` of the package that uses it. Luna Flow code uses

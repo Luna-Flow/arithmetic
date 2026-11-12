@@ -41,7 +41,7 @@ import {
 }
 ```
 
-The package needs the MoonBit toolchain 0.10 or later (`moonc` ≥ 0.10) with
+The package needs the MoonBit toolchain 0.10.20 or later (`moonc` ≥ 0.10.20) with
 the `moon.mod` and `moon.pkg` manifests, and is checked on the `wasm-gc`,
 `wasm`, `js` and `native` backends. It depends on `Kaida-Amethyst/math` for
 the `Float` and `Double` elementary functions; its tests also use

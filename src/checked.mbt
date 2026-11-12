@@ -1,61 +1,67 @@
 /// Floating-point classification shared at the arithmetic capability boundary.
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum FpClass {
   Finite
   Infinity
   NaN
-} derive(Eq, Debug)
+}
 
 /// Rounding modes shared by checked/contextual arithmetic capabilities.
 
 ///|
+#derive(Eq)
 pub(all) enum RoundingMode {
   ToNearestEven
   TowardZero
   TowardPositive
   TowardNegative
   AwayFromZero
-} derive(Eq)
+}
 
 /// Lightweight arithmetic context for checked operations.
 
 ///|
+#derive(Eq)
 pub struct ArithmeticContext {
   precision : Int32
   rounding : RoundingMode
   e_min : Int32?
   e_max : Int32?
   clamp : Bool
-} derive(Eq)
+}
 
 /// Stage at which a proof-backed numerical evaluation failed.
 ///
 
 ///|
+#derive(Eq)
 pub(all) enum CertificationStage {
   RangeReduction
   SeriesEvaluation
   EnclosurePropagation
   TargetRounding
-} derive(Eq)
+}
 
 /// Structured reason for a proof-backed numerical evaluation failure.
 ///
 
 ///|
+#derive(Eq)
 pub(all) enum CertificationFailureReason {
   RangeNotCertified
   SeriesDidNotConverge
   InvalidEnclosure
   ResourceLimit
   RefinementBudgetExhausted
-} derive(Eq)
+}
 
 /// Details retained when certified evaluation cannot prove a target result.
 ///
 
 ///|
+#derive(Eq)
 pub struct CertificationFailureDetail {
   operation : String
   stage : CertificationStage
@@ -63,11 +69,12 @@ pub struct CertificationFailureDetail {
   target_precision : Int32
   work_precision : Int32
   refinements : Int32
-} derive(Eq)
+}
 
 /// Structured arithmetic error categories shared across Luna-Flow.
 
 ///|
+#derive(Eq)
 pub enum ArithmeticErrorKind {
   DivisionByZero
   ParseError
@@ -76,15 +83,16 @@ pub enum ArithmeticErrorKind {
   UnsupportedOperation
   UnorderedComparison
   CertificationFailure(CertificationFailureDetail)
-} derive(Eq)
+}
 
 /// Structured error returned by checked/contextual arithmetic capabilities.
 
 ///|
+#derive(Eq)
 pub struct ArithmeticError {
   kind : ArithmeticErrorKind
   message : String
-} derive(Eq)
+}
 
 ///|
 pub fn ArithmeticContext::new(

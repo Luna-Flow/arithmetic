@@ -9,10 +9,11 @@ enum UncertifiedConstant {
 }
 
 ///|
+#derive(Eq, Debug)
 enum ExactHyperbolicValue {
   Zero
   One
-} derive(Eq, Debug)
+}
 
 ///|
 fn uncertified_constant(

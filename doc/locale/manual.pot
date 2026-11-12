@@ -1987,7 +1987,7 @@ msgid "Then import `\"Luna-Flow/arithmetic\"` in your `moon.pkg`. Luna Flow code
 msgstr ""
 
 #: manual/index.md:44
-msgid "The package needs the MoonBit toolchain 0.10 or later (`moonc` ≥ 0.10) with the `moon.mod` and `moon.pkg` manifests, and is checked on the `wasm-gc`, `wasm`, `js` and `native` backends. It depends on `Kaida-Amethyst/math` for the `Float` and `Double` elementary functions; its tests also use `Luna-Flow/luna-generic`."
+msgid "The package needs the MoonBit toolchain 0.10.20 or later (`moonc` ≥ 0.10.20) with the `moon.mod` and `moon.pkg` manifests, and is checked on the `wasm-gc`, `wasm`, `js` and `native` backends. It depends on `Kaida-Amethyst/math` for the `Float` and `Double` elementary functions; its tests also use `Luna-Flow/luna-generic`."
 msgstr ""
 
 #: manual/index.md:52

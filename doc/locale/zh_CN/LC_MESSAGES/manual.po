@@ -2005,8 +2005,8 @@ msgid "Then import `\"Luna-Flow/arithmetic\"` in your `moon.pkg`. Luna Flow code
 msgstr "然后在你的 `moon.pkg` 中导入 `\"Luna-Flow/arithmetic\"`。Luna Flow 代码使用别名 `@lf_arith`："
 
 #: manual/index.md:44
-msgid "The package needs the MoonBit toolchain 0.10 or later (`moonc` ≥ 0.10) with the `moon.mod` and `moon.pkg` manifests, and is checked on the `wasm-gc`, `wasm`, `js` and `native` backends. It depends on `Kaida-Amethyst/math` for the `Float` and `Double` elementary functions; its tests also use `Luna-Flow/luna-generic`."
-msgstr "本包需要 MoonBit 工具链 0.10 或更高版本（`moonc` ≥ 0.10），使用 `moon.mod` 和 `moon.pkg` 清单，并在 `wasm-gc`、`wasm`、`js` 和 `native` 后端上进行检查。`Float` 和 `Double` 的初等函数依赖 `Kaida-Amethyst/math`；测试还用到 `Luna-Flow/luna-generic`。"
+msgid "The package needs the MoonBit toolchain 0.10.20 or later (`moonc` ≥ 0.10.20) with the `moon.mod` and `moon.pkg` manifests, and is checked on the `wasm-gc`, `wasm`, `js` and `native` backends. It depends on `Kaida-Amethyst/math` for the `Float` and `Double` elementary functions; its tests also use `Luna-Flow/luna-generic`."
+msgstr "本包需要 MoonBit 工具链 0.10.20 或更高版本（`moonc` ≥ 0.10.20），使用 `moon.mod` 和 `moon.pkg` 清单，并在 `wasm-gc`、`wasm`、`js` 和 `native` 后端上进行检查。`Float` 和 `Double` 的初等函数依赖 `Kaida-Amethyst/math`；测试还用到 `Luna-Flow/luna-generic`。"
 
 #: manual/index.md:52
 msgid "The module has one package, at the source root `src/`, documented as `core`."

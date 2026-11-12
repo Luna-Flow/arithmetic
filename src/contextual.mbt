@@ -1,4 +1,5 @@
 ///|
+#derive(Eq, Debug)
 pub struct ArithmeticDiagnostics {
   inexact : Bool
   rounded : Bool
@@ -6,7 +7,7 @@ pub struct ArithmeticDiagnostics {
   underflow : Bool
   subnormal : Bool
   clamped : Bool
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn ArithmeticDiagnostics::empty() -> ArithmeticDiagnostics {
@@ -48,10 +49,11 @@ pub fn ArithmeticDiagnostics::combine(
 }
 
 ///|
+#derive(Eq, Debug)
 pub struct ArithmeticOutcome[T] {
   value : T
   diagnostics : ArithmeticDiagnostics
-} derive(Eq, Debug)
+}
 
 ///|
 pub fn[T] ArithmeticOutcome::exact(value : T) -> ArithmeticOutcome[T] {
